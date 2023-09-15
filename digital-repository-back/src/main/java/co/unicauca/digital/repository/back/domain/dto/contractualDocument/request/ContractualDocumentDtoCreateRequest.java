@@ -1,18 +1,20 @@
-package co.unicauca.digital.repository.back.domain.contractualDocument.dto.request;
+package co.unicauca.digital.repository.back.domain.dto.contractualDocument.request;
 
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-
 /**
- * Class that defines an entity for the O/R mapping for the input of information from the ContractualDocument table.
+ * Class that defines an entity for the O/R mapping for the input of information
+ * from the ContractualDocument table.
  */
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor @Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ContractualDocumentDtoCreateRequest {
-
 
     /** ContractualDocumentType description */
     @NotNull(message = "{contractualDocumentRequest.description.field.mull}")

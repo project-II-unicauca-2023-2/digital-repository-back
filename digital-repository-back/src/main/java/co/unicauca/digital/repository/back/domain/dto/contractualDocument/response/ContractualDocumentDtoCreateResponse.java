@@ -1,15 +1,19 @@
-package co.unicauca.digital.repository.back.domain.contractualDocument.dto.response;
+package co.unicauca.digital.repository.back.domain.dto.contractualDocument.response;
 
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 /**
- * Class that defines an entity for the O/R mapping of the ContractualDocument table.
+ * Class that defines an entity for the O/R mapping of the ContractualDocument
+ * table.
  */
 
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor @Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ContractualDocumentDtoCreateResponse {
 
     /** ContractualDocument description */

@@ -1,6 +1,6 @@
 package co.unicauca.digital.repository.back.domain.dto.contract.response;
 
-import co.unicauca.digital.repository.back.domain.contract.model.ContractStatusEnum;
+import co.unicauca.digital.repository.back.domain.model.contract.ContractStatusEnum;
 import lombok.*;
 
 import javax.persistence.EnumType;
