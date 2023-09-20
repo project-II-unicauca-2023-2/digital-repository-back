@@ -14,10 +14,8 @@
 	<name>Digital Repository</name>
 	<description>technical test project</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<org.mapstruct.version>1.5.4.Final</org.mapstruct.version>
-		<java.version>11</java.version>
-
 	</properties>
 	<dependencies>
 		<dependency>
