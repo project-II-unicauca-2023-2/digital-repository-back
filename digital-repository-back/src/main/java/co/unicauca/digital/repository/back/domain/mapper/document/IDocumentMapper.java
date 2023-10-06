@@ -6,7 +6,6 @@ import co.unicauca.digital.repository.back.domain.model.document.Document;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 
-import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
