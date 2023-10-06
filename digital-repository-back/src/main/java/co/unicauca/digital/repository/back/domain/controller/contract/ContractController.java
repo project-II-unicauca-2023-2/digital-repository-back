@@ -5,7 +5,6 @@ import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractD
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.service.contract.IContractService;
-import co.unicauca.digital.repository.back.domain.service.contract.IListContractualFolders;
 import co.unicauca.digital.repository.back.global.response.PageableResponse;
 import co.unicauca.digital.repository.back.global.response.Response;
 import org.springframework.http.HttpStatus;
@@ -26,14 +25,14 @@ public class ContractController {
      * Object used to invoke the operations of the HE-01 IListContractualFolders
      * interface
      */
-    private final IListContractualFolders listContractualFolders;
+    // private final IListContractualFolders listContractualFolders;
 
     /**
      * constructor method
      */
-    public ContractController(IContractService contractService, IListContractualFolders listContractualFolders) {
+    public ContractController(IContractService contractService/* , IListContractualFolders listContractualFolders */) {
         this.contractService = contractService;
-        this.listContractualFolders = listContractualFolders;
+        // this.listContractualFolders = listContractualFolders;
     }
 
     /**
@@ -118,7 +117,7 @@ public class ContractController {
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
         return new ResponseEntity<>(
-                this.listContractualFolders.getContractualFoldersSortBySigningDate(pageNo, pageSize), HttpStatus.OK);
+                this.contractService.getContractualFoldersSortBySigningDate(pageNo, pageSize), HttpStatus.OK);
     }
 
     /**
@@ -136,7 +135,7 @@ public class ContractController {
             @RequestParam() String filter,
             @RequestParam() String search) {
         return new ResponseEntity<>(
-                this.listContractualFolders.getContractualFoldersByFilter(pageNo, pageSize, filter, search),
+                this.contractService.getContractualFoldersByFilter(pageNo, pageSize, filter, search),
                 HttpStatus.OK);
     }
 }
