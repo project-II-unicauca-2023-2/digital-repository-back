@@ -2,7 +2,6 @@ package co.unicauca.digital.repository.back.domain.model.contractualDocument;
 
 import co.unicauca.digital.repository.back.domain.model.collection.Collection;
 import co.unicauca.digital.repository.back.domain.model.contractualDocumentType.ContractualDocumentType;
-import co.unicauca.digital.repository.back.domain.model.document.Document;
 import co.unicauca.digital.repository.back.domain.model.modalityContractType.ModalityContractType;
 import lombok.*;
 

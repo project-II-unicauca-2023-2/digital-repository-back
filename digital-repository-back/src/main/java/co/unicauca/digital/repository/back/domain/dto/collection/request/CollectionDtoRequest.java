@@ -1,7 +1,6 @@
 package co.unicauca.digital.repository.back.domain.dto.collection.request;
 
 import co.unicauca.digital.repository.back.domain.dto.document.request.DocumentDtoRequest;
-import co.unicauca.digital.repository.back.domain.model.document.Document;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
