@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subir Archivos Excel</title>
+</head>
+<body>
+    <h1>Subir Archivos Excel</h1>
+    <form action="/api/scanFile/uploadExcels" method="POST" enctype="multipart/form-data">
+        <input type="file" name="files" accept=".xlsx, .xls" multiple>
+        <button type="submit">Cargar Archivos</button>
+    </form>
+</body>
+</html>
