@@ -1,8 +1,9 @@
 package co.unicauca.digital.repository.back.domain.contract.model;
 
-import co.unicauca.digital.repository.back.domain.collection.model.Collection;
-import co.unicauca.digital.repository.back.domain.modalityContractType.model.ModalityContractType;
-import co.unicauca.digital.repository.back.domain.vendor.model.Vendor;
+import co.unicauca.digital.repository.back.domain.model.collection.Collection;
+import co.unicauca.digital.repository.back.domain.model.modalityContractType.ModalityContractType;
+import co.unicauca.digital.repository.back.domain.model.score.Score;
+import co.unicauca.digital.repository.back.domain.model.vendor.Vendor;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,7 +14,11 @@ import java.util.List;
  * Class that defines an entity for the O/R mapping of the CONTRACT table.
  */
 @Entity
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Contract {
 
     /** Contract id */
@@ -25,7 +30,7 @@ public class Contract {
     @Column(length = 250, unique = true)
     private String reference;
 
-    /** Contract date of signature  */
+    /** Contract date of signature */
     private LocalDateTime signingDate;
 
     /** Contract initial date */
@@ -45,7 +50,7 @@ public class Contract {
     @Column(length = 250)
     private String createUser;
 
-    /** Contract create time  */
+    /** Contract create time */
     private LocalDateTime createTime;
 
     /** Contract last update user */
@@ -57,7 +62,7 @@ public class Contract {
 
     /** Contract Vendor */
     @ManyToOne(optional = false)
-    @JoinColumn(name="vendorId")
+    @JoinColumn(name = "vendorId")
     private Vendor vendor;
 
     /** Contract Collections */
@@ -66,7 +71,10 @@ public class Contract {
 
     /** Contract ModalityContractType */
     @ManyToOne(optional = false)
-    @JoinColumn(name="modalityContractTypeId")
+    @JoinColumn(name = "modalityContractTypeId")
     private ModalityContractType modalityContractType;
-}
 
+    /** Contract Score */
+    @OneToOne(mappedBy = "contract", optional = false)
+    private Score score;
+}
