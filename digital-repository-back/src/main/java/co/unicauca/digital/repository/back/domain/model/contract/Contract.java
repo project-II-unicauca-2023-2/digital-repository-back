@@ -2,6 +2,7 @@ package co.unicauca.digital.repository.back.domain.model.contract;
 
 import co.unicauca.digital.repository.back.domain.model.collection.Collection;
 import co.unicauca.digital.repository.back.domain.model.modalityContractType.ModalityContractType;
+import co.unicauca.digital.repository.back.domain.model.score.Score;
 import co.unicauca.digital.repository.back.domain.model.vendor.Vendor;
 import lombok.*;
 
@@ -72,4 +73,8 @@ public class Contract {
     @ManyToOne(optional = false)
     @JoinColumn(name = "modalityContractTypeId")
     private ModalityContractType modalityContractType;
+
+    /** Contract Score */
+    @OneToOne(mappedBy = "contract", optional = false)
+    private Score score;
 }
