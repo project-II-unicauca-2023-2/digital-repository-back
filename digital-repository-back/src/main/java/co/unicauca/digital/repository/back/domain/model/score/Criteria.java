@@ -24,11 +24,11 @@ public class Criteria {
     private String name;
 
     /** Criteria Description */
-    @Column(length = 250)
+    @Column(length = 500)
     private String description;
 
-    /** Criteria ScoreCriteria */
-    @OneToOne(mappedBy = "criteria", optional = false)
-    @JoinColumn(name = "scorecriteriaId")
-    private ScoreCriteria scoreCriteria;
+    /** Criteria Type */
+    @Column(length = 250)
+    private String criteriaType;
+
 }

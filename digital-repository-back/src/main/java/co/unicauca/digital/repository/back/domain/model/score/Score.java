@@ -33,8 +33,8 @@ public class Score {
     private LocalDateTime updateTime;
 
     /** Score contract */
-    @OneToOne(mappedBy = "score")
-    @JoinColumn(name = "contractId")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "contract_id", referencedColumnName = "id")
     private Contract contract;
 
     /** Score scoreCriteria */
