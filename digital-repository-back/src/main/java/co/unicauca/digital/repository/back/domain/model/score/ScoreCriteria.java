@@ -33,4 +33,8 @@ public class ScoreCriteria {
     @ManyToOne(optional = false)
     @JoinColumn(name = "scoreId")
     private Score score;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "criteriaId")
+    private Criteria criteria;
 }

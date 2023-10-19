@@ -31,8 +31,4 @@ public class Criteria {
     @Column(length = 250)
     private String criteriaType;
 
-    /** Criteria ScoreCriteria */
-    @OneToOne(mappedBy = "criteria", optional = false)
-    @JoinColumn(name = "scorecriteriaId")
-    private ScoreCriteria scoreCriteria;
 }

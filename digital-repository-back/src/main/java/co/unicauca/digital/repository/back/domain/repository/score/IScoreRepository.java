@@ -12,8 +12,5 @@ import java.util.Optional;
  */
 @Repository
 public interface IScoreRepository extends JpaRepository<Score, Integer> {
-    /**
-     * Query find Score by identification
-     */
-    Optional<Score> findByIdentification(Integer identification);
+
 }
