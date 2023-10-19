@@ -75,6 +75,6 @@ public class Contract {
     private ModalityContractType modalityContractType;
 
     /** Contract Score */
-    @OneToOne(mappedBy = "contract", optional = false)
+    @OneToOne(optional = false)
     private Score score;
 }
