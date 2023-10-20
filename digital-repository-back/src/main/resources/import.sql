@@ -1,5 +1,5 @@
 -- Vendor
-insert into `vendor` (`id`, `createTime`, `createUser`, `identification`, `name`, `updateTime`, `updateUser`) VALUES (NULL, '2023-05-27 17:13:42', 'Miguel', '1061', 'Andres', '2023-05-27 17:13:42', NULL);
+insert into `vendor` (`id`, `createTime`, `createUser`, `identification`, `name`, `personType`,  `score`,`updateTime`, `updateUser`) VALUES (NULL, '2023-05-27 17:13:42', 'Miguel', '1061', 'Andres', 'natural',  0.0, '2023-05-27 17:13:42', NULL);
 
 -- Modality
 INSERT INTO `modality` (`ID`, `NAME`, `DESCRIPTION`, `EXTERNALCODE`, `CREATETIME`, `CREATEUSER`, `UPDATETIME`, `UPDATEUSER`) VALUES (1, 'Inferior o Igual a 100 SMLMV', NULL, 'PVRM1', '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial'),(2, 'Mayores a 100 SMLMV', NULL, 'PVRM2', '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial');

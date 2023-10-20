@@ -34,7 +34,7 @@ public class Score {
     private LocalDateTime updateTime;
 
     /** Score contract */
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "contract_id", referencedColumnName = "id")
     private Contract contract;
 
