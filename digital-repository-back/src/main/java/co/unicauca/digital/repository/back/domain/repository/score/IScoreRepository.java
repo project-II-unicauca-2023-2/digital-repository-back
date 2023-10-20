@@ -15,5 +15,5 @@ public interface IScoreRepository extends JpaRepository<Score, Integer> {
     /**
      * Query find Score by Id
      */
-    Optional<Score> findById(Integer Id);
+    Optional<Score> findById(Integer id);
 }

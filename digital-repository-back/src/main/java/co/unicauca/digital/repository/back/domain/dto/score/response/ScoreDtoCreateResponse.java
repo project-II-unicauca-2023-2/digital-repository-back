@@ -15,14 +15,14 @@ import java.time.LocalDateTime;
 @Builder
 public class ScoreDtoCreateResponse {
     /** Score Id */
-    private Integer Id;
+    private Integer id;
 
     /** Score total score */
     private Float totalScore;
 
-    /** Vendor create time */
+    /** Score create time */
     private LocalDateTime createTime;
 
-    /** Vendor update time */
+    /** Score update time */
     private LocalDateTime updateTime;
 }

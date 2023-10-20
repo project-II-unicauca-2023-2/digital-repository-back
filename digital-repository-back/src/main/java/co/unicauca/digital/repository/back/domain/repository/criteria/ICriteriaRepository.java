@@ -15,5 +15,5 @@ public interface ICriteriaRepository extends JpaRepository<Criteria, Integer> {
     /**
      * Query find Criteria by Id
      */
-    Optional<Criteria> findById(Integer Id);
+    Optional<Criteria> findById(Integer id);
 }

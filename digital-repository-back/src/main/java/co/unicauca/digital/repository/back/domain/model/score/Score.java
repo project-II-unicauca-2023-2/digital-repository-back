@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import co.unicauca.digital.repository.back.domain.model.contract.Contract;
-import co.unicauca.digital.repository.back.domain.model.scorecriteria.ScoreCriteria;
+import co.unicauca.digital.repository.back.domain.model.scoreCriteria.ScoreCriteria;
 
 /**
  * Class that defines an entity for the O/R mapping of the SCORE table.
@@ -25,7 +25,7 @@ public class Score {
     private Integer id;
 
     /** Total Score */
-    private Float TotalScore;
+    private Float totalScore;
 
     /** Score create time */
     private LocalDateTime createTime;
