@@ -1,9 +1,9 @@
-package co.unicauca.digital.repository.back.domain.repository.scoreCriteria;
+package co.unicauca.digital.repository.back.domain.repository.scorecriteria;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import co.unicauca.digital.repository.back.domain.model.scoreCriteria.ScoreCriteria;
+import co.unicauca.digital.repository.back.domain.model.scorecriteria.ScoreCriteria;
 
 import java.util.Optional;
 
