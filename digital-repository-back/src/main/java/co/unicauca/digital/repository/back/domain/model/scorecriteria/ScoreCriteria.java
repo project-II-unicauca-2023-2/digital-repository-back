@@ -1,8 +1,12 @@
-package co.unicauca.digital.repository.back.domain.model.score;
+package co.unicauca.digital.repository.back.domain.model.scorecriteria;
 
 import lombok.*;
 
 import javax.persistence.*;
+
+import co.unicauca.digital.repository.back.domain.model.criteria.Criteria;
+import co.unicauca.digital.repository.back.domain.model.score.Score;
+
 import java.time.LocalDateTime;
 
 /**

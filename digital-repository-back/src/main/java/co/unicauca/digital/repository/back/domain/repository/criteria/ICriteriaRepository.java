@@ -1,9 +1,9 @@
-package co.unicauca.digital.repository.back.domain.repository.score;
-
-import co.unicauca.digital.repository.back.domain.model.score.Criteria;
+package co.unicauca.digital.repository.back.domain.repository.criteria;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import co.unicauca.digital.repository.back.domain.model.criteria.Criteria;
 
 import java.util.Optional;
 
@@ -12,5 +12,8 @@ import java.util.Optional;
  */
 @Repository
 public interface ICriteriaRepository extends JpaRepository<Criteria, Integer> {
-
+    /**
+     * Query find Criteria by Id
+     */
+    Optional<Criteria> findById(Integer Id);
 }

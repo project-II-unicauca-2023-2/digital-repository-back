@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import co.unicauca.digital.repository.back.domain.model.contract.Contract;
+import co.unicauca.digital.repository.back.domain.model.scorecriteria.ScoreCriteria;
 
 /**
  * Class that defines an entity for the O/R mapping of the SCORE table.
