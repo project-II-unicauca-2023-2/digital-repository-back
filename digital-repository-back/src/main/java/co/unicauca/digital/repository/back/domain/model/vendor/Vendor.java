@@ -31,6 +31,13 @@ public class Vendor {
     @Column(length = 250, unique = true)
     private String identification;
 
+    /** Vendor person type */
+    @Column(length = 100, unique = true)
+    private String personType;
+
+    /** Vendor score */
+    private float score;
+
     /** Vendor create User */
     @Column(length = 250)
     private String createUser;
