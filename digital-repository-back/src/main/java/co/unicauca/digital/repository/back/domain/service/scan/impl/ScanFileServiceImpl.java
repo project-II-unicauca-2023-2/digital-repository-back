@@ -3,6 +3,7 @@ package co.unicauca.digital.repository.back.domain.service.scan.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
@@ -12,6 +13,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import co.unicauca.digital.repository.back.domain.model.score.Score;
+import co.unicauca.digital.repository.back.domain.model.scorecriteria.ScoreCriteria;
+import co.unicauca.digital.repository.back.domain.repository.contract.IContractRepository;
+import co.unicauca.digital.repository.back.domain.repository.criteria.ICriteriaRepository;
+import co.unicauca.digital.repository.back.domain.repository.score.IScoreRepository;
+import co.unicauca.digital.repository.back.domain.repository.scorecriteria.IScoreCriteriaRepository;
 import co.unicauca.digital.repository.back.domain.service.scan.IScanFileService;
 import co.unicauca.digital.repository.back.domain.utilities.ExcelUtils;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +28,10 @@ import lombok.RequiredArgsConstructor;
 public class ScanFileServiceImpl implements IScanFileService {
 
     private final ExcelUtils excelUtils;
+    private final IScoreRepository scoreRepository;
+    private final IScoreCriteriaRepository scoreCriteriaRepository;
+    private final ICriteriaRepository criteriaRepository;
+    private final IContractRepository contractRepository;
 
     @Override
     public void processFile(MultipartFile file) throws IOException {
@@ -55,12 +66,19 @@ public class ScanFileServiceImpl implements IScanFileService {
             // Number and date cells
             final Cell cell8C = sheet.getRow(7).getCell(2);
             System.out.println("Number and date: " + cell8C.toString());
-
+            String[] numberAndDate =cell8C.toString().split(" ");
+            String numberReference = numberAndDate[0];
+            var contract = this.contractRepository.findByReference(numberReference).orElseThrow();
+            System.out.println("References Contract" + contract.getReference());
             // Vendor Name cells
             final Cell cell9C = sheet.getRow(8).getCell(2);
             String vendorName = cell9C.toString();
             System.out.println("Vendor name:" + vendorName);
 
+            // type identification 
+            final Cell  cell9H = sheet.getRow(8).getCell(7);
+            String identificationType = cell9H.toString();
+            System.out.println("Identification type:" + identificationType);
             // Vendor cc,nit O identification cells
             final Cell cell9J = sheet.getRow(8).getCell(9);
             int vendorIdentif = (int ) Double.parseDouble(cell9J.toString());
@@ -113,23 +131,49 @@ public class ScanFileServiceImpl implements IScanFileService {
             final Cell cell45A = sheet.getRow(44).getCell(0);
             String firstCriteriaType = cell45A.toString();
             final Cell cell46C = sheet.getRow(45).getCell(2);
-            String firstCriteriaRating = cell46C.toString();
+            Integer qualityCriteriaRate = Integer.parseInt(cell46C.toString());
             // Second Criteria (Cumplimiento) scoring cellls
             final Cell cell45E = sheet.getRow(44).getCell(4);
             String secondCriteria= cell45E.toString();
             final Cell cell46G = sheet.getRow(45).getCell(6);
-            String secondCriteriaRating= cell46G.toString();
+            Integer complianceCriteriaRate= Integer.parseInt(cell46G.toString());
             // Second Criteria (execute) scoring cellls
             final Cell cell45H = sheet.getRow(44).getCell(7);
             String thirdCriteria = cell45H.toString();
             final Cell cell46J = sheet.getRow(45).getCell(9);
-            String thirdCriteriaRating = cell46J.toString();
+            Integer excecutionCriteriaRate = Integer.parseInt(cell46J.toString());
             
+            String[] vendorTypes = {cell16J.toString(),cell17J.toString(),cell18J.toString(),cell19J.toString(),cell20J.toString()
+                ,cell21J.toString(),cell22J.toString(),cell23J.toString(),cell24J.toString()
+                ,cell25J.toString(),cell26J.toString()}; 
+            // Convertir el array en una lista y encontrar la posición de 'x'
+            int position = Arrays.asList(vendorTypes).indexOf("x");
+            // Declarar una variable para almacenar el resultado
+            String criteriaType;
+            // Aplicar la lógica condicional para asignar los valores correspondientes
+            if (position >= 0 && position <= 2) {
+                criteriaType = "bienes";
+            } else if (position >= 3 && position <= 9) {
+                criteriaType = "servicios";
+            } else if (position == 10) {
+                criteriaType = "obras";
+            } else {
+                criteriaType = "No se encontró 'x' en la lista dentro de los límites especificados.";
+            }
+            // Imprimir el resultado o realizar cualquier otra operación necesaria
+            System.out.println("El criteria type es: " + criteriaType);
+
+            var qualityCriteria = this.criteriaRepository.findByNameAndCriteriaType("Calidad", criteriaType).orElseThrow(); // TODO handle exception
+            var executionCriteria = this.criteriaRepository.findByNameAndCriteriaType("Ejecucion", criteriaType).orElseThrow(); // TODO handle exception
+            var complianceCriteria = this.criteriaRepository.findByNameAndCriteriaType("Cumplimiento", criteriaType).orElseThrow(); // TODO handle exception                     
+            // System.out.println("quialit criteria " + qualityCriteria.getDescription());
+            // System.out.println("execution criteria " + executionCriteria.getDescription());
+            // System.out.println("compliance criteria " + complianceCriteria.getDescription());
 
             System.out.println("first Criteria type: " + firstCriteriaType +
-                 ": " + firstCriteriaRating + "\n" +
-                "second Criteria type: "+secondCriteria + ": " + secondCriteriaRating + "\n" +
-                "third Criteria type: "+thirdCriteria + ": " + thirdCriteriaRating+"\n" );
+                 ": " + qualityCriteriaRate + "\n" +
+                "second Criteria type: "+secondCriteria + ": " + complianceCriteriaRate + "\n" +
+                "third Criteria type: "+thirdCriteria + ": " + excecutionCriteriaRate+"\n" );
             
          
             // Total evaluation cells
@@ -155,6 +199,23 @@ public class ScanFileServiceImpl implements IScanFileService {
             String signatureProfessionalInventary = cell51H.toString(); 
             System.out.println("Ordenes de compra(Solo si aplica)"+"\n"+" Nombre profesional especializado"+nameProfessionalInventary
             +"\n"+"signature Personal especializado inventario: "+signatureProfessionalInventary);
+
+            Score score = Score.builder()
+            .totalScore(totalValue).contract(contract)
+            .createTime(LocalDateTime.now()).build();
+            this.scoreRepository.save(score);
+
+            ScoreCriteria firstScoreCriteria = ScoreCriteria.builder()
+            .score(score).criteria(qualityCriteria).rate(qualityCriteriaRate)
+            .createTime(LocalDateTime.now()).build();
+
+            ScoreCriteria secondScoreCriteria = ScoreCriteria.builder()
+            .score(score).criteria(complianceCriteria).rate(complianceCriteriaRate)
+            .createTime(LocalDateTime.now()).build();
+
+            ScoreCriteria thirdScoreCriteria = ScoreCriteria.builder()
+            .score(score).criteria(executionCriteria).rate(excecutionCriteriaRate)
+            .createTime(LocalDateTime.now()).build();
         } catch(Exception e){
             e.printStackTrace();
         }
