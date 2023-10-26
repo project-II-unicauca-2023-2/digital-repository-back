@@ -15,6 +15,14 @@ import java.util.Date;
 @Service
 public class ExcelUtils {
 
+    public Integer extractCriteriaRate(String criteriaRateString) {
+        if(criteriaRateString.contains(".")) {
+            Double criteriaRate = Double.parseDouble(criteriaRateString);
+            return criteriaRate.intValue();
+        }
+        return Integer.parseInt(criteriaRateString);
+    }
+
     public String extractReference(String referenceCode) {
         // Verificar si la cadena contiene ":"
         if (referenceCode.contains(":")) {

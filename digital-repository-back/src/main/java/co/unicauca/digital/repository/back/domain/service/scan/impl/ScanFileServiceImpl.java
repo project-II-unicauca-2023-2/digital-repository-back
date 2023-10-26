@@ -3,7 +3,9 @@ package co.unicauca.digital.repository.back.domain.service.scan.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import static java.time.LocalDateTime.now;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
@@ -35,74 +37,79 @@ public class ScanFileServiceImpl implements IScanFileService {
 
     @Override
     public void processFile(MultipartFile file) throws IOException {
+        Workbook workbook = null;
         try {
             InputStream is = file.getInputStream();
-            Workbook workbook = new XSSFWorkbook(is);
-            Sheet sheet = workbook.getSheetAt(0); // Primera hoja del excel.
+            workbook = new XSSFWorkbook(is);
+            Sheet sheet = workbook.getSheetAt(0);
             FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+
             System.out.println("===================== Data Evaluacion Proveedores V2 =============");
-            // Contract reference cells
+            
+            //* Contract reference cell
             final Cell cell4A = sheet.getRow(3).getCell(0);
             String reference = excelUtils.extractReference(cell4A.toString());
             System.out.println("Reference: " + reference);
 
-            // Evaluation version cells
+            //* Evaluation version cell
             final Cell cell4D = sheet.getRow(3).getCell(3);
             Integer version = excelUtils.extractVersion(cell4D.toString());
             System.out.println("Version: " + version);
 
-            // Evaluation update date cells
+            //* Evaluation update date cell
             final Cell cell4H = sheet.getRow(3).getCell(7);
             LocalDateTime updateDate = excelUtils.extractUpdateDate(cell4H.toString());
             System.out.println("Evaluation update date: " + updateDate);
 
-            // Evaluation date cells
+            //* Evaluation date cell
             final Cell cell6C = sheet.getRow(5).getCell(2);
             if(cell6C != null){
-            LocalDateTime evaluationDate = excelUtils.extractEvaluationDate(cell6C.toString());
-            System.out.println("Evaluation date: " + evaluationDate);
+                LocalDateTime evaluationDate = excelUtils.extractEvaluationDate(cell6C.toString());
+                System.out.println("Evaluation date: " + evaluationDate);
             }
 
-            // Number and date cells
+            //* Number and date cell
             final Cell cell8C = sheet.getRow(7).getCell(2);
             System.out.println("Number and date: " + cell8C.toString());
-            String[] numberAndDate =cell8C.toString().split(" ");
+            String[] numberAndDate = cell8C.toString().split(" ");
             String numberReference = numberAndDate[0];
-            var contract = this.contractRepository.findByReference(numberReference).orElseThrow();
-            System.out.println("References Contract" + contract.getReference());
-            // Vendor Name cells
+            // System.out.println("Número de referencia: " + numberReference);
+            
+            //* Vendor name cell
             final Cell cell9C = sheet.getRow(8).getCell(2);
             String vendorName = cell9C.toString();
             System.out.println("Vendor name:" + vendorName);
 
-            // type identification 
+            //* Identification type cell 
             final Cell  cell9H = sheet.getRow(8).getCell(7);
             String identificationType = cell9H.toString();
             System.out.println("Identification type:" + identificationType);
-            // Vendor cc,nit O identification cells
+
+            //* Vendor cc,nit O identification cell
             final Cell cell9J = sheet.getRow(8).getCell(9);
             int vendorIdentif = (int ) Double.parseDouble(cell9J.toString());
             System.out.println("Vendor Identification: " + vendorIdentif);
 
-            // Initial date cells
+            //* Initial date cell
             final Cell cell10C = sheet.getRow(9).getCell(2);
             if(cell10C.getLocalDateTimeCellValue() != null){
-            LocalDateTime initialDate = cell10C.getLocalDateTimeCellValue();
-            System.out.println("Initial date: " + initialDate.toString());
+                LocalDateTime initialDate = cell10C.getLocalDateTimeCellValue();
+                System.out.println("Initial date: " + initialDate.toString());
             }
 
-            // Final date cells
+            //* Final date cell
             final Cell cell10I = sheet.getRow(9).getCell(8);
             if(cell10I.getLocalDateTimeCellValue() != null){
-            LocalDateTime finalDate = cell10I.getLocalDateTimeCellValue();
-            System.out.println("Final Date: " + finalDate.toString());
+                LocalDateTime finalDate = cell10I.getLocalDateTimeCellValue();
+                System.out.println("Final Date: " + finalDate.toString());
             }
-            // Contract subject cells   
+
+            //* Contract subject cell   
             final Cell cell11A = sheet.getRow(10).getCell(0);
             String contractSubject =  excelUtils.extractContractSubject(cell11A.toString());
             System.out.println("Contract Subject: " + contractSubject);
 
-            // Vendor type cells
+            //* Vendor type cells
             // Goods
             final Cell cell16J = sheet.getRow(15).getCell(9);
             System.out.println("1. Por contrato de Compraventa: " + cell16J.toString());
@@ -125,63 +132,38 @@ public class ScanFileServiceImpl implements IScanFileService {
             System.out.println("6. Por contrato de Judicatura: " + cell24J.toString());
             final Cell cell25J = sheet.getRow(24).getCell(9);
             System.out.println("7. Por contrato de Aprendizaje: " + cell25J.toString());
+            // Works
             final Cell cell26J = sheet.getRow(25).getCell(9);
-            System.out.println("7. Por contrato de Obra: " + cell26J.toString());
-            // Firt Criteria (Quality) scoring cells
+            System.out.println("1. Por contrato de Obra: " + cell26J.toString());
+            
+            //* First Criteria (Quality) scoring cells
             final Cell cell45A = sheet.getRow(44).getCell(0);
             String firstCriteriaType = cell45A.toString();
             final Cell cell46C = sheet.getRow(45).getCell(2);
-            Integer qualityCriteriaRate = Integer.parseInt(cell46C.toString());
-            // Second Criteria (Cumplimiento) scoring cellls
+            Integer qualityCriteriaRate = this.excelUtils.extractCriteriaRate(cell46C.toString());
+            
+            //* Second Criteria (Cumplimiento) scoring cells
             final Cell cell45E = sheet.getRow(44).getCell(4);
             String secondCriteria= cell45E.toString();
             final Cell cell46G = sheet.getRow(45).getCell(6);
-            Integer complianceCriteriaRate= Integer.parseInt(cell46G.toString());
-            // Second Criteria (execute) scoring cellls
+            Integer complianceCriteriaRate= this.excelUtils.extractCriteriaRate(cell46G.toString());
+            
+            //* Third Criteria (execute) scoring cells
             final Cell cell45H = sheet.getRow(44).getCell(7);
             String thirdCriteria = cell45H.toString();
             final Cell cell46J = sheet.getRow(45).getCell(9);
-            Integer excecutionCriteriaRate = Integer.parseInt(cell46J.toString());
-            
-            String[] vendorTypes = {cell16J.toString(),cell17J.toString(),cell18J.toString(),cell19J.toString(),cell20J.toString()
-                ,cell21J.toString(),cell22J.toString(),cell23J.toString(),cell24J.toString()
-                ,cell25J.toString(),cell26J.toString()}; 
-            // Convertir el array en una lista y encontrar la posición de 'x'
-            int position = Arrays.asList(vendorTypes).indexOf("x");
-            // Declarar una variable para almacenar el resultado
-            String criteriaType;
-            // Aplicar la lógica condicional para asignar los valores correspondientes
-            if (position >= 0 && position <= 2) {
-                criteriaType = "bienes";
-            } else if (position >= 3 && position <= 9) {
-                criteriaType = "servicios";
-            } else if (position == 10) {
-                criteriaType = "obras";
-            } else {
-                criteriaType = "No se encontró 'x' en la lista dentro de los límites especificados.";
-            }
-            // Imprimir el resultado o realizar cualquier otra operación necesaria
-            System.out.println("El criteria type es: " + criteriaType);
+            Integer excecutionCriteriaRate = this.excelUtils.extractCriteriaRate(cell46J.toString());
 
-            var qualityCriteria = this.criteriaRepository.findByNameAndCriteriaType("Calidad", criteriaType).orElseThrow(); // TODO handle exception
-            var executionCriteria = this.criteriaRepository.findByNameAndCriteriaType("Ejecucion", criteriaType).orElseThrow(); // TODO handle exception
-            var complianceCriteria = this.criteriaRepository.findByNameAndCriteriaType("Cumplimiento", criteriaType).orElseThrow(); // TODO handle exception                     
-            // System.out.println("quialit criteria " + qualityCriteria.getDescription());
-            // System.out.println("execution criteria " + executionCriteria.getDescription());
-            // System.out.println("compliance criteria " + complianceCriteria.getDescription());
-
-            System.out.println("first Criteria type: " + firstCriteriaType +
-                 ": " + qualityCriteriaRate + "\n" +
+            System.out.println("first Criteria type: " + firstCriteriaType + ": " + qualityCriteriaRate + "\n" +
                 "second Criteria type: "+secondCriteria + ": " + complianceCriteriaRate + "\n" +
                 "third Criteria type: "+thirdCriteria + ": " + excecutionCriteriaRate+"\n" );
             
-         
-            // Total evaluation cells
+            //* Total evaluation cells
             final Cell cell47J = sheet.getRow(46).getCell(9);
             Float totalValue = excelUtils.evaluateFormula(cell47J, evaluator);
             System.out.println("Total Evaluation: " + totalValue + "\n");
 
-            // Supervisor data cells
+            //* Supervisor data cells
             final Cell cell49B = sheet.getRow(48).getCell(1);
             String nameSupervisor = cell49B.toString();
             final Cell cell49F = sheet.getRow(48).getCell(5);
@@ -192,7 +174,7 @@ public class ScanFileServiceImpl implements IScanFileService {
             + "signature supervisor"+ signatureSuoervisor+"\n"
             +"Signature Contratist"+ signatureContratist);
 
-            // buy orders cell
+            //* buy orders cell
             final Cell cell51C = sheet.getRow(50).getCell(2);
             String nameProfessionalInventary = cell51C.toString();
             final Cell cell51H = sheet.getRow(50).getCell(7);
@@ -200,25 +182,71 @@ public class ScanFileServiceImpl implements IScanFileService {
             System.out.println("Ordenes de compra(Solo si aplica)"+"\n"+" Nombre profesional especializado"+nameProfessionalInventary
             +"\n"+"signature Personal especializado inventario: "+signatureProfessionalInventary);
 
+            //* Determine the type of vendor to evaluate
+            List<String> vendorTypes = Arrays.asList(
+                cell16J.toString(),cell17J.toString(),cell18J.toString(),cell19J.toString(),
+                cell20J.toString(),cell21J.toString(),cell22J.toString(),cell23J.toString(),
+                cell24J.toString(),cell25J.toString(),cell26J.toString()
+            ); 
+            int position = vendorTypes.indexOf("x");
+            String criteriaType;
+            if (position >= 0 && position <= 2) {
+                criteriaType = "Bienes";
+            } else if (position >= 3 && position <= 9) {
+                criteriaType = "Servicios";
+            } else if (position == 10) {
+                criteriaType = "Obras";
+            } else {
+                // criteriaType = "No se encontró 'x' en la lista dentro de los límites especificados.";
+                criteriaType = null;
+            }
+            System.out.println("El criteria type es: " + criteriaType);
+
+            //* Save to DB
+            var contract = this.contractRepository.findByReference(numberReference)
+                .orElseThrow();
+            System.out.println("Contract reference: " + contract.getReference());
+
+            var qualityCriteria = this.criteriaRepository.findByNameAndCriteriaType("Calidad", criteriaType)
+                .orElseThrow();
+            var executionCriteria = this.criteriaRepository.findByNameAndCriteriaType("Ejecucion ", criteriaType)
+                .orElseThrow();
+            var complianceCriteria = this.criteriaRepository.findByNameAndCriteriaType("Cumplimiento", criteriaType)
+                .orElseThrow();                     
+            // System.out.println("Quality criteria " + qualityCriteria.getDescription());
+            // System.out.println("Execution criteria " + executionCriteria.getDescription());
+            // System.out.println("Compliance criteria " + complianceCriteria.getDescription());
+
             Score score = Score.builder()
-            .totalScore(totalValue).contract(contract)
-            .createTime(LocalDateTime.now()).build();
+                .totalScore(totalValue)
+                .contract(contract)
+                .createTime(now())
+                .build();
             this.scoreRepository.save(score);
 
             ScoreCriteria firstScoreCriteria = ScoreCriteria.builder()
-            .score(score).criteria(qualityCriteria).rate(qualityCriteriaRate)
-            .createTime(LocalDateTime.now()).build();
-
+                .score(score)
+                .criteria(qualityCriteria)
+                .rate(qualityCriteriaRate)
+                .createTime(now())
+                .build();
             ScoreCriteria secondScoreCriteria = ScoreCriteria.builder()
-            .score(score).criteria(complianceCriteria).rate(complianceCriteriaRate)
-            .createTime(LocalDateTime.now()).build();
-
+                .score(score)
+                .criteria(complianceCriteria)
+                .rate(complianceCriteriaRate)
+                .createTime(now())
+                .build();
             ScoreCriteria thirdScoreCriteria = ScoreCriteria.builder()
-            .score(score).criteria(executionCriteria).rate(excecutionCriteriaRate)
-            .createTime(LocalDateTime.now()).build();
+                .score(score)
+                .criteria(executionCriteria)
+                .rate(excecutionCriteriaRate)
+                .createTime(now())
+                .build();
+            this.scoreCriteriaRepository.saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
         } catch(Exception e){
             e.printStackTrace();
+        } finally {
+            if (workbook != null) workbook.close();
         }
-    }
-    
+    }    
 }
