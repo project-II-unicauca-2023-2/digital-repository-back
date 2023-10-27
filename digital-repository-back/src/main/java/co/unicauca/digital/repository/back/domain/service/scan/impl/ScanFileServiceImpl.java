@@ -49,7 +49,7 @@ public class ScanFileServiceImpl implements IScanFileService {
             //* Contract reference cell
             final Cell cell4A = sheet.getRow(3).getCell(0);
             String reference = excelUtils.extractReference(cell4A.toString());
-            System.out.println("Reference: " + reference);
+            System.out.println("Code: " + reference);
 
             //* Evaluation version cell
             final Cell cell4D = sheet.getRow(3).getCell(3);
@@ -67,6 +67,8 @@ public class ScanFileServiceImpl implements IScanFileService {
                 LocalDateTime evaluationDate = excelUtils.extractEvaluationDate(cell6C.toString());
                 System.out.println("Evaluation date: " + evaluationDate);
             }
+
+            System.out.println("===== Contract information =====");
 
             //* Number and date cell
             final Cell cell8C = sheet.getRow(7).getCell(2);
@@ -109,6 +111,8 @@ public class ScanFileServiceImpl implements IScanFileService {
             String contractSubject =  excelUtils.extractContractSubject(cell11A.toString());
             System.out.println("Contract Subject: " + contractSubject);
 
+            System.out.println("==== Vendor type ====");
+
             //* Vendor type cells
             // Goods
             final Cell cell16J = sheet.getRow(15).getCell(9);
@@ -136,6 +140,8 @@ public class ScanFileServiceImpl implements IScanFileService {
             final Cell cell26J = sheet.getRow(25).getCell(9);
             System.out.println("1. Por contrato de Obra: " + cell26J.toString());
             
+            System.out.println("==== Score ====");
+
             //* First Criteria (Quality) scoring cells
             final Cell cell45A = sheet.getRow(44).getCell(0);
             String firstCriteriaType = cell45A.toString();
@@ -154,33 +160,36 @@ public class ScanFileServiceImpl implements IScanFileService {
             final Cell cell46J = sheet.getRow(45).getCell(9);
             Integer excecutionCriteriaRate = this.excelUtils.extractCriteriaRate(cell46J.toString());
 
-            System.out.println("first Criteria type: " + firstCriteriaType + ": " + qualityCriteriaRate + "\n" +
-                "second Criteria type: "+secondCriteria + ": " + complianceCriteriaRate + "\n" +
-                "third Criteria type: "+thirdCriteria + ": " + excecutionCriteriaRate+"\n" );
+            System.out.println(firstCriteriaType + ": " + qualityCriteriaRate + "\n" +
+                secondCriteria + ": " + complianceCriteriaRate + "\n" +
+                thirdCriteria + ": " + excecutionCriteriaRate+"\n" );
             
             //* Total evaluation cells
             final Cell cell47J = sheet.getRow(46).getCell(9);
             Float totalValue = excelUtils.evaluateFormula(cell47J, evaluator);
-            System.out.println("Total Evaluation: " + totalValue + "\n");
+            System.out.println("Total score: " + totalValue + "\n");
 
             //* Supervisor data cells
-            final Cell cell49B = sheet.getRow(48).getCell(1);
+            /*final Cell cell49B = sheet.getRow(48).getCell(1);
             String nameSupervisor = cell49B.toString();
             final Cell cell49F = sheet.getRow(48).getCell(5);
             String signatureSuoervisor = cell49F.toString();
             final Cell cell49H = sheet.getRow(48).getCell(7);
             String signatureContratist = cell49H.toString();
             System.out.println("Supervisor fullname: " + nameSupervisor+"\n"
-            + "signature supervisor"+ signatureSuoervisor+"\n"
-            +"Signature Contratist"+ signatureContratist);
+                + "signature supervisor"+ signatureSuoervisor+"\n"
+                +"Signature Contratist"+ signatureContratist
+            );*/
 
             //* buy orders cell
-            final Cell cell51C = sheet.getRow(50).getCell(2);
+            /*final Cell cell51C = sheet.getRow(50).getCell(2);
             String nameProfessionalInventary = cell51C.toString();
             final Cell cell51H = sheet.getRow(50).getCell(7);
             String signatureProfessionalInventary = cell51H.toString(); 
-            System.out.println("Ordenes de compra(Solo si aplica)"+"\n"+" Nombre profesional especializado"+nameProfessionalInventary
-            +"\n"+"signature Personal especializado inventario: "+signatureProfessionalInventary);
+            System.out.println("Ordenes de compra(Solo si aplica)" + "\n" +
+                " Nombre profesional especializado" + nameProfessionalInventary + "\n" +
+                "signature Personal especializado inventario: " + signatureProfessionalInventary
+            );*/
 
             //* Determine the type of vendor to evaluate
             List<String> vendorTypes = Arrays.asList(
@@ -201,6 +210,10 @@ public class ScanFileServiceImpl implements IScanFileService {
                 criteriaType = null;
             }
             System.out.println("El criteria type es: " + criteriaType);
+
+            //TODO Create vendor
+            //TODO Create contract
+            //TODO Associate contract with vendor
 
             //* Save to DB
             var contract = this.contractRepository.findByReference(numberReference)
