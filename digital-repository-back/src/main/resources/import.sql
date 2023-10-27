@@ -10,6 +10,7 @@ INSERT INTO `contracttype` (`ID`, `NAME`, `DESCRIPTION`, `EXTERNALCODE`, `CREATE
 INSERT INTO `contracttype` (`ID`, `NAME`, `DESCRIPTION`, `EXTERNALCODE`, `CREATETIME`, `CREATEUSER`, `UPDATETIME`, `UPDATEUSER`) VALUES (3, 'Obra de Inferior', NULL, 'PVRTC3', '2023-05-29 03:37:20', 'cargue.inicial', '2023-05-29 03:37:20', 'cargue.inicial');
 INSERT INTO `contracttype` (`ID`, `NAME`, `DESCRIPTION`, `EXTERNALCODE`, `CREATETIME`, `CREATEUSER`, `UPDATETIME`, `UPDATEUSER`) VALUES (4, 'Suministro y Compraventa', NULL, 'PVRTC4', '2023-05-29 03:37:20', 'cargue.inicial', '2023-05-29 03:37:20', 'cargue.inicial');
 --Criteria
+INSERT INTO `db_gestion_documental`.`criteria` (`id`, `criteriaType`, `description`, `name`) VALUES ('1', 'Bienes', 'Cumplimiento con las especificaciones tecnicas pactadas y servicios post-ventas', 'Calidad');
 INSERT INTO `db_gestion_documental`.`criteria` (`id`, `criteriaType`, `description`, `name`) VALUES ('2', 'Bienes', 'Entrega de los bienes contratados dentro del tiempo establecido y los documentos que sean requeridos', 'Ejecucion');
 INSERT INTO `db_gestion_documental`.`criteria` (`id`, `criteriaType`, `description`, `name`) VALUES ('3', 'Bienes', 'Respuesta a documentacion solicitada; documentos precontraActuales,contraAtual y postContraActual', 'Cumplimiento');
 INSERT INTO `db_gestion_documental`.`criteria` (`id`, `criteriaType`, `description`, `name`) VALUES ('4', 'Servicios', 'Percepcion que se tiene de satisfaccion, grado de eficiencia o rendimiento del servicio', 'Calidad');

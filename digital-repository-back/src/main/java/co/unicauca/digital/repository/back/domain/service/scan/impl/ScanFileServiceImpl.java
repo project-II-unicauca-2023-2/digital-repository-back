@@ -209,10 +209,13 @@ public class ScanFileServiceImpl implements IScanFileService {
 
             var qualityCriteria = this.criteriaRepository.findByNameAndCriteriaType("Calidad", criteriaType)
                 .orElseThrow();
-            var executionCriteria = this.criteriaRepository.findByNameAndCriteriaType("Ejecucion ", criteriaType)
+                //System.out.println("pass 1");
+            var executionCriteria = this.criteriaRepository.findByNameAndCriteriaType("Ejecucion", criteriaType)
                 .orElseThrow();
+            //System.out.println("pass 2");
             var complianceCriteria = this.criteriaRepository.findByNameAndCriteriaType("Cumplimiento", criteriaType)
-                .orElseThrow();                     
+                .orElseThrow();          
+            //System.out.println("pass 3");           
             // System.out.println("Quality criteria " + qualityCriteria.getDescription());
             // System.out.println("Execution criteria " + executionCriteria.getDescription());
             // System.out.println("Compliance criteria " + complianceCriteria.getDescription());
