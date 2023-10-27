@@ -23,6 +23,7 @@ import co.unicauca.digital.repository.back.domain.repository.score.IScoreReposit
 import co.unicauca.digital.repository.back.domain.repository.scorecriteria.IScoreCriteriaRepository;
 import co.unicauca.digital.repository.back.domain.service.scan.IScanFileService;
 import co.unicauca.digital.repository.back.domain.utilities.ExcelUtils;
+import co.unicauca.digital.repository.back.global.exception.BusinessRuleException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -34,6 +35,21 @@ public class ScanFileServiceImpl implements IScanFileService {
     private final IScoreCriteriaRepository scoreCriteriaRepository;
     private final ICriteriaRepository criteriaRepository;
     private final IContractRepository contractRepository;
+    /* Contract information */
+    private String contractReference;
+    private String vendorName;
+    private String vendorIdentificationType;
+    private String vendorIdentification;
+    private LocalDateTime initialDate;
+    private LocalDateTime finallDate;
+    private String contractSubject;
+    /* Vendor type */
+    private String vendorType;
+    /* Score */
+    private Integer qualityCriteriaRate;
+    private Integer complianceCriteriaRate;
+    private Integer excecutionCriteriaRate;
+    private Float totalValue;
 
     @Override
     public void processFile(MultipartFile file) throws IOException {
@@ -75,7 +91,7 @@ public class ScanFileServiceImpl implements IScanFileService {
             System.out.println("Number and date: " + cell8C.toString());
             String[] numberAndDate = cell8C.toString().split(" ");
             String numberReference = numberAndDate[0];
-            // System.out.println("Número de referencia: " + numberReference);
+            System.out.println("Número de referencia: " + numberReference);
             
             //* Vendor name cell
             final Cell cell9C = sheet.getRow(8).getCell(2);
@@ -217,7 +233,7 @@ public class ScanFileServiceImpl implements IScanFileService {
 
             //* Save to DB
             var contract = this.contractRepository.findByReference(numberReference)
-                .orElseThrow();
+                .orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
             System.out.println("Contract reference: " + contract.getReference());
 
             var qualityCriteria = this.criteriaRepository.findByNameAndCriteriaType("Calidad", criteriaType)
