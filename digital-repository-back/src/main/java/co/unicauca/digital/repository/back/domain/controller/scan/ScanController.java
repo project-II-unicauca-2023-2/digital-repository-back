@@ -36,6 +36,7 @@ public class ScanController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al procesar archivos Excel.");
             }
+            scanFileService.saveData();
         }
         return ResponseEntity.ok("Archivos Excel cargados y procesados con éxito.");
     }

@@ -11,21 +11,35 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ExcelUtils {
+
+    public String determineVendorType(List<String> vendorTypes) {
+        int position = vendorTypes.indexOf("x");
+        String criteriaType = null;
+        if (position >= 0 && position <= 2) {
+            criteriaType = "Bienes";
+        } else if (position >= 3 && position <= 9) {
+            criteriaType = "Servicios";
+        } else if (position == 10) {
+            criteriaType = "Obras";
+        }
+        return criteriaType;
+    }
 
     public String extractReferenceNumber(String reference){
         String[] numberAndDate = reference.split(" ");
         return numberAndDate[0];
     }
 
-    public Integer extractCriteriaRate(String criteriaRateString) {
-        if(criteriaRateString.contains(".")) {
-            Double criteriaRate = Double.parseDouble(criteriaRateString);
-            return criteriaRate.intValue();
+    public Integer extractIntegerValue(String value) {
+        if(value.contains(".")) {
+            Double doubleValue = Double.parseDouble(value);
+            return doubleValue.intValue();
         }
-        return Integer.parseInt(criteriaRateString);
+        return Integer.parseInt(value);
     }
 
     public String extractCode(String referenceCode) {
