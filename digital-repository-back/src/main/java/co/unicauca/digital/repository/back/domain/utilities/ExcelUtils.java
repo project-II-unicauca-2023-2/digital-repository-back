@@ -15,6 +15,11 @@ import java.util.Date;
 @Service
 public class ExcelUtils {
 
+    public String extractReferenceNumber(String reference){
+        String[] numberAndDate = reference.split(" ");
+        return numberAndDate[0];
+    }
+
     public Integer extractCriteriaRate(String criteriaRateString) {
         if(criteriaRateString.contains(".")) {
             Double criteriaRate = Double.parseDouble(criteriaRateString);
@@ -23,7 +28,7 @@ public class ExcelUtils {
         return Integer.parseInt(criteriaRateString);
     }
 
-    public String extractReference(String referenceCode) {
+    public String extractCode(String referenceCode) {
         // Verificar si la cadena contiene ":"
         if (referenceCode.contains(":")) {
             // Encontrar la posición de ":"
@@ -80,7 +85,7 @@ public class ExcelUtils {
         }
     }
     
-    public LocalDateTime extractUpdateDate(String updateDate) throws ParseException{
+    public LocalDateTime extractEvaluationUpdateDate(String updateDate) throws ParseException{
         // Verificar si la cadena contiene ":"
         if (updateDate.contains(":")) {
             // Encontrar la posición de ":"
