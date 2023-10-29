@@ -66,4 +66,12 @@ public interface IContractService {
      */
     Response<Boolean> deleteContract(final int id);
 
+    /**
+     *Contract Existence Verification Service
+     *  @param prmMask - The contract mask used to verify its existence
+     *  @return {@link Response} - Response object for the service, containing
+     */
+    
+    Response<Boolean> entityExistsByReference(String prmMask);
+
 }

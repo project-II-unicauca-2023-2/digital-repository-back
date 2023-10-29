@@ -139,4 +139,11 @@ public class ContractController {
                 this.listContractualFolders.getContractualFoldersByFilter(pageNo, pageSize, filter, search),
                 HttpStatus.OK);
     }
+
+    @GetMapping("existingContractByMask")
+    public ResponseEntity<Response<Boolean>> getExistingContractByMask(@RequestParam String referenceMask){
+        return new ResponseEntity<>(
+        this.contractService.entityExistsByReference(referenceMask),
+        HttpStatus.OK);
+    }
 }

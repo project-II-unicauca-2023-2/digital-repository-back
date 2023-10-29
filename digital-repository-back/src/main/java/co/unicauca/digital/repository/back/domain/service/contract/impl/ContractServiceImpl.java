@@ -112,7 +112,7 @@ public class ContractServiceImpl implements IContractService {
      */
     @Override
     public Response<ContractDtoCreateResponse> createContract(final ContractDtoCreateRequest contractDtoCreateRequest) {
-        if (entityExistsByReference(contractDtoCreateRequest.getReference()))
+        if (entityExistsByReference(contractDtoCreateRequest.getReference()).getData())
             throw new BusinessRuleException("contract.request.already.exists");
 
         Contract contractModel = contractMapper.toEntityCreate(contractDtoCreateRequest);
@@ -205,7 +205,9 @@ public class ContractServiceImpl implements IContractService {
      * @param reference the request to be validated
      * @return true if the entity exists
      */
-    private boolean entityExistsByReference(final String reference) {
-        return contractRepository.findByReference(reference).isPresent();
+    public Response<Boolean>entityExistsByReference(final String referenceMask) {
+        String responseMessage = contractRepository.findByReference(referenceMask).isPresent() ? "Ya existe un contrato registrado con esa mascara" : "No existe un contrato con esa mascara";
+        return new ResponseHandler<>(200,responseMessage,responseMessage,
+                contractRepository.findByReference(referenceMask).isPresent()).getResponse();
     }
 }
