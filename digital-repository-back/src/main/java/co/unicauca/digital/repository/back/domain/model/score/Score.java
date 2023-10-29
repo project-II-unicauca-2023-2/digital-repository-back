@@ -24,6 +24,14 @@ public class Score {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    /**Aqui se utilizo una relacion one to one con la estrategia de clave compartida, la clave primaria de contrato es la misma clave primaria
+     * de score, de esta manera funciona como primaria y foranea al tiempo.
+     */
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "contract_id", referencedColumnName = "id")
+    private Contract contract;
+
     /** Total Score */
     private Float totalScore;
 
@@ -32,11 +40,6 @@ public class Score {
 
     /** Score last update time */
     private LocalDateTime updateTime;
-
-    /** Score contract */
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "contract_id", referencedColumnName = "id")
-    private Contract contract;
 
     /** Score scoreCriteria */
     @OneToMany(mappedBy = "score")

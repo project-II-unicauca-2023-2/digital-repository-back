@@ -10,7 +10,9 @@ import co.unicauca.digital.repository.back.domain.model.contract.Contract;
 import co.unicauca.digital.repository.back.domain.repository.contract.IContractRepository;
 import co.unicauca.digital.repository.back.domain.service.contract.IContractService;
 import co.unicauca.digital.repository.back.domain.model.modalityContractType.ModalityContractType;
+import co.unicauca.digital.repository.back.domain.model.score.Score;
 import co.unicauca.digital.repository.back.domain.repository.modalityContractType.IModalityContractTypeRepository;
+import co.unicauca.digital.repository.back.domain.repository.score.IScoreRepository;
 import co.unicauca.digital.repository.back.domain.model.vendor.Vendor;
 import co.unicauca.digital.repository.back.domain.repository.vendor.IVendorRepository;
 import co.unicauca.digital.repository.back.global.exception.BusinessRuleException;
@@ -37,10 +39,10 @@ public class ContractServiceImpl implements IContractService {
 
     /** Object to perform CRUD operations on the Product entity */
     private final IContractRepository contractRepository;
-
     /** Object to perform CRUD operations on the Product entity */
     private final IVendorRepository vendorRepository;
-
+    /** Object to perform CRUD operations on the Score entity */
+    private final IScoreRepository scoreRepository;
     /**
      * Object to perform CRUD operations on the ModalityContractTypeRepository
      * entity
@@ -57,12 +59,13 @@ public class ContractServiceImpl implements IContractService {
      */
     public ContractServiceImpl(IContractRepository contractRepository, IVendorRepository vendorRepository,
             IModalityContractTypeRepository modalityContractTypeRepository, IContractMapper contractMapper,
-            ICollectionService collectionService) {
+            ICollectionService collectionService,IScoreRepository scoreRepository) {
         this.contractRepository = contractRepository;
         this.vendorRepository = vendorRepository;
         this.modalityContractTypeRepository = modalityContractTypeRepository;
         this.contractMapper = contractMapper;
         this.collectionService = collectionService;
+        this.scoreRepository = scoreRepository;
     }
 
     /**
@@ -137,6 +140,17 @@ public class ContractServiceImpl implements IContractService {
 
         // create collectinos's contract
         this.collectionService.createCollections(contractSaved);
+
+        // Create a Score associated with the Contract
+        Score score = Score.builder()
+        .totalScore(0.0f)
+        .createTime(LocalDateTime.now())
+        .updateTime(LocalDateTime.now())
+        .contract(contractSaved)
+        .build();
+
+        // Save the Score
+        scoreRepository.save(score);
 
         ContractDtoCreateResponse contractDtoCreateResponse = contractMapper.toDtoCreate(contractSaved);
 
