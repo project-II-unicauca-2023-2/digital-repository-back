@@ -220,10 +220,6 @@ public class ScanFileServiceImpl implements IScanFileService {
 
     @Override
     public void saveData() {
-        // TODO Create vendor
-        // TODO Create contract
-        // TODO Associate contract with vendor
-
         // * Save to DB
         var contract = this.contractRepository.findByReference(contractReference)
             .orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
