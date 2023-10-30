@@ -20,9 +20,3 @@ public interface IContractVendorMapper {
     })
     ContractVendorDtoResponse toContractVendorDtoResponse(Contract contract, Vendor vendor);
 }
-
-
-
-
-
-
