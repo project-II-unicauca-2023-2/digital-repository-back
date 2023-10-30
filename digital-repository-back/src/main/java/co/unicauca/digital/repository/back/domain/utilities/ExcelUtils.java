@@ -11,11 +11,45 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ExcelUtils {
 
-    public String extractReference(String referenceCode) {
+    public String determineVendorType(List<String> vendorTypes) {
+        //int position = vendorTypes.indexOf("x");
+        int position = -1;
+        for (String type : vendorTypes) {
+            if (type.toLowerCase().contains("x".toLowerCase())) {
+                position = vendorTypes.indexOf(type);
+                break;
+            }
+        }
+        String criteriaType = null;
+        if (position >= 0 && position <= 2) {
+            criteriaType = "Bienes";
+        } else if (position >= 3 && position <= 9) {
+            criteriaType = "Servicios";
+        } else if (position == 10) {
+            criteriaType = "Obras";
+        }
+        return criteriaType;
+    }
+
+    public String extractReferenceNumber(String reference){
+        String[] numberAndDate = reference.split(" ");
+        return numberAndDate[0];
+    }
+
+    public Integer extractIntegerValue(String value) {
+        if(value.contains(".")) {
+            Double doubleValue = Double.parseDouble(value);
+            return doubleValue.intValue();
+        }
+        return Integer.parseInt(value);
+    }
+
+    public String extractCode(String referenceCode) {
         // Verificar si la cadena contiene ":"
         if (referenceCode.contains(":")) {
             // Encontrar la posición de ":"
@@ -72,7 +106,7 @@ public class ExcelUtils {
         }
     }
     
-    public LocalDateTime extractUpdateDate(String updateDate) throws ParseException{
+    public LocalDateTime extractEvaluationUpdateDate(String updateDate) throws ParseException{
         // Verificar si la cadena contiene ":"
         if (updateDate.contains(":")) {
             // Encontrar la posición de ":"
