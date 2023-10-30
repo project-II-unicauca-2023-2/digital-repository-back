@@ -5,6 +5,7 @@ import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractD
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
+import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
 import co.unicauca.digital.repository.back.global.response.PageableResponse;
 import co.unicauca.digital.repository.back.global.response.Response;
 
@@ -81,5 +82,13 @@ public interface IContractService {
      */
     
     Response<Boolean> ExistEvaluationByReference(String prmMask);
+
+    /**
+     *  Selected data from contract and vendor
+     *  @param prmMask - The contract mask used to verify its existence
+     *  @return {@link Response} - Response object for the service, containing
+     */
+    
+    Response<ContractVendorDtoResponse> DataContractVendorByMask(String prmMask);
 
 }

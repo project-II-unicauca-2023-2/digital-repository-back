@@ -5,7 +5,9 @@ import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractD
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
+import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
 import co.unicauca.digital.repository.back.domain.mapper.contract.IContractMapper;
+import co.unicauca.digital.repository.back.domain.mapper.contract.IContractVendorMapper;
 import co.unicauca.digital.repository.back.domain.model.contract.Contract;
 import co.unicauca.digital.repository.back.domain.repository.contract.IContractRepository;
 import co.unicauca.digital.repository.back.domain.service.contract.IContractService;
@@ -52,6 +54,8 @@ public class ContractServiceImpl implements IContractService {
     /** Mapping object for mapping the products */
     private final IContractMapper contractMapper;
 
+    private final IContractVendorMapper contractVendorMapper;
+
     private final ICollectionService collectionService;
 
     /**
@@ -59,13 +63,14 @@ public class ContractServiceImpl implements IContractService {
      */
     public ContractServiceImpl(IContractRepository contractRepository, IVendorRepository vendorRepository,
             IModalityContractTypeRepository modalityContractTypeRepository, IContractMapper contractMapper,
-            ICollectionService collectionService,IScoreRepository scoreRepository) {
+            ICollectionService collectionService,IScoreRepository scoreRepository,IContractVendorMapper contractVendorMapper) {
         this.contractRepository = contractRepository;
         this.vendorRepository = vendorRepository;
         this.modalityContractTypeRepository = modalityContractTypeRepository;
         this.contractMapper = contractMapper;
         this.collectionService = collectionService;
         this.scoreRepository = scoreRepository;
+        this.contractVendorMapper = contractVendorMapper;
     }
 
     /**
@@ -234,5 +239,13 @@ public class ContractServiceImpl implements IContractService {
         String responseMessage = isEvaluationRegister ? "Ya existe una evaluacion registrada para el contrato asociado a la mascara solicitada" : "No existe una evaluacion registrada para el contrato asociado a la mascara solicitada";
         return new ResponseHandler<>(200,responseMessage,responseMessage,
             isEvaluationRegister).getResponse();
+    }
+
+    public Response<ContractVendorDtoResponse> DataContractVendorByMask(String referenceMask){
+        Optional<Contract> contract = contractRepository.findByReference(referenceMask);
+        Contract objContrato = contract.orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
+        Vendor vendor = objContrato.getVendor(); 
+        return new ResponseHandler<>(200,"Datos del contrato y proveedor","Datos del contrato y proveedor",
+           contractVendorMapper.toContractVendorDtoResponse(objContrato, vendor)).getResponse();       
     }
 }

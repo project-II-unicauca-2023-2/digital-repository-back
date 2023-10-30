@@ -4,6 +4,7 @@ import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractD
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
+import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
 import co.unicauca.digital.repository.back.domain.service.contract.IContractService;
 import co.unicauca.digital.repository.back.domain.service.contract.IListContractualFolders;
 import co.unicauca.digital.repository.back.global.response.PageableResponse;
@@ -163,6 +164,19 @@ public class ContractController {
     public ResponseEntity<Response<Boolean>> getExistingEvaluationContractByMask(@RequestParam String referenceMask){
         return new ResponseEntity<>(
         this.contractService.ExistEvaluationByReference(referenceMask),
+        HttpStatus.OK);
+    }
+
+    /**
+     *API to get data for a contract and vendor
+     *  @param prmMask - The contract mask used to verify its existence
+     *  @return {@link Response} - Response object for the service, containing
+     */
+
+    @GetMapping("dataContractVendorByMask")
+    public ResponseEntity<Response<ContractVendorDtoResponse>> getDataContractVendorByMask(@RequestParam String referenceMask){
+        return new ResponseEntity<>(
+        this.contractService.DataContractVendorByMask(referenceMask),
         HttpStatus.OK);
     }
 }
