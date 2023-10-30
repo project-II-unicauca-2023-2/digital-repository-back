@@ -140,10 +140,29 @@ public class ContractController {
                 HttpStatus.OK);
     }
 
+    /**
+     *API to get Contract Existence Verification
+     *  @param prmMask - The contract mask used to verify its existence
+     *  @return {@link Response} - Response object for the service, containing
+     */
+
     @GetMapping("existingContractByMask")
     public ResponseEntity<Response<Boolean>> getExistingContractByMask(@RequestParam String referenceMask){
         return new ResponseEntity<>(
         this.contractService.entityExistsByReference(referenceMask),
+        HttpStatus.OK);
+    }
+
+    /**
+     *API to get Existence evaluation for a contract based on reference
+     *  @param prmMask - The contract mask used to verify its existence
+     *  @return {@link Response} - Response object for the service, containing
+     */
+
+    @GetMapping("existingEvaluationContractByMask")
+    public ResponseEntity<Response<Boolean>> getExistingEvaluationContractByMask(@RequestParam String referenceMask){
+        return new ResponseEntity<>(
+        this.contractService.ExistEvaluationByReference(referenceMask),
         HttpStatus.OK);
     }
 }

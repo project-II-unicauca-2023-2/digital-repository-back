@@ -74,4 +74,12 @@ public interface IContractService {
     
     Response<Boolean> entityExistsByReference(String prmMask);
 
+    /**
+     *Existence evaluation for a contract based on reference
+     *  @param prmMask - The contract mask used to verify its existence
+     *  @return {@link Response} - Response object for the service, containing
+     */
+    
+    Response<Boolean> ExistEvaluationByReference(String prmMask);
+
 }

@@ -220,8 +220,19 @@ public class ContractServiceImpl implements IContractService {
      * @return true if the entity exists
      */
     public Response<Boolean>entityExistsByReference(final String referenceMask) {
-        String responseMessage = contractRepository.findByReference(referenceMask).isPresent() ? "Ya existe un contrato registrado con esa mascara" : "No existe un contrato con esa mascara";
+        boolean isContractRegister = contractRepository.findByReference(referenceMask).isPresent();
+        String responseMessage = isContractRegister  ? "Ya existe un contrato registrado con esa mascara" : "No existe un contrato con esa mascara";
         return new ResponseHandler<>(200,responseMessage,responseMessage,
-                contractRepository.findByReference(referenceMask).isPresent()).getResponse();
+            isContractRegister).getResponse();
+    }
+
+    public Response<Boolean>ExistEvaluationByReference(final String referenceMask) {
+        Optional<Contract> contract = contractRepository.findByReference(referenceMask);
+        Contract objContrato = contract.orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
+        Score objScore  = scoreRepository.findById(objContrato.getId()).get();
+        boolean isEvaluationRegister = objScore.getCreateTime().equals(objScore.getUpdateTime()) ? false : true;
+        String responseMessage = isEvaluationRegister ? "Ya existe una evaluacion registrada para el contrato asociado a la mascara solicitada" : "No existe una evaluacion registrada para el contrato asociado a la mascara solicitada";
+        return new ResponseHandler<>(200,responseMessage,responseMessage,
+            isEvaluationRegister).getResponse();
     }
 }
