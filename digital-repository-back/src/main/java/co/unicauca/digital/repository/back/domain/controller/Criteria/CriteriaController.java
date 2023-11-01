@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.unicauca.digital.repository.back.domain.dto.criteria.response.CriteriaDtoCreateResponse;
-import co.unicauca.digital.repository.back.domain.dto.modality.response.ModalityDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.service.criteria.ICriteriaService;
 import co.unicauca.digital.repository.back.global.response.Response;
 

@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import co.unicauca.digital.repository.back.domain.model.criteria.Criteria;
-import co.unicauca.digital.repository.back.domain.model.modality.Modality;
 
 import java.util.Optional;
 
