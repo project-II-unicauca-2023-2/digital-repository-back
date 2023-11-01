@@ -1,4 +1,5 @@
 package co.unicauca.digital.repository.back.domain.service.scoreCriteria;
+import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaCalificationDomainDtoResponse;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaDtoResponse;
 import co.unicauca.digital.repository.back.global.response.Response;
 
@@ -9,4 +10,10 @@ public interface IScoreCriteriaService {
      *  @return {@link Response} - Response object for the service, containing
      */
     Response<ScoreCriteriaDtoResponse> DataScoreCriteriaByMask(String prmMask);
+
+    /**
+     *  Get Calification Domain List
+     *  @return {@link Response} - Response object for the service, containing
+     */
+    Response<ScoreCriteriaCalificationDomainDtoResponse> CalificationDomain();
 }

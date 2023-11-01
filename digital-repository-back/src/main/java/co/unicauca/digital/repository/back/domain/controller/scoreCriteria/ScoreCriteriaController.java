@@ -1,4 +1,5 @@
 package co.unicauca.digital.repository.back.domain.controller.scoreCriteria;
+import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaCalificationDomainDtoResponse;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaDtoResponse;
 import co.unicauca.digital.repository.back.domain.service.scoreCriteria.IScoreCriteriaService;
 import co.unicauca.digital.repository.back.global.response.Response;
@@ -20,6 +21,13 @@ public class ScoreCriteriaController {
     public ResponseEntity<Response<ScoreCriteriaDtoResponse>> getScoreCriteriaDataByMask(@RequestParam String referenceMask){
         return new ResponseEntity<>(
         this.scoreCriteriaService.DataScoreCriteriaByMask(referenceMask),
+        HttpStatus.OK);
+    }
+
+    @GetMapping("calificationDomain")
+    public ResponseEntity<Response<ScoreCriteriaCalificationDomainDtoResponse>> getCalificationDomain(){
+        return new ResponseEntity<>(
+        this.scoreCriteriaService.CalificationDomain(),
         HttpStatus.OK);
     }
 }

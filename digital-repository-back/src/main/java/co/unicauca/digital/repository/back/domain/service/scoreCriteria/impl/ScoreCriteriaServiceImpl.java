@@ -1,12 +1,15 @@
 package co.unicauca.digital.repository.back.domain.service.scoreCriteria.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaCalificationDomainDto;
+import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaCalificationDomainDtoResponse;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaDto;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaDtoResponse;
 import co.unicauca.digital.repository.back.domain.mapper.scoreCriteria.IScoreCriteriaDtoMapper;
@@ -15,10 +18,6 @@ import co.unicauca.digital.repository.back.domain.model.contract.Contract;
 import co.unicauca.digital.repository.back.domain.model.score.Score;
 import co.unicauca.digital.repository.back.domain.model.scoreCriteria.ScoreCriteria;
 import co.unicauca.digital.repository.back.domain.repository.contract.IContractRepository;
-import co.unicauca.digital.repository.back.domain.repository.criteria.ICriteriaRepository;
-import co.unicauca.digital.repository.back.domain.repository.score.IScoreRepository;
-import co.unicauca.digital.repository.back.domain.repository.scoreCriteria.IScoreCriteriaRepository;
-import co.unicauca.digital.repository.back.domain.service.contract.IContractService;
 import co.unicauca.digital.repository.back.domain.service.scoreCriteria.IScoreCriteriaService;
 import co.unicauca.digital.repository.back.global.exception.BusinessRuleException;
 import co.unicauca.digital.repository.back.global.response.Response;
@@ -50,5 +49,22 @@ public class ScoreCriteriaServiceImpl implements IScoreCriteriaService {
         }
         return new ResponseHandler<>(200,"Nombre criterios, valores y total","Nombre criterios, valores y total",
            scoreCriteriaMapper.toScoreCriteriaDtoResponse(objScore, objListScoreCriteriaDto)).getResponse();  
+    }
+
+    public Response<ScoreCriteriaCalificationDomainDtoResponse> CalificationDomain(){
+        /**
+         * Por el momento se deja esta lista aqui, en el esquema actual de BD no se ve reflejado
+         * campos que coincidan con esta lista.
+         * Porque no dejar esta lista quemada en el front?
+        */
+        List<ScoreCriteriaCalificationDomainDto> calificationList = Arrays.asList(
+        new ScoreCriteriaCalificationDomainDto("No cumple", 1),
+        new ScoreCriteriaCalificationDomainDto("Mínimamente", 2),
+        new ScoreCriteriaCalificationDomainDto("Parcialmente", 3),
+        new ScoreCriteriaCalificationDomainDto("Plenamente", 4),
+        new ScoreCriteriaCalificationDomainDto("Supera expectativas", 5)
+        );
+        return new ResponseHandler<>(200,"Dominios de calificación","Dominios de calificación",
+        new ScoreCriteriaCalificationDomainDtoResponse(calificationList)).getResponse(); 
     }
 }
