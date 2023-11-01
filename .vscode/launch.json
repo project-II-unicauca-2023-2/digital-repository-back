@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DigitalRepositoryApplication<digital-repository>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "co.unicauca.digital.repository.back.DigitalRepositoryApplication",
+            "projectName": "digital-repository",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
