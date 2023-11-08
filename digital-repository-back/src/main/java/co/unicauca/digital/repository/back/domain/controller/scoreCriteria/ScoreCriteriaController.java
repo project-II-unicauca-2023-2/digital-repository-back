@@ -1,8 +1,12 @@
 package co.unicauca.digital.repository.back.domain.controller.scoreCriteria;
+import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.request.ScoreCriteriaDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaCalificationDomainDtoResponse;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaDtoResponse;
 import co.unicauca.digital.repository.back.domain.service.scoreCriteria.IScoreCriteriaService;
 import co.unicauca.digital.repository.back.global.response.Response;
+
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +32,13 @@ public class ScoreCriteriaController {
     public ResponseEntity<Response<ScoreCriteriaCalificationDomainDtoResponse>> getCalificationDomain(){
         return new ResponseEntity<>(
         this.scoreCriteriaService.CalificationDomain(),
+        HttpStatus.OK);
+    }
+
+    @PostMapping("registerCalification")
+    public ResponseEntity<Response<Boolean>> registerCalification(@Valid @RequestBody final ScoreCriteriaDtoCreateRequest calificationRequest){
+        return new ResponseEntity<>(
+        this.scoreCriteriaService.RegisterCalification(calificationRequest),
         HttpStatus.OK);
     }
 }
