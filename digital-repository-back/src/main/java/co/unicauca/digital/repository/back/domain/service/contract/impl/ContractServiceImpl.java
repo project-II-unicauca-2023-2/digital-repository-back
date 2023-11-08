@@ -245,7 +245,9 @@ public class ContractServiceImpl implements IContractService {
         Optional<Contract> contract = contractRepository.findByReference(referenceMask);
         Contract objContrato = contract.orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
         Vendor vendor = objContrato.getVendor(); 
+        ContractVendorDtoResponse objResponse = contractVendorMapper.toContractVendorDtoResponse(objContrato, vendor);
+        objResponse.setNaturalPerson("NATURAL".equalsIgnoreCase(vendor.getPersonType()));
         return new ResponseHandler<>(200,"Datos del contrato y proveedor","Datos del contrato y proveedor",
-           contractVendorMapper.toContractVendorDtoResponse(objContrato, vendor)).getResponse();       
+           objResponse).getResponse();       
     }
 }

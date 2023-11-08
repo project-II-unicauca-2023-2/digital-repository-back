@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Class that defines an entity for the O/R mapping for the output of
  * information from the CONTRACT table.
@@ -26,9 +28,13 @@ public class ContractVendorDtoResponse {
     /** Contract subject */
     private String subject;
 
-    //Vendor
+    /** Vendor name */
     private String name;
 
     /** Vendor identification number */
     private String identification;
+
+    /** If isNaturalPerson is false, then the personType is juridical.*/
+    @JsonProperty("isNaturalPerson")
+    private boolean isNaturalPerson;
 }
