@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.unicauca.digital.repository.back.domain.dto.criteria.response.AllCriteriaDtoConsultResponse;
+import co.unicauca.digital.repository.back.domain.dto.criteria.response.CriteriaDtoConsultResponse;
 import co.unicauca.digital.repository.back.domain.dto.criteria.response.CriteriaDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.service.criteria.ICriteriaService;
 import co.unicauca.digital.repository.back.global.response.Response;
@@ -37,5 +39,11 @@ public class CriteriaController {
     @GetMapping("/{id}")
     public ResponseEntity<Response<CriteriaDtoCreateResponse>> getById(@Valid @PathVariable final Integer id) {
         return new ResponseEntity<>(this.criteriaService.getById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/criteria/{criteriaType}")
+    public ResponseEntity<Response<AllCriteriaDtoConsultResponse>> getCriteriaByType(@PathVariable String criteriaType){
+
+        return new ResponseEntity<>(this.criteriaService.getCriteriaByType(criteriaType), HttpStatus.OK);
     }
 }

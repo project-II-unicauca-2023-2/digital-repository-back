@@ -1,12 +1,14 @@
 package co.unicauca.digital.repository.back.domain.service.criteria.impl;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-
+import co.unicauca.digital.repository.back.domain.dto.criteria.response.AllCriteriaDtoConsultResponse;
+import co.unicauca.digital.repository.back.domain.dto.criteria.response.CriteriaDtoConsultResponse;
 import co.unicauca.digital.repository.back.domain.dto.criteria.response.CriteriaDtoCreateResponse;
 
 import co.unicauca.digital.repository.back.domain.mapper.criteria.ICriteriaMapper;
@@ -50,6 +52,18 @@ public class CriteriaServiceImpl implements ICriteriaService{
         CriteriaDtoCreateResponse criteriaDtoCreateResponse = criteriaMapper.toDtoFind(criteriaFound.get());
 
         return new ResponseHandler<>(200, "Encontrado", "Encontrado", criteriaDtoCreateResponse).getResponse();
+    }
+
+    @Override
+    public Response<AllCriteriaDtoConsultResponse> getCriteriaByType(String criteriaType) {
+        AllCriteriaDtoConsultResponse response=new AllCriteriaDtoConsultResponse();
+
+        response.setCriteriaType(criteriaType);
+        response.setCalidad(criteriaRepository.getCriteriaByTypeAndName(criteriaType, "CALIDAD"));
+        response.setCumplimiento(criteriaRepository.getCriteriaByTypeAndName(criteriaType, "CUMPLIMIENTO"));
+        response.setEjecucion(criteriaRepository.getCriteriaByTypeAndName(criteriaType, "EJECUCION"));
+        
+        return new ResponseHandler<>(200, "Encontrado", "Encontrado", response).getResponse();
     }
 
 

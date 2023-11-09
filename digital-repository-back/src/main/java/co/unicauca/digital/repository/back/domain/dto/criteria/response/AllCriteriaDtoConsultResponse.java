@@ -12,10 +12,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class CriteriaDtoConsultResponse {
+public class AllCriteriaDtoConsultResponse {
 
-    private String description;
+    private String criteriaType;
 
-    private String name;
+    private String calidad;
+
+    private String ejecucion;
+
+    private String cumplimiento;
 
 }
