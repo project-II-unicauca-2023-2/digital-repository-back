@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import static java.time.LocalDateTime.now;
 import java.util.Arrays;
 import java.util.List;
@@ -278,5 +280,75 @@ public class ScanFileServiceImpl implements IScanFileService {
         complianceCriteriaRate=null;
         excecutionCriteriaRate=null;
         totalScore=null;
+    }
+
+    @Override
+    public void processMassiveFile(MultipartFile file) throws IOException, ParseException {
+        InputStream is = file.getInputStream();
+        Workbook workbook = new XSSFWorkbook(is);
+        Sheet sheet = workbook.getSheetAt(0);
+        FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+
+        System.out.println("============= Data Massive File ==============");
+        
+        final Cell cell207A = sheet.getRow(206).getCell(0);
+        String reference = cell207A.toString();
+        System.out.println("Reference: " + reference);
+
+        final Cell cell206B = sheet.getRow(206).getCell(1);
+        String stringSuscriptionDate = cell206B.getStringCellValue();
+        System.out.println("String susciption date: " + stringSuscriptionDate);
+        
+        // Definir el formato de la fecha
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+
+        // Convertir la cadena a LocalDateTime
+        LocalDateTime suscriptionDate = LocalDateTime.parse(stringSuscriptionDate, formatter);
+
+        System.out.println("Suscription date: " + suscriptionDate);
+
+        final Cell cell206C = sheet.getRow(206).getCell(2);
+        String contractType = cell206C.toString();
+        System.out.println("Contract type: " + contractType);
+
+        final Cell cell206D = sheet.getRow(206).getCell(3);
+        String contractSubject = cell206D.toString();
+        System.out.println("Contract subject: " + contractSubject);
+
+        final Cell cell206E = sheet.getRow(206).getCell(4);
+        String identificationType = cell206E.toString();
+
+        final Cell cell206F = sheet.getRow(206).getCell(5);
+        String ccRut = cell206F.toString();
+
+        final Cell cell206G = sheet.getRow(206).getCell(6);
+        String nit = cell206G.toString();
+
+        final Cell cell206H = sheet.getRow(206).getCell(7);
+        String vendorName = cell206H.toString();
+
+        final Cell cell206I = sheet.getRow(206).getCell(8);
+        String supervisorName = cell206I.toString();
+
+        final Cell cell206J = sheet.getRow(206).getCell(9);
+        LocalDateTime initialDate = LocalDateTime.parse(cell206J.toString());
+
+        final Cell cell206K = sheet.getRow(206).getCell(10);
+        LocalDateTime finalDate = LocalDateTime.parse(cell206K.toString());
+
+        final Cell cell206L = sheet.getRow(206).getCell(11);
+        String contractEvaluation = cell206L.toString();
+
+        System.out.println("Identification type: " + identificationType + "\n" +
+            "CC/RUT: " + ccRut + "\n" +
+            "NIT: " + nit + "\n" +
+            "Vendor name: " + vendorName + "\n" +
+            "Supervisor name: " + supervisorName + "\n" +
+            "Initial date: " + initialDate + "\n" +
+            "Final date: " + finalDate + "\n" +
+            "Contract evaluation: " + contractEvaluation + "\n"
+        );
+
+        if (workbook != null) workbook.close();
     }
 }
