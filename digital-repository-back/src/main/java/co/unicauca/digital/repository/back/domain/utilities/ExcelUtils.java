@@ -17,7 +17,14 @@ import java.util.List;
 public class ExcelUtils {
 
     public String determineVendorType(List<String> vendorTypes) {
-        int position = vendorTypes.indexOf("x");
+        //int position = vendorTypes.indexOf("x");
+        int position = -1;
+        for (String type : vendorTypes) {
+            if (type.toLowerCase().contains("x".toLowerCase())) {
+                position = vendorTypes.indexOf(type);
+                break;
+            }
+        }
         String criteriaType = null;
         if (position >= 0 && position <= 2) {
             criteriaType = "Bienes";
