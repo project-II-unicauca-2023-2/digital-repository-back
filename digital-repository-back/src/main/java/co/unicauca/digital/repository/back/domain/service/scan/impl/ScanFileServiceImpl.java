@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import static java.time.LocalDateTime.now;
@@ -66,26 +67,36 @@ public class ScanFileServiceImpl implements IScanFileService {
         System.out.println("===================== Data Evaluacion Proveedores V2 =============");
 
         // * Contract reference cell
-        /*final Cell cell4A = sheet.getRow(3).getCell(0);
-        String code = excelUtils.extractCode(cell4A.toString());
-        System.out.println("Code: " + code);*/
+        /*
+         * final Cell cell4A = sheet.getRow(3).getCell(0);
+         * String code = excelUtils.extractCode(cell4A.toString());
+         * System.out.println("Code: " + code);
+         */
 
         // * Evaluation version cell
-        /*final Cell cell4D = sheet.getRow(3).getCell(3);
-        Integer version = excelUtils.extractVersion(cell4D.toString());
-        System.out.println("Version: " + version);*/
+        /*
+         * final Cell cell4D = sheet.getRow(3).getCell(3);
+         * Integer version = excelUtils.extractVersion(cell4D.toString());
+         * System.out.println("Version: " + version);
+         */
 
         // * Evaluation update date cell
-        /*final Cell cell4H = sheet.getRow(3).getCell(7);
-        LocalDateTime evaluationUpdateDate = excelUtils.extractEvaluationUpdateDate(cell4H.toString());
-        System.out.println("Evaluation update date: " + evaluationUpdateDate);*/
+        /*
+         * final Cell cell4H = sheet.getRow(3).getCell(7);
+         * LocalDateTime evaluationUpdateDate =
+         * excelUtils.extractEvaluationUpdateDate(cell4H.toString());
+         * System.out.println("Evaluation update date: " + evaluationUpdateDate);
+         */
 
         // * Evaluation date cell
-        /*final Cell cell6C = sheet.getRow(5).getCell(2);
-        if (cell6C != null) {
-            LocalDateTime evaluationDate = excelUtils.extractEvaluationDate(cell6C.toString());
-            System.out.println("Evaluation date: " + evaluationDate);
-        }*/
+        /*
+         * final Cell cell6C = sheet.getRow(5).getCell(2);
+         * if (cell6C != null) {
+         * LocalDateTime evaluationDate =
+         * excelUtils.extractEvaluationDate(cell6C.toString());
+         * System.out.println("Evaluation date: " + evaluationDate);
+         * }
+         */
 
         System.out.println("===== Contract information =====");
 
@@ -136,16 +147,19 @@ public class ScanFileServiceImpl implements IScanFileService {
         final Cell cell17J = sheet.getRow(16).getCell(9);
         // System.out.println("2. Por contrato de Suministro: " + cell17J.toString());
         final Cell cell18J = sheet.getRow(17).getCell(9);
-        // System.out.println("3. Por contrato de orden de compra: " + cell18J.toString());
+        // System.out.println("3. Por contrato de orden de compra: " +
+        // cell18J.toString());
         // Services
         final Cell cell19J = sheet.getRow(18).getCell(9);
-        // System.out.println("1. Por contrato de Prestación de servicios: " + cell19J.toString());
+        // System.out.println("1. Por contrato de Prestación de servicios: " +
+        // cell19J.toString());
         final Cell cell20J = sheet.getRow(19).getCell(9);
         // System.out.println("2. Por contrato de Consultoría: " + cell20J.toString());
         final Cell cell21J = sheet.getRow(20).getCell(9);
         // System.out.println("3. Por contrato de Suministro: " + cell21J.toString());
         final Cell cell22J = sheet.getRow(21).getCell(9);
-        // System.out.println("4. Por contrato de arrendamiento: " + cell22J.toString());
+        // System.out.println("4. Por contrato de arrendamiento: " +
+        // cell22J.toString());
         final Cell cell23J = sheet.getRow(22).getCell(9);
         // System.out.println("5. Por contrato de pasantia: " + cell23J.toString());
         final Cell cell24J = sheet.getRow(23).getCell(9);
@@ -156,10 +170,9 @@ public class ScanFileServiceImpl implements IScanFileService {
         final Cell cell26J = sheet.getRow(25).getCell(9);
         // System.out.println("1. Por contrato de Obra: " + cell26J.toString());
         // * Determine the type of vendor to evaluate
-        vendorTypes = Arrays.asList(cell16J.toString(), cell17J.toString(), cell18J.toString(), 
-            cell19J.toString(), cell20J.toString(), cell21J.toString(), cell22J.toString(), 
-            cell23J.toString(), cell24J.toString(), cell25J.toString(), cell26J.toString()
-        );
+        vendorTypes = Arrays.asList(cell16J.toString(), cell17J.toString(), cell18J.toString(),
+                cell19J.toString(), cell20J.toString(), cell21J.toString(), cell22J.toString(),
+                cell23J.toString(), cell24J.toString(), cell25J.toString(), cell26J.toString());
         criteriaType = excelUtils.determineVendorType(vendorTypes);
         System.out.println("El criteria type es: " + criteriaType);
 
@@ -183,9 +196,8 @@ public class ScanFileServiceImpl implements IScanFileService {
         excecutionCriteriaRate = excelUtils.extractIntegerValue(cell46J.toString());
 
         System.out.println(firstCriteriaType + ": " + qualityCriteriaRate + "\n" +
-            secondCriteria + ": " + complianceCriteriaRate + "\n" +
-            thirdCriteria + ": " + excecutionCriteriaRate + "\n"
-        );
+                secondCriteria + ": " + complianceCriteriaRate + "\n" +
+                thirdCriteria + ": " + excecutionCriteriaRate + "\n");
 
         // * Total evaluation cells
         final Cell cell47J = sheet.getRow(46).getCell(9);
@@ -193,28 +205,34 @@ public class ScanFileServiceImpl implements IScanFileService {
         System.out.println("Total score: " + totalScore + "\n");
 
         // * Supervisor data cells
-        /*final Cell cell49B = sheet.getRow(48).getCell(1);
-        String nameSupervisor = cell49B.toString();
-        final Cell cell49F = sheet.getRow(48).getCell(5);
-        String signatureSuoervisor = cell49F.toString();
-        final Cell cell49H = sheet.getRow(48).getCell(7);
-        String signatureContratist = cell49H.toString();
-        System.out.println("Supervisor fullname: " + nameSupervisor+"\n"
-            + "signature supervisor"+ signatureSuoervisor+"\n"
-            +"Signature Contratist"+ signatureContratist
-        );*/
+        /*
+         * final Cell cell49B = sheet.getRow(48).getCell(1);
+         * String nameSupervisor = cell49B.toString();
+         * final Cell cell49F = sheet.getRow(48).getCell(5);
+         * String signatureSuoervisor = cell49F.toString();
+         * final Cell cell49H = sheet.getRow(48).getCell(7);
+         * String signatureContratist = cell49H.toString();
+         * System.out.println("Supervisor fullname: " + nameSupervisor+"\n"
+         * + "signature supervisor"+ signatureSuoervisor+"\n"
+         * +"Signature Contratist"+ signatureContratist
+         * );
+         */
 
         // * buy orders cell
-        /*final Cell cell51C = sheet.getRow(50).getCell(2);
-        String nameProfessionalInventary = cell51C.toString();
-        final Cell cell51H = sheet.getRow(50).getCell(7);
-        String signatureProfessionalInventary = cell51H.toString();
-        System.out.println("Ordenes de compra(Solo si aplica)" + "\n" +
-            " Nombre profesional especializado" + nameProfessionalInventary + "\n" +
-            "signature Personal especializado inventario: " + signatureProfessionalInventary
-        );*/
+        /*
+         * final Cell cell51C = sheet.getRow(50).getCell(2);
+         * String nameProfessionalInventary = cell51C.toString();
+         * final Cell cell51H = sheet.getRow(50).getCell(7);
+         * String signatureProfessionalInventary = cell51H.toString();
+         * System.out.println("Ordenes de compra(Solo si aplica)" + "\n" +
+         * " Nombre profesional especializado" + nameProfessionalInventary + "\n" +
+         * "signature Personal especializado inventario: " +
+         * signatureProfessionalInventary
+         * );
+         */
 
-        if (workbook != null) workbook.close();
+        if (workbook != null)
+            workbook.close();
 
         // * Save data
         // saveData();
@@ -224,62 +242,62 @@ public class ScanFileServiceImpl implements IScanFileService {
     public void saveData() {
         // * Save to DB
         var contract = this.contractRepository.findByReference(contractReference)
-            .orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
+                .orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
         System.out.println("Contract reference: " + contract.getReference());
 
         var qualityCriteria = this.criteriaRepository.findByNameAndCriteriaType("Calidad", criteriaType)
-            .orElseThrow();
+                .orElseThrow();
         var executionCriteria = this.criteriaRepository.findByNameAndCriteriaType("Ejecucion", criteriaType)
-            .orElseThrow();
+                .orElseThrow();
         var complianceCriteria = this.criteriaRepository.findByNameAndCriteriaType("Cumplimiento", criteriaType)
-            .orElseThrow();
+                .orElseThrow();
 
         Score score = Score.builder()
-            .totalScore(totalScore)
-            .contract(contract)
-            .createTime(now())
-            .build();
+                .totalScore(totalScore)
+                .contract(contract)
+                .createTime(now())
+                .build();
         this.scoreRepository.save(score);
 
         ScoreCriteria firstScoreCriteria = ScoreCriteria.builder()
-            .score(score)
-            .criteria(qualityCriteria)
-            .rate(qualityCriteriaRate)
-            .createTime(now())
-            .build();
+                .score(score)
+                .criteria(qualityCriteria)
+                .rate(qualityCriteriaRate)
+                .createTime(now())
+                .build();
         ScoreCriteria secondScoreCriteria = ScoreCriteria.builder()
-            .score(score)
-            .criteria(complianceCriteria)
-            .rate(complianceCriteriaRate)
-            .createTime(now())
-            .build();
+                .score(score)
+                .criteria(complianceCriteria)
+                .rate(complianceCriteriaRate)
+                .createTime(now())
+                .build();
         ScoreCriteria thirdScoreCriteria = ScoreCriteria.builder()
-            .score(score)
-            .criteria(executionCriteria)
-            .rate(excecutionCriteriaRate)
-            .createTime(now())
-            .build();
+                .score(score)
+                .criteria(executionCriteria)
+                .rate(excecutionCriteriaRate)
+                .createTime(now())
+                .build();
         this.scoreCriteriaRepository.saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
         cleanData();
     }
 
     private void cleanData() {
         /* Contract information */
-        contractReference=null;
-        vendorName=null;
-        vendorIdentificationType=null;
-        vendorIdentification=null;
-        initialDate=null;
-        finalDate=null;
-        contractSubject=null;
+        contractReference = null;
+        vendorName = null;
+        vendorIdentificationType = null;
+        vendorIdentification = null;
+        initialDate = null;
+        finalDate = null;
+        contractSubject = null;
         /* Vendor type */
-        vendorTypes=null;
-        criteriaType=null;
+        vendorTypes = null;
+        criteriaType = null;
         /* Score */
-        qualityCriteriaRate=null;
-        complianceCriteriaRate=null;
-        excecutionCriteriaRate=null;
-        totalScore=null;
+        qualityCriteriaRate = null;
+        complianceCriteriaRate = null;
+        excecutionCriteriaRate = null;
+        totalScore = null;
     }
 
     @Override
@@ -290,22 +308,15 @@ public class ScanFileServiceImpl implements IScanFileService {
         FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
 
         System.out.println("============= Data Massive File ==============");
-        
+
         final Cell cell207A = sheet.getRow(206).getCell(0);
         String reference = cell207A.toString();
         System.out.println("Reference: " + reference);
 
         final Cell cell206B = sheet.getRow(206).getCell(1);
-        String stringSuscriptionDate = cell206B.getStringCellValue();
+        LocalDateTime stringSuscriptionDate = cell206B.getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
         System.out.println("String susciption date: " + stringSuscriptionDate);
-        
-        // Definir el formato de la fecha
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-
-        // Convertir la cadena a LocalDateTime
-        LocalDateTime suscriptionDate = LocalDateTime.parse(stringSuscriptionDate, formatter);
-
-        System.out.println("Suscription date: " + suscriptionDate);
 
         final Cell cell206C = sheet.getRow(206).getCell(2);
         String contractType = cell206C.toString();
@@ -331,24 +342,25 @@ public class ScanFileServiceImpl implements IScanFileService {
         String supervisorName = cell206I.toString();
 
         final Cell cell206J = sheet.getRow(206).getCell(9);
-        LocalDateTime initialDate = LocalDateTime.parse(cell206J.toString());
+        LocalDateTime initialDate = cell206J.getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
 
         final Cell cell206K = sheet.getRow(206).getCell(10);
-        LocalDateTime finalDate = LocalDateTime.parse(cell206K.toString());
+        LocalDateTime finalDate = cell206K.getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
 
         final Cell cell206L = sheet.getRow(206).getCell(11);
         String contractEvaluation = cell206L.toString();
 
         System.out.println("Identification type: " + identificationType + "\n" +
-            "CC/RUT: " + ccRut + "\n" +
-            "NIT: " + nit + "\n" +
-            "Vendor name: " + vendorName + "\n" +
-            "Supervisor name: " + supervisorName + "\n" +
-            "Initial date: " + initialDate + "\n" +
-            "Final date: " + finalDate + "\n" +
-            "Contract evaluation: " + contractEvaluation + "\n"
-        );
-
-        if (workbook != null) workbook.close();
+                "CC/RUT: " + ccRut + "\n" +
+                "NIT: " + nit + "\n" +
+                "Vendor name: " + vendorName + "\n" +
+                "Supervisor name: " + supervisorName + "\n" +
+                "Initial date: " + initialDate + "\n" +
+                "Final date: " + finalDate + "\n" +
+                "Contract evaluation: " + contractEvaluation + "\n");
+        if (workbook != null)
+            workbook.close();
     }
 }
