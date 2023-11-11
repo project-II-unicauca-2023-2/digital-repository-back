@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 import static java.time.LocalDateTime.now;
 import java.util.Arrays;
@@ -13,6 +11,7 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -305,62 +304,110 @@ public class ScanFileServiceImpl implements IScanFileService {
         InputStream is = file.getInputStream();
         Workbook workbook = new XSSFWorkbook(is);
         Sheet sheet = workbook.getSheetAt(0);
-        FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+        final int NUM_COLUMN_A = 0;
+        final int NUM_COLUMN_B = 1;
+        final int NUM_COLUMN_C = 2;
+        final int NUM_COLUMN_D = 3;
+        final int NUM_COLUMN_E = 4;
+        final int NUM_COLUMN_F = 5;
+        final int NUM_COLUMN_G = 6;
+        final int NUM_COLUMN_H = 7;
+        final int NUM_COLUMN_I = 8;
+        final int NUM_COLUMN_J = 9;
+        final int NUM_COLUMN_K = 10;
+        final int NUM_COLUMN_L = 11;
+        boolean isNaturalPerson = false;
+        // final String NIT = "1 NIT";
+        final String RUT = "2 RUT - REGISTRO ÚNICO TRIBUTARIO";
+        final String CC = "3 CÉDULA DE CIUDADANÍA";
+        final String CE = "4 CÉDULA DE EXTRANJERÍA";
 
-        System.out.println("============= Data Massive File ==============");
+        System.out.println("\n============= Data Massive File ==============\n");
 
-        final Cell cell207A = sheet.getRow(206).getCell(0);
-        String reference = cell207A.toString();
-        System.out.println("Reference: " + reference);
+        Row row; // cada fila del excel
+        int rownum = 1; // empieza en la fila 2
+        boolean isRowEmpty = false; // para saber si la fila esta vacia
 
-        final Cell cell206B = sheet.getRow(206).getCell(1);
-        LocalDateTime stringSuscriptionDate = cell206B.getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
-        System.out.println("String susciption date: " + stringSuscriptionDate);
+        while(!isRowEmpty) { // mientras la fila no este vacia
+            row = sheet.getRow(rownum); // se obtiene la fila
+            if( (row.getCell(NUM_COLUMN_A).toString()).isBlank() ) 
+                isRowEmpty = true;
+            // Comprobar si la celda en la coulmna L no es nula y no es NA
+            if(!isRowEmpty && row.getCell(NUM_COLUMN_L)!=null && !row.getCell(NUM_COLUMN_L).toString().equals("NA")) { 
+                // Comprobar si las celdas no son nulas, excepto las celdas con columnas F y G
+                /*if(!(row.getCell(NUM_COLUMN_B).toString()).isBlank() && !(row.getCell(NUM_COLUMN_C).toString()).isBlank() && 
+                    !(row.getCell(NUM_COLUMN_D).toString()).isBlank() && !(row.getCell(NUM_COLUMN_E).toString()).isBlank() && 
+                    !(row.getCell(NUM_COLUMN_H).toString()).isBlank()
+                ) {*/
+                    System.out.println("\nPrinting row " + (rownum + 1) + "\n");
 
-        final Cell cell206C = sheet.getRow(206).getCell(2);
-        String contractType = cell206C.toString();
-        System.out.println("Contract type: " + contractType);
+                    String reference = row.getCell(NUM_COLUMN_A).toString();
+                    System.out.println("Reference: " + reference);
+                    
+                    LocalDateTime suscriptionDate = row.getCell(NUM_COLUMN_B).getLocalDateTimeCellValue();
+                    if(suscriptionDate!=null) System.out.println("Susciption date: " + suscriptionDate);
+                    
+                    String contractType = row.getCell(NUM_COLUMN_C).toString();
+                    if(!contractType.isBlank()) System.out.println("Contract type: " + contractType);
+                    
+                    String contractSubject = row.getCell(NUM_COLUMN_D).toString();
+                    if(!contractSubject.isBlank()) System.out.println("Contract subject: " + contractSubject);
+                    
+                    String identificationType = row.getCell(NUM_COLUMN_E).toString();
+                    if(!identificationType.isBlank()) System.out.println("Identification type: " + identificationType);
 
-        final Cell cell206D = sheet.getRow(206).getCell(3);
-        String contractSubject = cell206D.toString();
-        System.out.println("Contract subject: " + contractSubject);
+                    String identificationNumber="";
 
-        final Cell cell206E = sheet.getRow(206).getCell(4);
-        String identificationType = cell206E.toString();
+                    // Comprobar si es persona natural
+                    if(identificationType.equals(RUT) || identificationType.equals(CC) || identificationType.equals(CE)) {
+                        isNaturalPerson = true;
+                    }
 
-        final Cell cell206F = sheet.getRow(206).getCell(5);
-        String ccRut = cell206F.toString();
+                    // Comprobar que, si es persona natural,
+                    // que la celda en la columna F no sea nula
+                    var cellF = row.getCell(NUM_COLUMN_F).toString();
+                    if(isNaturalPerson == true && !cellF.isBlank()) {
+                        if(!(row.getCell(NUM_COLUMN_G).toString()).isBlank()) {
+                            System.out.println("Error: NIT is not blank");
+                        } else {
+                            identificationNumber = row.getCell(NUM_COLUMN_F).toString();
+                        }
+                    }
+                    // Comprobar que, si no es persona natural, 
+                    // que la celda en la columna G no sea nula
+                    var cellG = row.getCell(NUM_COLUMN_G).toString();
+                    if(isNaturalPerson == false && !cellG.isBlank()) {
+                        if(!(row.getCell(NUM_COLUMN_F).toString()).isBlank()) {
+                            System.out.println("Error: CC/RUT is not blank");
+                        } else {
+                            identificationNumber = row.getCell(NUM_COLUMN_G).toString();
+                        }
+                    }
 
-        final Cell cell206G = sheet.getRow(206).getCell(6);
-        String nit = cell206G.toString();
+                    if(!identificationNumber.isBlank()) System.out.println("Identification number: " + identificationNumber);
+                    
+                    String vendorName = row.getCell(NUM_COLUMN_H).toString();
+                    if(!vendorName.isBlank()) System.out.println("Vendor name: " + vendorName);
 
-        final Cell cell206H = sheet.getRow(206).getCell(7);
-        String vendorName = cell206H.toString();
+                    String supervisorName = row.getCell(NUM_COLUMN_I).toString();
+                    if(!supervisorName.isBlank()) System.out.println("Supervisor name: " + supervisorName);
 
-        final Cell cell206I = sheet.getRow(206).getCell(8);
-        String supervisorName = cell206I.toString();
+                    LocalDateTime initialDate = row.getCell(NUM_COLUMN_J).getLocalDateTimeCellValue();
+                    if(initialDate!=null) System.out.println("Initial date: " + initialDate);
 
-        final Cell cell206J = sheet.getRow(206).getCell(9);
-        LocalDateTime initialDate = cell206J.getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
+                    LocalDateTime finalDate = row.getCell(NUM_COLUMN_K).getLocalDateTimeCellValue();
+                    if(finalDate!=null) System.out.println("Final date: " + finalDate);
 
-        final Cell cell206K = sheet.getRow(206).getCell(10);
-        LocalDateTime finalDate = cell206K.getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
-
-        final Cell cell206L = sheet.getRow(206).getCell(11);
-        String contractEvaluation = cell206L.toString();
-
-        System.out.println("Identification type: " + identificationType + "\n" +
-                "CC/RUT: " + ccRut + "\n" +
-                "NIT: " + nit + "\n" +
-                "Vendor name: " + vendorName + "\n" +
-                "Supervisor name: " + supervisorName + "\n" +
-                "Initial date: " + initialDate + "\n" +
-                "Final date: " + finalDate + "\n" +
-                "Contract evaluation: " + contractEvaluation + "\n");
-        if (workbook != null)
-            workbook.close();
+                    String contractEvaluation = row.getCell(NUM_COLUMN_L).toString();
+                    System.out.println("Contract evaluation: " + contractEvaluation);
+                    
+                /* } else {
+                    isRowEmpty = true;
+                }*/
+            }
+            rownum++;
+        }
+        System.out.println("================= End =====================");
+        if (workbook != null) workbook.close();
     }
 }
