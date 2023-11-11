@@ -14,8 +14,8 @@ import lombok.Setter;
 
 public class CriteriaDtoConsultResponse {
 
-    private String description;
-
+    private Integer id;
     private String name;
-
+    private String description;
+    
 }
