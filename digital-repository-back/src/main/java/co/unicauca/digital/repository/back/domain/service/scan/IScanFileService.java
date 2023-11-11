@@ -9,4 +9,5 @@ public interface IScanFileService {
     void processFile(MultipartFile file) throws IOException, ParseException;
     void saveData();
     void processMassiveFile(MultipartFile file) throws IOException, ParseException;
+    void saveMassiveData();
 }
