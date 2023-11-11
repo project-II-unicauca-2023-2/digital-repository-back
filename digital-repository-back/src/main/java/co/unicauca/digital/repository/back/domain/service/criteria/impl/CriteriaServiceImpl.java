@@ -55,15 +55,9 @@ public class CriteriaServiceImpl implements ICriteriaService{
     }
 
     @Override
-    public Response<AllCriteriaDtoConsultResponse> getCriteriaByType(String criteriaType) {
-        AllCriteriaDtoConsultResponse response=new AllCriteriaDtoConsultResponse();
-
-        response.setCriteriaType(criteriaType);
-        response.setCalidad(criteriaRepository.getCriteriaByTypeAndName(criteriaType, "CALIDAD"));
-        response.setCumplimiento(criteriaRepository.getCriteriaByTypeAndName(criteriaType, "CUMPLIMIENTO"));
-        response.setEjecucion(criteriaRepository.getCriteriaByTypeAndName(criteriaType, "EJECUCION"));
-        
-        return new ResponseHandler<>(200, "Encontrado", "Encontrado", response).getResponse();
+    public List<CriteriaDtoConsultResponse> getCriteriaByType(String criteriaType) {
+        List<CriteriaDtoConsultResponse> result = criteriaRepository.getCriteriaByType(criteriaType);
+         return result;
     }
 
 

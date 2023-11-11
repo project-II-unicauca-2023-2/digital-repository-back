@@ -1,6 +1,7 @@
 package co.unicauca.digital.repository.back.domain.service.criteria;
 
-import co.unicauca.digital.repository.back.domain.dto.criteria.response.AllCriteriaDtoConsultResponse;
+import java.util.List;
+
 import co.unicauca.digital.repository.back.domain.dto.criteria.response.CriteriaDtoConsultResponse;
 import co.unicauca.digital.repository.back.domain.dto.criteria.response.CriteriaDtoCreateResponse;
 import co.unicauca.digital.repository.back.global.response.Response;
@@ -16,7 +17,7 @@ public interface ICriteriaService {
      */
     Response<CriteriaDtoCreateResponse> getById(final int id);
 
-    Response<AllCriteriaDtoConsultResponse> getCriteriaByType(String criteriaType);
+    List<CriteriaDtoConsultResponse> getCriteriaByType(String criteriaType);
 
 
 }
