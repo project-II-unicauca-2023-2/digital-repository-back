@@ -1,5 +1,6 @@
 package co.unicauca.digital.repository.back.domain.controller.contract;
 
+import co.unicauca.digital.repository.back.domain.dto.aboutVendor.response.aboutVendorDto;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
@@ -7,8 +8,11 @@ import co.unicauca.digital.repository.back.domain.dto.contract.response.Contract
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
 import co.unicauca.digital.repository.back.domain.service.contract.IContractService;
 import co.unicauca.digital.repository.back.domain.service.contract.IListContractualFolders;
+import co.unicauca.digital.repository.back.domain.service.vendorType.IAboutVendorService;
 import co.unicauca.digital.repository.back.global.response.PageableResponse;
 import co.unicauca.digital.repository.back.global.response.Response;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +23,11 @@ import javax.validation.Valid;
 @RequestMapping("/contract")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ContractController {
+    /**
+     * Object used to invoke the operations of the IAboutVendor interface
+     */
+    @Autowired
+    private IAboutVendorService aboutVendorService;
 
     /** Object used to invoke the operations of the IContractServe interface */
     private final IContractService contractService;
@@ -178,5 +187,10 @@ public class ContractController {
         return new ResponseEntity<>(
         this.contractService.DataContractVendorByMask(referenceMask),
         HttpStatus.OK);
+    }
+    @GetMapping("/aboutVendor")
+    public Response<aboutVendorDto> getCriteriaByType(@RequestParam String referenceMask){
+
+        return aboutVendorService.getAboutVendor(referenceMask);
     }
 }
