@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * Repository that manages the persistence of the User entity in the database.
  */
 @Repository
-public interface IUserRepository extends JpaRepository<User, Integer> {
+public interface IUserRepository extends JpaRepository<User, String> {
 }
