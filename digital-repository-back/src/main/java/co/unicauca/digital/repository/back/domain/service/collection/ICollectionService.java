@@ -3,7 +3,6 @@ package co.unicauca.digital.repository.back.domain.service.collection;
 import co.unicauca.digital.repository.back.domain.dto.collection.request.CollectionDtoRequest;
 import co.unicauca.digital.repository.back.domain.dto.collection.response.CollectionDtoResponse;
 import co.unicauca.digital.repository.back.domain.model.contract.Contract;
-import co.unicauca.digital.repository.back.domain.model.contractualDocument.ContractualDocument;
 import co.unicauca.digital.repository.back.global.response.PageableResponse;
 import co.unicauca.digital.repository.back.global.response.Response;
 

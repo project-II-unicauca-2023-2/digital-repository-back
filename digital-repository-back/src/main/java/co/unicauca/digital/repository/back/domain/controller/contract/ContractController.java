@@ -8,7 +8,7 @@ import co.unicauca.digital.repository.back.domain.dto.contract.response.Contract
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
 import co.unicauca.digital.repository.back.domain.service.contract.IContractService;
-import co.unicauca.digital.repository.back.domain.service.contract.IListContractualFolders;
+//import co.unicauca.digital.repository.back.domain.service.contract.IListContractualFolders;
 import co.unicauca.digital.repository.back.domain.service.vendorType.IAboutVendorService;
 import co.unicauca.digital.repository.back.global.response.PageableResponse;
 import co.unicauca.digital.repository.back.global.response.Response;
@@ -37,14 +37,14 @@ public class ContractController {
      * Object used to invoke the operations of the HE-01 IListContractualFolders
      * interface
      */
-    private final IListContractualFolders listContractualFolders;
+    // private final IListContractualFolders listContractualFolders;
 
     /**
      * constructor method
      */
-    public ContractController(IContractService contractService, IListContractualFolders listContractualFolders) {
+    public ContractController(IContractService contractService/* , IListContractualFolders listContractualFolders */) {
         this.contractService = contractService;
-        this.listContractualFolders = listContractualFolders;
+        // this.listContractualFolders = listContractualFolders;
     }
 
     /**
@@ -129,7 +129,7 @@ public class ContractController {
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
         return new ResponseEntity<>(
-                this.listContractualFolders.getContractualFoldersSortBySigningDate(pageNo, pageSize), HttpStatus.OK);
+                this.contractService.getContractualFoldersSortBySigningDate(pageNo, pageSize), HttpStatus.OK);
     }
 
     /**
@@ -147,56 +147,57 @@ public class ContractController {
             @RequestParam() String filter,
             @RequestParam() String search) {
         return new ResponseEntity<>(
-                this.listContractualFolders.getContractualFoldersByFilter(pageNo, pageSize, filter, search),
+                this.contractService.getContractualFoldersByFilter(pageNo, pageSize, filter, search),
                 HttpStatus.OK);
     }
 
     /**
-     *API to get Contract Existence Verification
-     *  @param prmMask - The contract mask used to verify its existence
-     *  @return {@link Response} - Response object for the service, containing
+     * API to get Contract Existence Verification
+     * 
+     * @param prmMask - The contract mask used to verify its existence
+     * @return {@link Response} - Response object for the service, containing
      */
 
     @GetMapping("existingContractByMask")
     public ResponseEntity<Response<Boolean>> getExistingContractByMask(
-        @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest
-    ){
+            @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest) {
         return new ResponseEntity<>(
-        this.contractService.entityExistsByReference(contractDtoIdRequest),
-        HttpStatus.OK);
+                this.contractService.entityExistsByReference(contractDtoIdRequest),
+                HttpStatus.OK);
     }
 
     /**
-     *API to get Existence evaluation for a contract based on reference
-     *  @param prmMask - The contract mask used to verify its existence
-     *  @return {@link Response} - Response object for the service, containing
+     * API to get Existence evaluation for a contract based on reference
+     * 
+     * @param prmMask - The contract mask used to verify its existence
+     * @return {@link Response} - Response object for the service, containing
      */
 
     @GetMapping("existingEvaluationContractByMask")
     public ResponseEntity<Response<Boolean>> getExistingEvaluationContractByMask(
-        @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest
-    ){
+            @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest) {
         return new ResponseEntity<>(
-        this.contractService.ExistEvaluationByReference(contractDtoIdRequest),
-        HttpStatus.OK);
+                this.contractService.ExistEvaluationByReference(contractDtoIdRequest),
+                HttpStatus.OK);
     }
 
     /**
-     *API to get data for a contract and vendor
-     *  @param prmMask - The contract mask used to verify its existence
-     *  @return {@link Response} - Response object for the service, containing
+     * API to get data for a contract and vendor
+     * 
+     * @param prmMask - The contract mask used to verify its existence
+     * @return {@link Response} - Response object for the service, containing
      */
 
     @GetMapping("dataContractVendorByMask")
     public ResponseEntity<Response<ContractVendorDtoResponse>> getDataContractVendorByMask(
-        @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest
-    ){
+            @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest) {
         return new ResponseEntity<>(
-        this.contractService.DataContractVendorByMask(contractDtoIdRequest),
-        HttpStatus.OK);
+                this.contractService.DataContractVendorByMask(contractDtoIdRequest),
+                HttpStatus.OK);
     }
+
     @GetMapping("/aboutVendor")
-    public Response<aboutVendorDto> getCriteriaByType(@RequestParam String referenceMask){
+    public Response<aboutVendorDto> getCriteriaByType(@RequestParam String referenceMask) {
 
         return aboutVendorService.getAboutVendor(referenceMask);
     }

@@ -1,5 +1,5 @@
 -- Vendor
-insert into `vendor` (`id`, `createTime`, `createUser`, `identification`, `name`, `updateTime`, `updateUser`) VALUES (NULL, '2023-05-27 17:13:42', 'Miguel', '1061', 'Andres', '2023-05-27 17:13:42', NULL);
+insert into `vendor` (`id`, `createTime`, `createUser`, `identification`, `name`, `personType`,  `score`,`updateTime`, `updateUser`) VALUES (NULL, '2023-05-27 17:13:42', 'Miguel', '1061', 'Andres', 'natural',  0.0, '2023-05-27 17:13:42', NULL);
 
 -- Modality
 INSERT INTO `modality` (`ID`, `NAME`, `DESCRIPTION`, `EXTERNALCODE`, `CREATETIME`, `CREATEUSER`, `UPDATETIME`, `UPDATEUSER`) VALUES (1, 'Inferior o Igual a 100 SMLMV', NULL, 'PVRM1', '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial'),(2, 'Mayores a 100 SMLMV', NULL, 'PVRM2', '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial');
@@ -41,4 +41,6 @@ INSERT INTO `db_gestion_documental`.`criteria` (`criteriaType`, `description`, `
 INSERT INTO `db_gestion_documental`.`criteria` (`criteriaType`, `description`, `name`) VALUES ('Obras', 'Cumplimiento en todas las especificaciones del proyecto de EJECUCION de la obra, así como las adecuadas condiciones de calidad y la normatividad de aplicación.', 'CALIDAD');
 INSERT INTO `db_gestion_documental`.`criteria` (`criteriaType`, `description`, `name`) VALUES ('Obras', 'Construcción de la obra de acuerdo con lo previsto en el proyecto, alcanzando el objeto y la meta física contractual, garantizando funcionalidad.', 'EJECUCION');
 INSERT INTO `db_gestion_documental`.`criteria` (`criteriaType`, `description`, `name`) VALUES ('Obras', 'Cumplimiento en los tiempos de entrega de la obra, finalización de la obra en el tiempo pactado y entrega oportuna de la documentación técnica, legal y administrativa previo a la liquidación.', 'CUMPLIMIENTO');
+
+-- Contract
 

@@ -74,7 +74,9 @@ public class Contract {
     @JoinColumn(name = "modalityContractTypeId")
     private ModalityContractType modalityContractType;
 
-    /**Aqui se utilizo una relacion one to one con la estrategia de clave compartida, la clave primaria de contrato es la misma clave primaria
+    /**
+     * Aqui se utilizo una relacion one to one con la estrategia de clave
+     * compartida, la clave primaria de contrato es la misma clave primaria
      * de score, de esta manera funciona como primeria y foranea al tiempo.
      */
     @OneToOne(mappedBy = "contract", cascade = CascadeType.ALL)

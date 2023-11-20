@@ -24,7 +24,9 @@ public class Score {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    /**Aqui se utilizo una relacion one to one con la estrategia de clave compartida, la clave primaria de contrato es la misma clave primaria
+    /**
+     * Aqui se utilizo una relacion one to one con la estrategia de clave
+     * compartida, la clave primaria de contrato es la misma clave primaria
      * de score, de esta manera funciona como primaria y foranea al tiempo.
      */
     @OneToOne

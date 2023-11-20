@@ -5,6 +5,7 @@ import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractD
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
+import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindContractualFoldersResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
 import co.unicauca.digital.repository.back.domain.mapper.contract.IContractMapper;
@@ -25,6 +26,7 @@ import co.unicauca.digital.repository.back.global.response.handler.ResponseHandl
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -255,5 +257,55 @@ public class ContractServiceImpl implements IContractService {
         objResponse.setNaturalPerson("NATURAL".equalsIgnoreCase(vendor.getPersonType()));
         return new ResponseHandler<>(200,"Datos del contrato y proveedor","Datos del contrato y proveedor",
            objResponse).getResponse();       
+    }
+
+    @Override
+    public Response<PageableResponse<Object>> getContractualFoldersSortBySigningDate(int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("signingDate").descending());
+        Page<Contract> responsePage = contractRepository.findAll(pageRequest);
+
+        List<Object> contractDtoFindContractualFolderResponse = responsePage.get()
+                .map(contract -> {
+                    ContractDtoFindContractualFoldersResponse response = this.contractMapper
+                            .toDtoFindContractualFolders(contract);
+                    response.setSigningYear(contract.getSigningDate().getYear());
+                    response.setModality(contract.getModalityContractType().getModality().getName());
+                    response.setContractType(contract.getModalityContractType().getContractType().getName());
+                    response.setVendor(contract.getVendor().getIdentification());
+                    return response;
+                }).collect(Collectors.toList());
+
+        PageableResponse<Object> response = PageableResponse.builder()
+                .data(contractDtoFindContractualFolderResponse)
+                .pageNo(responsePage.getNumber())
+                .pageSize(responsePage.getSize())
+                .totalElements(responsePage.getTotalElements())
+                .totalPages(responsePage.getTotalPages())
+                .last(responsePage.isLast())
+                .build();
+
+        return new ResponseHandler<>(200, "Exitoso", "Exitoso", response).getResponse();
+    }
+
+    @Override
+    public Response<PageableResponse<Object>> getContractualFoldersByFilter(int pageNo, int pageSize, String filter,
+            String search) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        Page<ContractDtoFindContractualFoldersResponse> responsePage = contractRepository
+                .findByFilterAndSearchPattern(filter, search, pageRequest);
+
+        List<Object> contractDtoFindContractualFolderResponse = responsePage.get()
+                .collect(Collectors.toList());
+
+        PageableResponse<Object> response = PageableResponse.builder()
+                .data(contractDtoFindContractualFolderResponse)
+                .pageNo(responsePage.getNumber())
+                .pageSize(responsePage.getSize())
+                .totalElements(responsePage.getTotalElements())
+                .totalPages(responsePage.getTotalPages())
+                .last(responsePage.isLast())
+                .build();
+
+        return new ResponseHandler<>(200, "Exitoso", "Exitoso", response).getResponse();
     }
 }
