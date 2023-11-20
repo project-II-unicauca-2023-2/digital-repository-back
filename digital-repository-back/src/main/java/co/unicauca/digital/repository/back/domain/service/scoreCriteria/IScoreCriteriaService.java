@@ -1,4 +1,5 @@
 package co.unicauca.digital.repository.back.domain.service.scoreCriteria;
+import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.request.ScoreCriteriaDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaCalificationDomainDtoResponse;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaDtoResponse;
@@ -10,7 +11,7 @@ public interface IScoreCriteriaService {
      *  @param prmMask - The contract mask used to verify its existence
      *  @return {@link Response} - Response object for the service, containing
      */
-    Response<ScoreCriteriaDtoResponse> DataScoreCriteriaByMask(String prmMask);
+    Response<ScoreCriteriaDtoResponse> DataScoreCriteriaByMask(ContractDtoIdRequest prmContractParams);
 
     /**
      *  Get Calification Domain List

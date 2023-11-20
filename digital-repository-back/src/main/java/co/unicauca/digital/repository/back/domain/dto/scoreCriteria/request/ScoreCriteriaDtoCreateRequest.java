@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import lombok.*;
 
 /**
@@ -19,9 +20,8 @@ import lombok.*;
 public class ScoreCriteriaDtoCreateRequest {
 
     /** Contract mask for rating*/
-    @NotNull(message = "{scoreCriteria.contractMask.field.not.null}")
-    @NotEmpty(message = "{scoreCriteria.contractMask.field.not.empty}")
-    private String contractMask;
+  
+    private ContractDtoIdRequest prmContractParams;
     
     /** List of ratings and criteria for rating a contract */
     @NotNull(message = "{scoreCriteria.listCriteriaRate.field.not.null}")

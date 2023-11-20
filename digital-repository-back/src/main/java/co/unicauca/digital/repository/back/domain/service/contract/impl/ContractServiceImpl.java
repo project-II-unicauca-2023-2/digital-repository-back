@@ -2,6 +2,7 @@ package co.unicauca.digital.repository.back.domain.service.contract.impl;
 
 import co.unicauca.digital.repository.back.domain.service.collection.ICollectionService;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoCreateRequest;
+import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
@@ -120,7 +121,9 @@ public class ContractServiceImpl implements IContractService {
      */
     @Override
     public Response<ContractDtoCreateResponse> createContract(final ContractDtoCreateRequest contractDtoCreateRequest) {
-        if (entityExistsByReference(contractDtoCreateRequest.getReference()).getData())
+        String anio = Integer.toString(contractDtoCreateRequest.getInitialDate().getYear());
+        ContractDtoIdRequest aux = new ContractDtoIdRequest(contractDtoCreateRequest.getReference(),anio);
+        if (entityExistsByReference(aux).getData())
             throw new BusinessRuleException("contract.request.already.exists");
 
         Contract contractModel = contractMapper.toEntityCreate(contractDtoCreateRequest);
@@ -224,15 +227,17 @@ public class ContractServiceImpl implements IContractService {
      * @param reference the request to be validated
      * @return true if the entity exists
      */
-    public Response<Boolean>entityExistsByReference(final String referenceMask) {
-        boolean isContractRegister = contractRepository.findByReference(referenceMask).isPresent();
+    public Response<Boolean>entityExistsByReference(final ContractDtoIdRequest prmContractParams) {
+        int numericYear = Integer.parseInt(prmContractParams.getAnio());
+        boolean isContractRegister = contractRepository.findByReferenceAndYear(prmContractParams.getMascara(),numericYear).isPresent();
         String responseMessage = isContractRegister  ? "Ya existe un contrato registrado con esa mascara" : "No existe un contrato con esa mascara";
         return new ResponseHandler<>(200,responseMessage,responseMessage,
             isContractRegister).getResponse();
     }
 
-    public Response<Boolean>ExistEvaluationByReference(final String referenceMask) {
-        Optional<Contract> contract = contractRepository.findByReference(referenceMask);
+    public Response<Boolean>ExistEvaluationByReference(final ContractDtoIdRequest prmContractParams) {
+        int numericYear = Integer.parseInt(prmContractParams.getAnio());
+        Optional<Contract> contract = contractRepository.findByReferenceAndYear(prmContractParams.getMascara(),numericYear);
         Contract objContrato = contract.orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
         Score objScore  = scoreRepository.findById(objContrato.getId()).get();
         boolean isEvaluationRegister = objScore.getCreateTime().equals(objScore.getUpdateTime()) ? false : true;
@@ -241,8 +246,9 @@ public class ContractServiceImpl implements IContractService {
             isEvaluationRegister).getResponse();
     }
 
-    public Response<ContractVendorDtoResponse> DataContractVendorByMask(String referenceMask){
-        Optional<Contract> contract = contractRepository.findByReference(referenceMask);
+    public Response<ContractVendorDtoResponse> DataContractVendorByMask(final ContractDtoIdRequest prmContractParams){
+        int numericYear = Integer.parseInt(prmContractParams.getAnio());
+        Optional<Contract> contract = contractRepository.findByReferenceAndYear(prmContractParams.getMascara(),numericYear);
         Contract objContrato = contract.orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
         Vendor vendor = objContrato.getVendor(); 
         ContractVendorDtoResponse objResponse = contractVendorMapper.toContractVendorDtoResponse(objContrato, vendor);

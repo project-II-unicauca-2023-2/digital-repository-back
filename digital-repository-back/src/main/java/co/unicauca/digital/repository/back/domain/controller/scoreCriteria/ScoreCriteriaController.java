@@ -1,4 +1,5 @@
 package co.unicauca.digital.repository.back.domain.controller.scoreCriteria;
+import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.request.ScoreCriteriaDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaCalificationDomainDtoResponse;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaDtoResponse;
@@ -22,9 +23,11 @@ public class ScoreCriteriaController {
         this.scoreCriteriaService = scoreCriteriaService;
     }
     @GetMapping("scoreCriteriaDataByMask")
-    public ResponseEntity<Response<ScoreCriteriaDtoResponse>> getScoreCriteriaDataByMask(@RequestParam String referenceMask){
+    public ResponseEntity<Response<ScoreCriteriaDtoResponse>> getScoreCriteriaDataByMask(
+        @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest
+    ){
         return new ResponseEntity<>(
-        this.scoreCriteriaService.DataScoreCriteriaByMask(referenceMask),
+        this.scoreCriteriaService.DataScoreCriteriaByMask(contractDtoIdRequest),
         HttpStatus.OK);
     }
 

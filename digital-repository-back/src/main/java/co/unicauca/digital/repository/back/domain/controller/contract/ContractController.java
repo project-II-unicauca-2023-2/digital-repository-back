@@ -2,6 +2,7 @@ package co.unicauca.digital.repository.back.domain.controller.contract;
 
 import co.unicauca.digital.repository.back.domain.dto.aboutVendor.response.aboutVendorDto;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoCreateRequest;
+import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
@@ -157,9 +158,11 @@ public class ContractController {
      */
 
     @GetMapping("existingContractByMask")
-    public ResponseEntity<Response<Boolean>> getExistingContractByMask(@RequestParam String referenceMask){
+    public ResponseEntity<Response<Boolean>> getExistingContractByMask(
+        @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest
+    ){
         return new ResponseEntity<>(
-        this.contractService.entityExistsByReference(referenceMask),
+        this.contractService.entityExistsByReference(contractDtoIdRequest),
         HttpStatus.OK);
     }
 
@@ -170,9 +173,11 @@ public class ContractController {
      */
 
     @GetMapping("existingEvaluationContractByMask")
-    public ResponseEntity<Response<Boolean>> getExistingEvaluationContractByMask(@RequestParam String referenceMask){
+    public ResponseEntity<Response<Boolean>> getExistingEvaluationContractByMask(
+        @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest
+    ){
         return new ResponseEntity<>(
-        this.contractService.ExistEvaluationByReference(referenceMask),
+        this.contractService.ExistEvaluationByReference(contractDtoIdRequest),
         HttpStatus.OK);
     }
 
@@ -183,9 +188,11 @@ public class ContractController {
      */
 
     @GetMapping("dataContractVendorByMask")
-    public ResponseEntity<Response<ContractVendorDtoResponse>> getDataContractVendorByMask(@RequestParam String referenceMask){
+    public ResponseEntity<Response<ContractVendorDtoResponse>> getDataContractVendorByMask(
+        @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest
+    ){
         return new ResponseEntity<>(
-        this.contractService.DataContractVendorByMask(referenceMask),
+        this.contractService.DataContractVendorByMask(contractDtoIdRequest),
         HttpStatus.OK);
     }
     @GetMapping("/aboutVendor")

@@ -2,6 +2,7 @@ package co.unicauca.digital.repository.back.domain.service.contract;
 
 import co.unicauca.digital.repository.back.domain.model.collection.Collection;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoCreateRequest;
+import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
@@ -73,7 +74,7 @@ public interface IContractService {
      *  @return {@link Response} - Response object for the service, containing
      */
     
-    Response<Boolean> entityExistsByReference(String prmMask);
+    Response<Boolean> entityExistsByReference(ContractDtoIdRequest prmContractParams);
 
     /**
      *Existence evaluation for a contract based on reference
@@ -81,7 +82,7 @@ public interface IContractService {
      *  @return {@link Response} - Response object for the service, containing
      */
     
-    Response<Boolean> ExistEvaluationByReference(String prmMask);
+    Response<Boolean> ExistEvaluationByReference(ContractDtoIdRequest prmContractParams);
 
     /**
      *  Selected data from contract and vendor
@@ -89,6 +90,6 @@ public interface IContractService {
      *  @return {@link Response} - Response object for the service, containing
      */
     
-    Response<ContractVendorDtoResponse> DataContractVendorByMask(String prmMask);
+    Response<ContractVendorDtoResponse> DataContractVendorByMask(ContractDtoIdRequest prmContractParams);
 
 }

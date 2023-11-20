@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.request.ScoreCriteriaDtoCreate;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.request.ScoreCriteriaDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.scoreCriteria.response.ScoreCriteriaCalificationDomainDto;
@@ -51,8 +52,9 @@ public class ScoreCriteriaServiceImpl implements IScoreCriteriaService {
         this.criteriaRepository = criteriaRepository;
         this.scoreRepository = scoreRepository;
     }
-    public Response<ScoreCriteriaDtoResponse> DataScoreCriteriaByMask(String prmMask){
-        Optional<Contract> contract = contractRepository.findByReference(prmMask);
+    public Response<ScoreCriteriaDtoResponse> DataScoreCriteriaByMask(final ContractDtoIdRequest prmContractParams){
+        int numericYear = Integer.parseInt(prmContractParams.getAnio());
+        Optional<Contract> contract = contractRepository.findByReferenceAndYear(prmContractParams.getMascara(),numericYear);
         Contract objContract = contract.orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
         Score objScore = objContract.getScore();
         List<ScoreCriteria> objListScoreCriteria = objScore.getScoringCriteria();
@@ -83,7 +85,8 @@ public class ScoreCriteriaServiceImpl implements IScoreCriteriaService {
     }
 
     public Response<Boolean> RegisterCalification(ScoreCriteriaDtoCreateRequest calificationRequest){
-        Optional<Contract> contract = contractRepository.findByReference(calificationRequest.getContractMask());
+        int numericYear = Integer.parseInt(calificationRequest.getPrmContractParams().getAnio());
+        Optional<Contract> contract = contractRepository.findByReferenceAndYear(calificationRequest.getPrmContractParams().getMascara(),numericYear);
         Contract objContract = contract.orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
         Score objScore = objContract.getScore();
         if(isAlreadyRated(objScore)){
