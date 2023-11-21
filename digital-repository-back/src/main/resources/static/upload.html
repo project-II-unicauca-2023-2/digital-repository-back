@@ -10,5 +10,11 @@
         <input type="file" name="files" accept=".xlsx, .xls" multiple>
         <button type="submit">Cargar Archivos</button>
     </form>
+    <hr>
+    <h1>Subir Archivo Excel Massivo</h1>
+    <form action="/api/scanFile/uploadMassiveExcel" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".xlsx, .xls">
+        <button type="submit">Cargar Archivo Masivo</button>
+    </form>
 </body>
 </html>

@@ -133,48 +133,9 @@ public class ExcelUtils {
         String year = evaluationDatesSplit[3];
         String monthName = evaluationDatesSplit[1];
         String day = evaluationDatesSplit[0];
-        Integer monthNum=0;
-        switch (MonthEnum.valueOf(monthName)) {
-            case ENERO:
-                monthNum=1;
-                break;
-            case FEBRERO:
-                monthNum=2;
-                break;
-            case MARZO:
-                monthNum=3;
-                break;
-            case ABRIL:
-                monthNum=4;
-                break;
-            case MAYO:
-                monthNum=5;
-                break;
-            case JUNIO:
-                monthNum=6;
-                break;
-            case JULIO:
-                monthNum=7;
-                break;
-            case AGOSTO:
-                monthNum=8;
-                break;
-            case SEPTIEMBRE:
-                monthNum=9;
-                break;
-            case OCTUBRE:
-                monthNum=10;
-                break;
-            case NOVIEMBRE:
-                monthNum=11;
-                break;
-            case DICIEMBRE:
-                monthNum=12;
-                break;
-        }
-
+        Integer monthNum = (MonthEnum.valueOf(monthName)).getNum();
         String month;
-        if(Integer.toString(monthNum).length()==1){
+        if(Integer.toString(monthNum).length() == 1){
             month = "0" + monthNum;
         }else{
             month = Integer.toString(monthNum);
