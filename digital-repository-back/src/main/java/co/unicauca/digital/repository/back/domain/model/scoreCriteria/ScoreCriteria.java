@@ -1,4 +1,4 @@
-package co.unicauca.digital.repository.back.domain.model.scorecriteria;
+package co.unicauca.digital.repository.back.domain.model.scoreCriteria;
 
 import lombok.*;
 

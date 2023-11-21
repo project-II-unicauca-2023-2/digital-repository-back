@@ -1,9 +1,11 @@
 package co.unicauca.digital.repository.back.domain.service.contract;
 
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoCreateRequest;
+import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
+import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
 import co.unicauca.digital.repository.back.global.response.PageableResponse;
 import co.unicauca.digital.repository.back.global.response.Response;
 
@@ -62,6 +64,33 @@ public interface IContractService {
      *         information about the outcome of the transaction.
      */
     Response<Boolean> deleteContract(final int id);
+
+    /**
+     * Contract Existence Verification Service
+     * 
+     * @param prmMask - The contract mask used to verify its existence
+     * @return {@link Response} - Response object for the service, containing
+     */
+
+    Response<Boolean> entityExistsByReference(ContractDtoIdRequest prmContractParams);
+
+    /**
+     * Existence evaluation for a contract based on reference
+     * 
+     * @param prmMask - The contract mask used to verify its existence
+     * @return {@link Response} - Response object for the service, containing
+     */
+
+    Response<Boolean> ExistEvaluationByReference(ContractDtoIdRequest prmContractParams);
+
+    /**
+     * Selected data from contract and vendor
+     * 
+     * @param prmMask - The contract mask used to verify its existence
+     * @return {@link Response} - Response object for the service, containing
+     */
+
+    Response<ContractVendorDtoResponse> DataContractVendorByMask(ContractDtoIdRequest prmContractParams);
 
     /**
      * Service to get all contracts sort by SigningDate time descending

@@ -19,11 +19,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import co.unicauca.digital.repository.back.domain.model.score.Score;
-import co.unicauca.digital.repository.back.domain.model.scorecriteria.ScoreCriteria;
+import co.unicauca.digital.repository.back.domain.model.scoreCriteria.ScoreCriteria;
 import co.unicauca.digital.repository.back.domain.repository.contract.IContractRepository;
 import co.unicauca.digital.repository.back.domain.repository.criteria.ICriteriaRepository;
 import co.unicauca.digital.repository.back.domain.repository.score.IScoreRepository;
-import co.unicauca.digital.repository.back.domain.repository.scorecriteria.IScoreCriteriaRepository;
+import co.unicauca.digital.repository.back.domain.repository.scoreCriteria.IScoreCriteriaRepository;
 import co.unicauca.digital.repository.back.domain.service.scan.IScanFileService;
 import co.unicauca.digital.repository.back.domain.utilities.ExcelUtils;
 import co.unicauca.digital.repository.back.global.exception.BusinessRuleException;
