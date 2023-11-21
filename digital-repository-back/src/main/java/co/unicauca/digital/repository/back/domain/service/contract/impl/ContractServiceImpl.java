@@ -2,16 +2,21 @@ package co.unicauca.digital.repository.back.domain.service.contract.impl;
 
 import co.unicauca.digital.repository.back.domain.service.collection.ICollectionService;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoCreateRequest;
+import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindContractualFoldersResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
+import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
 import co.unicauca.digital.repository.back.domain.mapper.contract.IContractMapper;
+import co.unicauca.digital.repository.back.domain.mapper.contract.IContractVendorMapper;
 import co.unicauca.digital.repository.back.domain.model.contract.Contract;
 import co.unicauca.digital.repository.back.domain.repository.contract.IContractRepository;
 import co.unicauca.digital.repository.back.domain.service.contract.IContractService;
 import co.unicauca.digital.repository.back.domain.model.modalityContractType.ModalityContractType;
+import co.unicauca.digital.repository.back.domain.model.score.Score;
 import co.unicauca.digital.repository.back.domain.repository.modalityContractType.IModalityContractTypeRepository;
+import co.unicauca.digital.repository.back.domain.repository.score.IScoreRepository;
 import co.unicauca.digital.repository.back.domain.model.vendor.Vendor;
 import co.unicauca.digital.repository.back.domain.repository.vendor.IVendorRepository;
 import co.unicauca.digital.repository.back.global.exception.BusinessRuleException;
@@ -39,10 +44,10 @@ public class ContractServiceImpl implements IContractService {
 
     /** Object to perform CRUD operations on the Product entity */
     private final IContractRepository contractRepository;
-
     /** Object to perform CRUD operations on the Product entity */
     private final IVendorRepository vendorRepository;
-
+    /** Object to perform CRUD operations on the Score entity */
+    private final IScoreRepository scoreRepository;
     /**
      * Object to perform CRUD operations on the ModalityContractTypeRepository
      * entity
@@ -52,6 +57,8 @@ public class ContractServiceImpl implements IContractService {
     /** Mapping object for mapping the products */
     private final IContractMapper contractMapper;
 
+    private final IContractVendorMapper contractVendorMapper;
+
     private final ICollectionService collectionService;
 
     /**
@@ -59,12 +66,14 @@ public class ContractServiceImpl implements IContractService {
      */
     public ContractServiceImpl(IContractRepository contractRepository, IVendorRepository vendorRepository,
             IModalityContractTypeRepository modalityContractTypeRepository, IContractMapper contractMapper,
-            ICollectionService collectionService) {
+            ICollectionService collectionService,IScoreRepository scoreRepository,IContractVendorMapper contractVendorMapper) {
         this.contractRepository = contractRepository;
         this.vendorRepository = vendorRepository;
         this.modalityContractTypeRepository = modalityContractTypeRepository;
         this.contractMapper = contractMapper;
         this.collectionService = collectionService;
+        this.scoreRepository = scoreRepository;
+        this.contractVendorMapper = contractVendorMapper;
     }
 
     /**
@@ -114,7 +123,9 @@ public class ContractServiceImpl implements IContractService {
      */
     @Override
     public Response<ContractDtoCreateResponse> createContract(final ContractDtoCreateRequest contractDtoCreateRequest) {
-        if (entityExistsByReference(contractDtoCreateRequest.getReference()))
+        String anio = Integer.toString(contractDtoCreateRequest.getInitialDate().getYear());
+        ContractDtoIdRequest aux = new ContractDtoIdRequest(contractDtoCreateRequest.getReference(),anio);
+        if (entityExistsByReference(aux).getData())
             throw new BusinessRuleException("contract.request.already.exists");
 
         Contract contractModel = contractMapper.toEntityCreate(contractDtoCreateRequest);
@@ -139,6 +150,17 @@ public class ContractServiceImpl implements IContractService {
 
         // create collectinos's contract
         this.collectionService.createCollections(contractSaved);
+
+        // Create a Score associated with the Contract
+        Score score = Score.builder()
+        .totalScore(0.0f)
+        .createTime(LocalDateTime.now())
+        .updateTime(LocalDateTime.now())
+        .contract(contractSaved)
+        .build();
+
+        // Save the Score
+        scoreRepository.save(score);
 
         ContractDtoCreateResponse contractDtoCreateResponse = contractMapper.toDtoCreate(contractSaved);
 
@@ -207,8 +229,34 @@ public class ContractServiceImpl implements IContractService {
      * @param reference the request to be validated
      * @return true if the entity exists
      */
-    private boolean entityExistsByReference(final String reference) {
-        return contractRepository.findByReference(reference).isPresent();
+    public Response<Boolean>entityExistsByReference(final ContractDtoIdRequest prmContractParams) {
+        int numericYear = Integer.parseInt(prmContractParams.getAnio());
+        boolean isContractRegister = contractRepository.findByReferenceAndYear(prmContractParams.getMascara(),numericYear).isPresent();
+        String responseMessage = isContractRegister  ? "Ya existe un contrato registrado con esa mascara" : "No existe un contrato con esa mascara";
+        return new ResponseHandler<>(200,responseMessage,responseMessage,
+            isContractRegister).getResponse();
+    }
+
+    public Response<Boolean>ExistEvaluationByReference(final ContractDtoIdRequest prmContractParams) {
+        int numericYear = Integer.parseInt(prmContractParams.getAnio());
+        Optional<Contract> contract = contractRepository.findByReferenceAndYear(prmContractParams.getMascara(),numericYear);
+        Contract objContrato = contract.orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
+        Score objScore  = scoreRepository.findById(objContrato.getId()).get();
+        boolean isEvaluationRegister = objScore.getCreateTime().equals(objScore.getUpdateTime()) ? false : true;
+        String responseMessage = isEvaluationRegister ? "Ya existe una evaluacion registrada para el contrato asociado a la mascara solicitada" : "No existe una evaluacion registrada para el contrato asociado a la mascara solicitada";
+        return new ResponseHandler<>(200,responseMessage,responseMessage,
+            isEvaluationRegister).getResponse();
+    }
+
+    public Response<ContractVendorDtoResponse> DataContractVendorByMask(final ContractDtoIdRequest prmContractParams){
+        int numericYear = Integer.parseInt(prmContractParams.getAnio());
+        Optional<Contract> contract = contractRepository.findByReferenceAndYear(prmContractParams.getMascara(),numericYear);
+        Contract objContrato = contract.orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
+        Vendor vendor = objContrato.getVendor(); 
+        ContractVendorDtoResponse objResponse = contractVendorMapper.toContractVendorDtoResponse(objContrato, vendor);
+        objResponse.setNaturalPerson("NATURAL".equalsIgnoreCase(vendor.getPersonType()));
+        return new ResponseHandler<>(200,"Datos del contrato y proveedor","Datos del contrato y proveedor",
+           objResponse).getResponse();       
     }
 
     @Override

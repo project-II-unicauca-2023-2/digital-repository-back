@@ -26,7 +26,7 @@ public class ScanController {
     public ResponseEntity<String> uploadExcelFiles(@RequestParam("files") List<MultipartFile> files) {
         if (files.isEmpty()) {
             return ResponseEntity.badRequest()
-                .body("Por favor seleccione al menos un archivo Excel para cargar.");
+                    .body("Por favor seleccione al menos un archivo Excel para cargar.");
         }
         for (MultipartFile file : files) {
             try {
@@ -34,7 +34,7 @@ public class ScanController {
             } catch (IOException | ParseException e) {
                 // e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al procesar archivos Excel.");
+                        .body("Error al procesar archivos Excel.");
             }
             scanFileService.saveData();
         }

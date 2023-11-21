@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
  * database.
  */
 @Repository
-public interface ICredentialRepository extends JpaRepository<Credential, Integer> {
+public interface ICredentialRepository extends JpaRepository<Credential, Long> {
 }

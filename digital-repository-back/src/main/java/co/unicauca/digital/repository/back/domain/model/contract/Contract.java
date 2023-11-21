@@ -2,6 +2,7 @@ package co.unicauca.digital.repository.back.domain.model.contract;
 
 import co.unicauca.digital.repository.back.domain.model.collection.Collection;
 import co.unicauca.digital.repository.back.domain.model.modalityContractType.ModalityContractType;
+import co.unicauca.digital.repository.back.domain.model.score.Score;
 import co.unicauca.digital.repository.back.domain.model.vendor.Vendor;
 import lombok.*;
 
@@ -73,7 +74,12 @@ public class Contract {
     @JoinColumn(name = "modalityContractTypeId")
     private ModalityContractType modalityContractType;
 
-    /** Contract Score */
-    // @OneToOne(optional = false)
-    // private Score score;
+    /**
+     * Aqui se utilizo una relacion one to one con la estrategia de clave
+     * compartida, la clave primaria de contrato es la misma clave primaria
+     * de score, de esta manera funciona como primeria y foranea al tiempo.
+     */
+    @OneToOne(mappedBy = "contract", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Score score;
 }
