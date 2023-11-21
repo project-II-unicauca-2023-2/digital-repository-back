@@ -43,6 +43,10 @@ public class ScanController {
 
     @PostMapping("/uploadMassiveExcel")
     public ResponseEntity<String> uploadMassiveExcelFile(@RequestParam("file") MultipartFile file) {
+        if(file.isEmpty()) {
+            return ResponseEntity.badRequest()
+                .body("Por favor seleccione un archivo Excel masivo para cargar.");
+        }
         try {
             scanFileService.processMassiveFile(file);
         } catch (IOException | ParseException e) {
