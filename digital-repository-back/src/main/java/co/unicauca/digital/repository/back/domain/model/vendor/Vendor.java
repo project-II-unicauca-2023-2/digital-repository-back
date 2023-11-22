@@ -32,7 +32,7 @@ public class Vendor {
     private String identification;
 
     /** Vendor person type */
-    @Column(length = 100, unique = true)
+    @Column(length = 100)
     private String personType;
 
     /** Vendor score */
