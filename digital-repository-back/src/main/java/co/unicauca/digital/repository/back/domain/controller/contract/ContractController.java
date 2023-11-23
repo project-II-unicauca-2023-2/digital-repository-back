@@ -158,7 +158,7 @@ public class ContractController {
      * @return {@link Response} - Response object for the service, containing
      */
 
-    @GetMapping("existingContractByMask")
+    @PostMapping("existingContractByMask")
     public ResponseEntity<Response<Boolean>> getExistingContractByMask(
             @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest) {
         return new ResponseEntity<>(
@@ -173,7 +173,7 @@ public class ContractController {
      * @return {@link Response} - Response object for the service, containing
      */
 
-    @GetMapping("existingEvaluationContractByMask")
+    @PostMapping("existingEvaluationContractByMask")
     public ResponseEntity<Response<Boolean>> getExistingEvaluationContractByMask(
             @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest) {
         return new ResponseEntity<>(
@@ -188,7 +188,7 @@ public class ContractController {
      * @return {@link Response} - Response object for the service, containing
      */
 
-    @GetMapping("dataContractVendorByMask")
+    @PostMapping("dataContractVendorByMask")
     public ResponseEntity<Response<ContractVendorDtoResponse>> getDataContractVendorByMask(
             @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest) {
         return new ResponseEntity<>(
