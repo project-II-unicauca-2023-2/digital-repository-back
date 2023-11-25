@@ -4,6 +4,7 @@ Requisitos
 ------------------
 1. Instalar el MySQLServer y el Workbench (https://dev.mysql.com/downloads/installer/)
 2. Instalar SpringBoot en VSCode y descargar las extensiones: Extension Pack For Java, Spring Boot Dashboard, Spring Boot Tools, Spring Initializr Java Support.
+3. Establecer la siguiente varible de entorno, como se muestra a continuación (reiniciar el sistema posteriormente): ![Ejemplo Variable de Entorno](https://github.com/project-II-unicauca-2023-2/digital-repository-back/assets/149627640/ea2ff819-5686-4b05-bba2-163403fb82c5)
 
 Pasos para levantar el back-end:
 ------------------
