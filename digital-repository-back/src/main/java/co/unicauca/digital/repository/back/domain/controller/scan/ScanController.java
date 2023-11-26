@@ -24,7 +24,7 @@ public class ScanController {
 
     @PostMapping("/uploadExcels")
     public ResponseEntity<String> uploadExcelFiles(@RequestParam("files") List<MultipartFile> files) {
-        if (files.isEmpty()) {
+        if (files.isEmpty() || files.get(0).isEmpty()) {
             return ResponseEntity.badRequest()
                     .body("Por favor seleccione al menos un archivo Excel para cargar.");
         }
@@ -43,15 +43,15 @@ public class ScanController {
 
     @PostMapping("/uploadMassiveExcel")
     public ResponseEntity<String> uploadMassiveExcelFile(@RequestParam("file") MultipartFile file) {
-        if(file.isEmpty()) {
+        if (file.isEmpty()) {
             return ResponseEntity.badRequest()
-                .body("Por favor seleccione un archivo Excel masivo para cargar.");
+                    .body("Por favor seleccione un archivo Excel masivo para cargar.");
         }
         try {
             scanFileService.processMassiveFile(file);
         } catch (IOException | ParseException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Error al procesar archivo Excel masivo.");
+                    .body("Error al procesar archivo Excel masivo.");
         }
         // scanFileService.saveData();
         return ResponseEntity.ok("Archivo Excel masivo cargado y procesado con éxito.");
