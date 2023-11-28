@@ -1,7 +1,10 @@
 package co.unicauca.digital.repository.back.domain.controller.scan;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -42,18 +45,19 @@ public class ScanController {
     }
 
     @PostMapping("/uploadMassiveExcel")
-    public ResponseEntity<String> uploadMassiveExcelFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<String>> uploadMassiveExcelFile(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest()
-                    .body("Por favor seleccione un archivo Excel masivo para cargar.");
+                    .body(Arrays.asList("Por favor seleccione un archivo Excel masivo para cargar."));
         }
+        List<String> mensajesProceso = new ArrayList<>();
         try {
-            scanFileService.processMassiveFile(file);
+            mensajesProceso = scanFileService.processMassiveFile(file);
         } catch (IOException | ParseException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al procesar archivo Excel masivo.");
+                    .body(Arrays.asList("Error al procesar archivo Excel masivo."));
         }
         // scanFileService.saveData();
-        return ResponseEntity.ok("Archivo Excel masivo cargado y procesado con éxito.");
+        return ResponseEntity.ok(mensajesProceso);
     }
 }

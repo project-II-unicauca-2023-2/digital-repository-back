@@ -6,6 +6,8 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 
 import static java.time.LocalDateTime.now;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -231,11 +233,12 @@ public class ScanFileServiceImpl implements IScanFileService {
     }
 
     @Override
-    public void processMassiveFile(MultipartFile file) throws IOException, ParseException {
+    public List<String> processMassiveFile(MultipartFile file) throws IOException, ParseException {
         InputStream is = file.getInputStream();
         Workbook workbook = new XSSFWorkbook(is);
         Sheet sheet = workbook.getSheetAt(0);
         
+        ArrayList<String> listaMensajes = new ArrayList<String>();
         Row row; // cada fila del excel
         int rownum = 1; // empieza en la fila 2
         boolean isRowEmpty = false; // para saber si la fila esta vacia
@@ -322,13 +325,21 @@ public class ScanFileServiceImpl implements IScanFileService {
                         .createTime(now())
                         .build();
                     this.scoreRepository.save(score);
+                    listaMensajes.add("El contrato con mascara: "+ contractReference + " ha sido guardado correctamente. \n");
+                } else {
+
+                    listaMensajes.add("El contrato con mascara: "+ contractReference + " no se encuentra en la Base de datos. \n");
+                    
                 }
             }
+
             rownum++;
         }
         System.out.println("================= End =====================");
+        System.out.println(listaMensajes);
         if (workbook != null) workbook.close();
         cleanData();
+        return listaMensajes;
     }
 
     @Override
