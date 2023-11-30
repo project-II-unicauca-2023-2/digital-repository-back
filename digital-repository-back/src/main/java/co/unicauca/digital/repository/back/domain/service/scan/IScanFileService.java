@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface IScanFileService {
     void processFile(MultipartFile file) throws IOException, ParseException;
-    void saveData();
+    List<String> saveData();
     List<String> processMassiveFile(MultipartFile file) throws IOException, ParseException;
-    void saveMassiveData();
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class ExcelUtils {
@@ -42,6 +43,12 @@ public class ExcelUtils {
     }
 
     public Integer extractIntegerValue(String value) {
+        if(value.isBlank()) {
+            return 0;
+        }
+        if(!Pattern.matches("^\\d+$", value)) {
+            return -1;
+        }
         if(value.contains(".")) {
             Double doubleValue = Double.parseDouble(value);
             return doubleValue.intValue();

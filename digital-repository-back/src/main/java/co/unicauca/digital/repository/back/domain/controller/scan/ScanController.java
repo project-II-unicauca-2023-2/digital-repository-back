@@ -1,10 +1,8 @@
 package co.unicauca.digital.repository.back.domain.controller.scan;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -26,38 +24,37 @@ public class ScanController {
     private final IScanFileService scanFileService;
 
     @PostMapping("/uploadExcels")
-    public ResponseEntity<String> uploadExcelFiles(@RequestParam("files") List<MultipartFile> files) {
+    public ResponseEntity<?> uploadExcelFiles(@RequestParam("files") List<MultipartFile> files) {
         if (files.isEmpty() || files.get(0).isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body("Por favor seleccione al menos un archivo Excel para cargar.");
+            return new ResponseEntity<>("Por favor seleccione un archivo Excel para cargar", HttpStatus.BAD_REQUEST);
         }
+        List<String> responseMessages = new ArrayList<String>();
         for (MultipartFile file : files) {
             try {
                 scanFileService.processFile(file);
             } catch (IOException | ParseException e) {
-                // e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Error al procesar archivos Excel.");
+                return new ResponseEntity<>("Error al guardar el archivo excel en la base de datos", 
+                    HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            scanFileService.saveData();
+            for (String string : scanFileService.saveData()) {
+                responseMessages.add(string);    
+            }
         }
-        return ResponseEntity.ok("Archivos Excel cargados y procesados con éxito.");
+        return ResponseEntity.ok(responseMessages);
     }
 
     @PostMapping("/uploadMassiveExcel")
-    public ResponseEntity<List<String>> uploadMassiveExcelFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadMassiveExcelFile(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body(Arrays.asList("Por favor seleccione un archivo Excel masivo para cargar."));
+            return new ResponseEntity<>("Por favor seleccione un archivo Excel para cargar", HttpStatus.BAD_REQUEST);
         }
         List<String> mensajesProceso = new ArrayList<>();
         try {
             mensajesProceso = scanFileService.processMassiveFile(file);
         } catch (IOException | ParseException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Arrays.asList("Error al procesar archivo Excel masivo."));
+            return new ResponseEntity<>("Error al guardar el archivo excel en la base de datos", 
+                HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        // scanFileService.saveData();
         return ResponseEntity.ok(mensajesProceso);
     }
 }

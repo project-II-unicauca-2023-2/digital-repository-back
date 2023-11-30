@@ -9,7 +9,9 @@ import static java.time.LocalDateTime.now;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
@@ -20,6 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import co.unicauca.digital.repository.back.domain.model.contract.Contract;
 import co.unicauca.digital.repository.back.domain.model.score.Score;
 import co.unicauca.digital.repository.back.domain.model.scoreCriteria.ScoreCriteria;
 import co.unicauca.digital.repository.back.domain.repository.contract.IContractRepository;
@@ -28,7 +31,6 @@ import co.unicauca.digital.repository.back.domain.repository.score.IScoreReposit
 import co.unicauca.digital.repository.back.domain.repository.scoreCriteria.IScoreCriteriaRepository;
 import co.unicauca.digital.repository.back.domain.service.scan.IScanFileService;
 import co.unicauca.digital.repository.back.domain.utilities.ExcelUtils;
-import co.unicauca.digital.repository.back.global.exception.BusinessRuleException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -171,46 +173,107 @@ public class ScanFileServiceImpl implements IScanFileService {
     }
 
     @Override
-    public void saveData() {
-        // * Save to DB
-        var contract = this.contractRepository.findByReference(contractReference)
-                .orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
-        System.out.println("Contract reference: " + contract.getReference());
+    public List<String> saveData() {
+        boolean flag = true;
+        List<String> responseMessages = new ArrayList<String>();
+        String baseMessage = "El contrato con máscara: " + contractReference + " ";
+        // Reference is not empty
+        if (contractReference.isBlank()) {
+            flag = false;
+            responseMessages.add("La máscara de contrato no puede estar vacía");
+        }
 
-        var qualityCriteria = this.criteriaRepository.findByNameAndCriteriaType("Calidad", criteriaType)
-                .orElseThrow();
-        var executionCriteria = this.criteriaRepository.findByNameAndCriteriaType("Ejecucion", criteriaType)
-                .orElseThrow();
-        var complianceCriteria = this.criteriaRepository.findByNameAndCriteriaType("Cumplimiento", criteriaType)
-                .orElseThrow();
+        // ID vendor is not empty
+        if (vendorIdentification.equals("0")) {
+            flag = false;
+            responseMessages.add(baseMessage + ", el número de identificación del proveedor no puede estar vacío");
+        }
 
-        Score score = Score.builder()
-                .totalScore(totalScore)
-                .contract(contract)
-                .createTime(now())
-                .build();
-        this.scoreRepository.save(score);
+        // ID vendor must be a number
+        if (vendorIdentification.equals("-1")) {
+            flag = false;
+            responseMessages.add(baseMessage + ", el número de identificación del proveedor no puede contener letras o caracteres especiales");
+        }
 
-        ScoreCriteria firstScoreCriteria = ScoreCriteria.builder()
-                .score(score)
-                .criteria(qualityCriteria)
-                .rate(qualityCriteriaRate)
-                .createTime(now())
-                .build();
-        ScoreCriteria secondScoreCriteria = ScoreCriteria.builder()
-                .score(score)
-                .criteria(complianceCriteria)
-                .rate(complianceCriteriaRate)
-                .createTime(now())
-                .build();
-        ScoreCriteria thirdScoreCriteria = ScoreCriteria.builder()
-                .score(score)
-                .criteria(executionCriteria)
-                .rate(excecutionCriteriaRate)
-                .createTime(now())
-                .build();
-        this.scoreCriteriaRepository.saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
+        // Calification rate is not empty
+        if (qualityCriteriaRate == null || complianceCriteriaRate == null || excecutionCriteriaRate == null) {
+            flag = false;
+            responseMessages.add(baseMessage + ", las calificaciones de los criterios no pueden estar vacías");
+        }
+
+        // Reference with contract type
+        String[] contractNumber = contractReference.split("/");
+        // Optional<ContractType> contractTypeOptional = contractTypeRepository.findByExternalCode(contractNumber[0]);
+
+        HashMap<String, String> contractTypesMap = new HashMap<>();
+        contractTypesMap.put("5.5-31.3", vendorTypes.get(0)); //X
+        contractTypesMap.put("5.5-31.6", vendorTypes.get(1));
+        contractTypesMap.put("5.5-31.X", vendorTypes.get(2));
+        contractTypesMap.put("5.5-31.5", vendorTypes.get(3)); //X
+        contractTypesMap.put("5.5-31.9", vendorTypes.get(4));
+        // contractTypesMap.put("5.5-31.6", vendorTypes.get(5));
+        contractTypesMap.put("5.5-31.1", vendorTypes.get(6));
+        contractTypesMap.put("5.5-31.X", vendorTypes.get(7));
+        contractTypesMap.put("5.5-31.X", vendorTypes.get(8));
+        contractTypesMap.put("5.5-31.7", vendorTypes.get(9));
+        contractTypesMap.put("5.5-31.4", vendorTypes.get(10));
+
+        System.out.println(contractTypesMap);
+
+        if(!contractTypesMap.get(contractNumber[0]).equals("x")) {
+            flag = false;
+            responseMessages.add(baseMessage + ", el tipo de proveedor no coincide con la máscara especificada");
+        }
+
+        if(flag) {
+            // * Save to DB
+            Optional<Contract> contract = this.contractRepository.findByReference(contractReference);
+
+            if(contract.isEmpty()) {
+                responseMessages.add("El contrato con máscara: " + contractReference + " no se encuentra en la base de datos");
+                cleanData();
+                return responseMessages;
+            }
+
+            System.out.println("Contract reference: " + contract.get().getReference());
+
+            var qualityCriteria = this.criteriaRepository.findByNameAndCriteriaType("Calidad", criteriaType)
+                    .orElseThrow();
+            var executionCriteria = this.criteriaRepository.findByNameAndCriteriaType("Ejecucion", criteriaType)
+                    .orElseThrow();
+            var complianceCriteria = this.criteriaRepository.findByNameAndCriteriaType("Cumplimiento", criteriaType)
+                    .orElseThrow();
+
+            Score score = Score.builder()
+                    .totalScore(totalScore)
+                    .contract(contract.get())
+                    .createTime(now())
+                    .build();
+            this.scoreRepository.save(score);
+
+            ScoreCriteria firstScoreCriteria = ScoreCriteria.builder()
+                    .score(score)
+                    .criteria(qualityCriteria)
+                    .rate(qualityCriteriaRate)
+                    .createTime(now())
+                    .build();
+            ScoreCriteria secondScoreCriteria = ScoreCriteria.builder()
+                    .score(score)
+                    .criteria(complianceCriteria)
+                    .rate(complianceCriteriaRate)
+                    .createTime(now())
+                    .build();
+            ScoreCriteria thirdScoreCriteria = ScoreCriteria.builder()
+                    .score(score)
+                    .criteria(executionCriteria)
+                    .rate(excecutionCriteriaRate)
+                    .createTime(now())
+                    .build();
+            this.scoreCriteriaRepository.saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
+            responseMessages.add("La evaluación del contrato con máscara: " + contractReference + " ha sido guardada correctamente");
+        }
         cleanData();
+        return responseMessages;
     }
 
     private void cleanData() {
@@ -325,25 +388,18 @@ public class ScanFileServiceImpl implements IScanFileService {
                         .createTime(now())
                         .build();
                     this.scoreRepository.save(score);
-                    listaMensajes.add("El contrato con mascara: "+ contractReference + " ha sido guardado correctamente. \n");
+                    listaMensajes.add("El contrato con mascara: "+ contractReference + " ha sido guardado correctamente.");
                 } else {
-
-                    listaMensajes.add("El contrato con mascara: "+ contractReference + " no se encuentra en la Base de datos. \n");
-                    
+                    listaMensajes.add("El contrato con mascara: "+ contractReference + " no se encuentra en la Base de datos.");
                 }
+            } else {
+                listaMensajes.add("El contrato con mascara: "+ contractReference + " no se le ha ingresado una evaluación.");
             }
-
             rownum++;
         }
         System.out.println("================= End =====================");
-        System.out.println(listaMensajes);
         if (workbook != null) workbook.close();
         cleanData();
         return listaMensajes;
-    }
-
-    @Override
-    public void saveMassiveData() {
-        
     }
 }
