@@ -22,10 +22,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import co.unicauca.digital.repository.back.domain.dto.scan.ContractEvaluationInfo;
+import co.unicauca.digital.repository.back.domain.dto.scan.UploadExcelFileResponse;
 import co.unicauca.digital.repository.back.domain.model.contract.Contract;
+import co.unicauca.digital.repository.back.domain.model.contractType.ContractType;
 import co.unicauca.digital.repository.back.domain.model.score.Score;
 import co.unicauca.digital.repository.back.domain.model.scoreCriteria.ScoreCriteria;
 import co.unicauca.digital.repository.back.domain.repository.contract.IContractRepository;
+import co.unicauca.digital.repository.back.domain.repository.contractType.IContractTypeRepository;
 import co.unicauca.digital.repository.back.domain.repository.criteria.ICriteriaRepository;
 import co.unicauca.digital.repository.back.domain.repository.score.IScoreRepository;
 import co.unicauca.digital.repository.back.domain.repository.scoreCriteria.IScoreCriteriaRepository;
@@ -42,6 +46,7 @@ public class ScanFileServiceImpl implements IScanFileService {
     private final IScoreCriteriaRepository scoreCriteriaRepository;
     private final ICriteriaRepository criteriaRepository;
     private final IContractRepository contractRepository;
+    private final IContractTypeRepository contractTypeRepository;
     /* Excel column numbers */
     private final int NUM_COLUMN_A = 0;
     private final int NUM_COLUMN_B = 1;
@@ -173,10 +178,10 @@ public class ScanFileServiceImpl implements IScanFileService {
     }
 
     @Override
-    public List<String> saveData() {
+    public UploadExcelFileResponse saveData() {
         boolean flag = true;
         List<String> responseMessages = new ArrayList<String>();
-        String baseMessage = "El contrato con máscara: " + contractReference + " ";
+        //String baseMessage = "El contrato con máscara: " + contractReference + " ";
         // Reference is not empty
         if (contractReference.isBlank()) {
             flag = false;
@@ -186,24 +191,23 @@ public class ScanFileServiceImpl implements IScanFileService {
         // ID vendor is not empty
         if (vendorIdentification.equals("0")) {
             flag = false;
-            responseMessages.add(baseMessage + ", el número de identificación del proveedor no puede estar vacío");
+            responseMessages.add("El número de identificación del proveedor no puede estar vacío");
         }
 
         // ID vendor must be a number
         if (vendorIdentification.equals("-1")) {
             flag = false;
-            responseMessages.add(baseMessage + ", el número de identificación del proveedor no puede contener letras o caracteres especiales");
+            responseMessages.add("El número de identificación del proveedor no puede contener letras o caracteres especiales");
         }
 
         // Calification rate is not empty
         if (qualityCriteriaRate == null || complianceCriteriaRate == null || excecutionCriteriaRate == null) {
             flag = false;
-            responseMessages.add(baseMessage + ", las calificaciones de los criterios no pueden estar vacías");
+            responseMessages.add("Las calificaciones de los criterios no pueden estar vacías");
         }
 
         // Reference with contract type
         String[] contractNumber = contractReference.split("/");
-        // Optional<ContractType> contractTypeOptional = contractTypeRepository.findByExternalCode(contractNumber[0]);
 
         HashMap<String, String> contractTypesMap = new HashMap<>();
         contractTypesMap.put("5.5-31.3", vendorTypes.get(0)); //X
@@ -217,14 +221,36 @@ public class ScanFileServiceImpl implements IScanFileService {
         contractTypesMap.put("5.5-31.X", vendorTypes.get(8));
         contractTypesMap.put("5.5-31.7", vendorTypes.get(9));
         contractTypesMap.put("5.5-31.4", vendorTypes.get(10));
-
-        System.out.println(contractTypesMap);
-
-        if(!contractTypesMap.get(contractNumber[0]).equals("x")) {
+        Integer contractTypeId;
+        Optional<ContractType> contractTypeOptional = contractTypeRepository.findByExternalCode(contractNumber[0]);
+        if(contractTypeOptional.isEmpty() && contractNumber[0].isEmpty()) {
             flag = false;
-            responseMessages.add(baseMessage + ", el tipo de proveedor no coincide con la máscara especificada");
+            contractTypeId = null;
+        } else {
+            contractTypeId = contractTypeOptional.get().getId();
+            if(!contractTypesMap.get(contractNumber[0]).equals("x")) {
+                flag = false;
+                responseMessages.add("El tipo de proveedor no coincide con la máscara especificada");
+            }
         }
 
+        var contractInfo = ContractEvaluationInfo.builder()
+            .vendorName(vendorName)
+            .identification(vendorIdentification)
+            .initialDate(initialDate)
+            .finalDate(finalDate)
+            .subject(contractSubject)
+            .contractTypeId(contractTypeId)
+            .qualityRate(qualityCriteriaRate)
+            .complianceRate(complianceCriteriaRate)
+            .excecutionRate(excecutionCriteriaRate)
+            .totalScore(totalScore)
+            .build();
+        var uploadExcelFileResponse = UploadExcelFileResponse.builder()
+            .reference(contractReference)
+            .messages(responseMessages)
+            .contractInfo(contractInfo)
+            .build();
         if(flag) {
             // * Save to DB
             Optional<Contract> contract = this.contractRepository.findByReference(contractReference);
@@ -232,7 +258,7 @@ public class ScanFileServiceImpl implements IScanFileService {
             if(contract.isEmpty()) {
                 responseMessages.add("El contrato con máscara: " + contractReference + " no se encuentra en la base de datos");
                 cleanData();
-                return responseMessages;
+                return uploadExcelFileResponse;
             }
 
             System.out.println("Contract reference: " + contract.get().getReference());
@@ -273,7 +299,8 @@ public class ScanFileServiceImpl implements IScanFileService {
             responseMessages.add("La evaluación del contrato con máscara: " + contractReference + " ha sido guardada correctamente");
         }
         cleanData();
-        return responseMessages;
+
+        return uploadExcelFileResponse;
     }
 
     private void cleanData() {

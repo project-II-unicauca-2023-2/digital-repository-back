@@ -46,12 +46,12 @@ public class ExcelUtils {
         if(value.isBlank()) {
             return 0;
         }
-        if(!Pattern.matches("^\\d+$", value)) {
-            return -1;
-        }
         if(value.contains(".")) {
             Double doubleValue = Double.parseDouble(value);
             return doubleValue.intValue();
+        }
+        if(!Pattern.matches("^\\d+$", value)) {
+            return -1;
         }
         return Integer.parseInt(value);
     }

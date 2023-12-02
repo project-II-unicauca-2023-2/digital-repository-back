@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import co.unicauca.digital.repository.back.domain.dto.scan.UploadExcelFileResponse;
 import co.unicauca.digital.repository.back.domain.service.scan.IScanFileService;
 
 @RestController
@@ -28,7 +29,7 @@ public class ScanController {
         if (files.isEmpty() || files.get(0).isEmpty()) {
             return new ResponseEntity<>("Por favor seleccione un archivo Excel para cargar", HttpStatus.BAD_REQUEST);
         }
-        List<String> responseMessages = new ArrayList<String>();
+        var responseMessages = new ArrayList<>();
         for (MultipartFile file : files) {
             try {
                 scanFileService.processFile(file);
@@ -36,9 +37,10 @@ public class ScanController {
                 return new ResponseEntity<>("Error al guardar el archivo excel en la base de datos", 
                     HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            for (String string : scanFileService.saveData()) {
-                responseMessages.add(string);    
-            }
+            responseMessages.add(scanFileService.saveData());
+            // for (var responseMessage : scanFileService.saveData()) {
+            //     responseMessages.add(string);    
+            // }
         }
         return ResponseEntity.ok(responseMessages);
     }
