@@ -44,3 +44,53 @@ INSERT INTO `db_gestion_documental`.`criteria` (`criteriaType`, `description`, `
 
 -- Contract
 
+--Datos de prueba para dash
+INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`createUser`, `contractTypeId`, `modalityId`) VALUES ('init', '1', '1');
+INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`createUser`, `contractTypeId`, `modalityId`) VALUES ('init', '2', '1');
+INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`createUser`, `contractTypeId`, `modalityId`) VALUES ('init', '3', '1');
+INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`createUser`, `contractTypeId`, `modalityId`) VALUES ('init', '4', '1');
+INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`createUser`, `contractTypeId`, `modalityId`) VALUES ('init', '5', '1');
+INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`createUser`, `contractTypeId`, `modalityId`) VALUES ('init', '6', '1');
+INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`createUser`, `contractTypeId`, `modalityId`) VALUES ('init', '8', '1');
+
+INSERT INTO `db_gestion_documental`.`vendor` (`createTime`, `createUser`, `identification`, `name`, `score`) VALUES ('2023-01-1 00:00:00', 'init', '111', 'Hugo', '0');
+INSERT INTO `db_gestion_documental`.`vendor` (`createTime`, `createUser`, `identification`, `name`, `score`) VALUES ('2023-01-1 00:00:00', 'init', '222', 'Paco', '0');
+INSERT INTO `db_gestion_documental`.`vendor` (`createTime`, `createUser`, `identification`, `name`, `score`) VALUES ('2023-01-1 00:00:00', 'init', '333', 'Luis', '0');
+
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '5', '2');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '5', '3');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '6', '4');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '6', '2');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '6', '3');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '7', '4');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '8', '2');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '8', '3');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '9', '4');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '9', '2');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '9', '3');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '10', '4');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '10', '2');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '11', '2');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '11', '3');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '11', '4');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2025-12-1', '2023-01-1 00:00:00', '5', '3');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2025-12-1', '2023-01-1 00:00:00', '6', '4');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2025-12-1', '2023-01-1 00:00:00', '6', '4');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2025-12-1', '2023-01-1 00:00:00', '10', '2');
+
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('1', '2.5');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('2', '3.5');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('3', '4');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('4', '4.2');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('5', '3.5');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('6', '2.1');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('7', '1.5');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('8', '4.5');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('9', '5');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('10', '5');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('11', '4.6');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('12', '1.6');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('13', '4.2');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('14', '5');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('15', '3.8');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `totalScore`) VALUES ('16', '2.6');
