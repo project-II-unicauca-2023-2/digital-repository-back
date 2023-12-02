@@ -223,9 +223,10 @@ public class ScanFileServiceImpl implements IScanFileService {
         contractTypesMap.put("5.5-31.4", vendorTypes.get(10));
         Integer contractTypeId;
         Optional<ContractType> contractTypeOptional = contractTypeRepository.findByExternalCode(contractNumber[0]);
-        if(contractTypeOptional.isEmpty() && contractNumber[0].isEmpty()) {
+        if(contractTypeOptional.isEmpty()) {
             flag = false;
             contractTypeId = null;
+            responseMessages.add("El tipo de contrato no se encuentra en la base de datos");
         } else {
             contractTypeId = contractTypeOptional.get().getId();
             if(!contractTypesMap.get(contractNumber[0]).equals("x")) {
