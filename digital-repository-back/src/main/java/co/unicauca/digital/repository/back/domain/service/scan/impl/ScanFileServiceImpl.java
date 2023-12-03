@@ -2,7 +2,6 @@ package co.unicauca.digital.repository.back.domain.service.scan.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 
 import static java.time.LocalDateTime.now;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -78,7 +78,7 @@ public class ScanFileServiceImpl implements IScanFileService {
     private Float totalScore;
 
     @Override
-    public void processFile(MultipartFile file) throws IOException, ParseException {
+    public void processFile(MultipartFile file) throws IOException {
         InputStream is = file.getInputStream();
         Workbook workbook = new XSSFWorkbook(is);
         Sheet sheet = workbook.getSheetAt(0);
@@ -86,93 +86,107 @@ public class ScanFileServiceImpl implements IScanFileService {
 
         System.out.println("===================== Data Evaluacion Proveedores V2 =============");
         System.out.println("===== Contract information =====");
-        // Number and date cell
-        final Cell cell8C = sheet.getRow(7).getCell(NUM_COLUMN_C);
-        contractReference = excelUtils.extractReferenceNumber(cell8C.toString());
-        System.out.println("Número de referencia: " + contractReference);
+        
+        if(sheet.getRow(7)!=null) {
+            //* Number and date cell
+            final Cell cell8C = sheet.getRow(7).getCell(NUM_COLUMN_C);
+            contractReference = excelUtils.extractReferenceNumber(cell8C.toString());
+            System.out.println("Número de referencia: " + contractReference);
+        }
 
-        // Vendor name cell
-        final Cell cell9C = sheet.getRow(8).getCell(NUM_COLUMN_C);
-        vendorName = cell9C.toString();
-        System.out.println("Vendor name:" + vendorName);
-        
-        // Identification type cell
-        final Cell cell9H = sheet.getRow(8).getCell(NUM_COLUMN_H);
-        vendorIdentificationType = cell9H.toString();
-        System.out.println("Identification type:" + vendorIdentificationType);
-        
-        // Vendor cc,nit O identification cell
-        final Cell cell9J = sheet.getRow(8).getCell(NUM_COLUMN_J);
-        vendorIdentification = excelUtils.extractIntegerValue(cell9J.toString()).toString();
-        System.out.println("Vendor Identification: " + vendorIdentification);
-        
-        // Initial date cell
-        final Cell cell10C = sheet.getRow(9).getCell(NUM_COLUMN_C);
-        if (cell10C.getLocalDateTimeCellValue() != null) {
-            initialDate = cell10C.getLocalDateTimeCellValue();
-            System.out.println("Initial date: " + initialDate.toString());
+        if(sheet.getRow(8)!=null) {
+            // Vendor name cell
+            final Cell cell9C = sheet.getRow(8).getCell(NUM_COLUMN_C);
+            vendorName = cell9C.toString();
+            System.out.println("Vendor name:" + vendorName);
+            // Identification type cell
+            final Cell cell9H = sheet.getRow(8).getCell(NUM_COLUMN_H);
+            vendorIdentificationType = cell9H.toString();
+            System.out.println("Identification type:" + vendorIdentificationType);
+            //* Vendor cc,nit O identification cell
+            final Cell cell9J = sheet.getRow(8).getCell(NUM_COLUMN_J);
+            vendorIdentification = excelUtils.extractIntegerValue(cell9J.toString()).toString();
+            System.out.println("Vendor Identification: " + vendorIdentification);
         }
         
-        // Final date cell
-        final Cell cell10I = sheet.getRow(9).getCell(NUM_COLUMN_I);
-        if (cell10I.getLocalDateTimeCellValue() != null) {
-            finalDate = cell10I.getLocalDateTimeCellValue();
-            System.out.println("Final Date: " + finalDate.toString());
+        if(sheet.getRow(9)!=null) {
+            // Initial date cell
+            final Cell cell10C = sheet.getRow(9).getCell(NUM_COLUMN_C);
+            if (cell10C.getCellType() != CellType.STRING && cell10C.getLocalDateTimeCellValue() != null) {
+                initialDate = cell10C.getLocalDateTimeCellValue();
+                System.out.println("Initial date: " + initialDate.toString());
+            }
+            // Final date cell
+            final Cell cell10I = sheet.getRow(9).getCell(NUM_COLUMN_I);
+            if (cell10I.getCellType() != CellType.STRING && cell10I.getLocalDateTimeCellValue() != null) {
+                finalDate = cell10I.getLocalDateTimeCellValue();
+                System.out.println("Final Date: " + finalDate.toString());
+            }
         }
         
-        // Contract subject cell
-        final Cell cell11A = sheet.getRow(10).getCell(NUM_COLUMN_A);
-        contractSubject = excelUtils.extractContractSubject(cell11A.toString());
-        System.out.println("Contract Subject: " + contractSubject);
-        System.out.println("==== Vendor type ====");
+        if(sheet.getRow(10)!=null) {
+            // Contract subject cell
+            final Cell cell11A = sheet.getRow(10).getCell(NUM_COLUMN_A);
+            contractSubject = excelUtils.extractContractSubject(cell11A.toString());
+            System.out.println("Contract Subject: " + contractSubject);
+        }
         
-        // Vendor type cells
-        // Goods
-        final Cell cell16J = sheet.getRow(15).getCell(NUM_COLUMN_J);
-        final Cell cell17J = sheet.getRow(16).getCell(NUM_COLUMN_J);
-        final Cell cell18J = sheet.getRow(17).getCell(NUM_COLUMN_J);
-        // Services
-        final Cell cell19J = sheet.getRow(18).getCell(NUM_COLUMN_J);
-        final Cell cell20J = sheet.getRow(19).getCell(NUM_COLUMN_J);
-        final Cell cell21J = sheet.getRow(20).getCell(NUM_COLUMN_J);
-        final Cell cell22J = sheet.getRow(21).getCell(NUM_COLUMN_J);
-        final Cell cell23J = sheet.getRow(22).getCell(NUM_COLUMN_J);
-        final Cell cell24J = sheet.getRow(23).getCell(NUM_COLUMN_J);
-        final Cell cell25J = sheet.getRow(24).getCell(NUM_COLUMN_J);
-        // Works
-        final Cell cell26J = sheet.getRow(25).getCell(NUM_COLUMN_J);
-        
-        // Determine the type of vendor to evaluate
-        vendorTypes = Arrays.asList(cell16J.toString(), cell17J.toString(), cell18J.toString(),
-                cell19J.toString(), cell20J.toString(), cell21J.toString(), cell22J.toString(),
-                cell23J.toString(), cell24J.toString(), cell25J.toString(), cell26J.toString());
-        criteriaType = excelUtils.determineVendorType(vendorTypes);
-        System.out.println("El criteria type es: " + criteriaType);
+        if(sheet.getRow(15)!= null && sheet.getRow(16)!= null && sheet.getRow(17)!= null &&
+            sheet.getRow(18)!= null && sheet.getRow(19)!= null && sheet.getRow(20)!= null &&
+            sheet.getRow(21)!= null && sheet.getRow(22)!= null && sheet.getRow(23)!= null &&
+            sheet.getRow(24)!= null && sheet.getRow(25)!= null) 
+        {
+            System.out.println("==== Vendor type ====");
+            // Vendor type cells
+            // Goods
+            final Cell cell16J = sheet.getRow(15).getCell(NUM_COLUMN_J);
+            final Cell cell17J = sheet.getRow(16).getCell(NUM_COLUMN_J);
+            final Cell cell18J = sheet.getRow(17).getCell(NUM_COLUMN_J);
+            // Services
+            final Cell cell19J = sheet.getRow(18).getCell(NUM_COLUMN_J);
+            final Cell cell20J = sheet.getRow(19).getCell(NUM_COLUMN_J);
+            final Cell cell21J = sheet.getRow(20).getCell(NUM_COLUMN_J);
+            final Cell cell22J = sheet.getRow(21).getCell(NUM_COLUMN_J);
+            final Cell cell23J = sheet.getRow(22).getCell(NUM_COLUMN_J);
+            final Cell cell24J = sheet.getRow(23).getCell(NUM_COLUMN_J);
+            final Cell cell25J = sheet.getRow(24).getCell(NUM_COLUMN_J);
+            // Works
+            final Cell cell26J = sheet.getRow(25).getCell(NUM_COLUMN_J);
+            
+            // Determine the type of vendor to evaluate
+            vendorTypes = Arrays.asList(cell16J.toString(), cell17J.toString(), cell18J.toString(),
+                    cell19J.toString(), cell20J.toString(), cell21J.toString(), cell22J.toString(),
+                    cell23J.toString(), cell24J.toString(), cell25J.toString(), cell26J.toString());
+            criteriaType = excelUtils.determineVendorType(vendorTypes);
+            System.out.println("El criteria type es: " + criteriaType);
+        }
         
         System.out.println("==== Score ====");
-        // First Criteria (Quality) scoring cells
-        final Cell cell45A = sheet.getRow(44).getCell(NUM_COLUMN_A);
-        String firstCriteriaType = cell45A.toString();
-        final Cell cell46C = sheet.getRow(45).getCell(NUM_COLUMN_C);
-        qualityCriteriaRate = excelUtils.extractIntegerValue(cell46C.toString());
-        // Second Criteria (Cumplimiento) scoring cells
-        final Cell cell45E = sheet.getRow(44).getCell(NUM_COLUMN_E);
-        String secondCriteria = cell45E.toString();
-        final Cell cell46G = sheet.getRow(45).getCell(NUM_COLUMN_G);
-        complianceCriteriaRate = excelUtils.extractIntegerValue(cell46G.toString());
-        // Third Criteria (execute) scoring cells
-        final Cell cell45H = sheet.getRow(44).getCell(NUM_COLUMN_H);
-        String thirdCriteria = cell45H.toString();
-        final Cell cell46J = sheet.getRow(45).getCell(NUM_COLUMN_J);
-        excecutionCriteriaRate = excelUtils.extractIntegerValue(cell46J.toString());
-        System.out.println(firstCriteriaType + ": " + qualityCriteriaRate + "\n" +
-                secondCriteria + ": " + complianceCriteriaRate + "\n" +
-                thirdCriteria + ": " + excecutionCriteriaRate + "\n");
-        
-        // Total evaluation cells
-        final Cell cell47J = sheet.getRow(46).getCell(NUM_COLUMN_J);
-        totalScore = excelUtils.evaluateFormula(cell47J, evaluator);
-        System.out.println("Total score: " + totalScore + "\n");
+        if( sheet.getRow(44)!=null && sheet.getRow(45)!=null && sheet.getRow(46)!=null ) {
+            // First Criteria (Quality) scoring cells
+            final Cell cell45A = sheet.getRow(44).getCell(NUM_COLUMN_A);
+            String firstCriteriaType = cell45A.toString();
+            final Cell cell46C = sheet.getRow(45).getCell(NUM_COLUMN_C);
+            qualityCriteriaRate = excelUtils.extractIntegerValue(cell46C.toString());
+            // Second Criteria (Cumplimiento) scoring cells
+            final Cell cell45E = sheet.getRow(44).getCell(NUM_COLUMN_E);
+            String secondCriteria = cell45E.toString();
+            final Cell cell46G = sheet.getRow(45).getCell(NUM_COLUMN_G);
+            complianceCriteriaRate = excelUtils.extractIntegerValue(cell46G.toString());
+            // Third Criteria (execute) scoring cells
+            final Cell cell45H = sheet.getRow(44).getCell(NUM_COLUMN_H);
+            String thirdCriteria = cell45H.toString();
+            final Cell cell46J = sheet.getRow(45).getCell(NUM_COLUMN_J);
+            excecutionCriteriaRate = excelUtils.extractIntegerValue(cell46J.toString());
+            System.out.println(firstCriteriaType + ": " + qualityCriteriaRate + "\n" +
+                    secondCriteria + ": " + complianceCriteriaRate + "\n" +
+                    thirdCriteria + ": " + excecutionCriteriaRate + "\n");
+            
+            // Total evaluation cells
+            final Cell cell47J = sheet.getRow(46).getCell(NUM_COLUMN_J);
+            totalScore = excelUtils.evaluateFormula(cell47J, evaluator);
+            System.out.println("Total score: " + totalScore + "\n");
+        }
         
         if (workbook != null) workbook.close();
     }
@@ -183,19 +197,17 @@ public class ScanFileServiceImpl implements IScanFileService {
         List<String> responseMessages = new ArrayList<String>();
         //String baseMessage = "El contrato con máscara: " + contractReference + " ";
         // Reference is not empty
-        if (contractReference.isBlank()) {
+        if (contractReference == null) {
             flag = false;
             responseMessages.add("La máscara de contrato no puede estar vacía");
         }
-
-        // ID vendor is not empty
-        if (vendorIdentification.equals("0")) {
+        
+        if (vendorIdentification == null || vendorIdentification.equals("0")) {
+            // ID vendor is empty
             flag = false;
             responseMessages.add("El número de identificación del proveedor no puede estar vacío");
-        }
-
-        // ID vendor must be a number
-        if (vendorIdentification.equals("-1")) {
+        } else if (vendorIdentification.equals("-1")) {
+            // ID vendor must be a number
             flag = false;
             responseMessages.add("El número de identificación del proveedor no puede contener letras o caracteres especiales");
         }
@@ -206,33 +218,50 @@ public class ScanFileServiceImpl implements IScanFileService {
             responseMessages.add("Las calificaciones de los criterios no pueden estar vacías");
         }
 
+        Integer contractTypeId=null;
         // Reference with contract type
-        String[] contractNumber = contractReference.split("/");
-
-        HashMap<String, String> contractTypesMap = new HashMap<>();
-        contractTypesMap.put("5.5-31.3", vendorTypes.get(0)); //X
-        contractTypesMap.put("5.5-31.6", vendorTypes.get(1));
-        contractTypesMap.put("5.5-31.X", vendorTypes.get(2));
-        contractTypesMap.put("5.5-31.5", vendorTypes.get(3)); //X
-        contractTypesMap.put("5.5-31.9", vendorTypes.get(4));
-        // contractTypesMap.put("5.5-31.6", vendorTypes.get(5));
-        contractTypesMap.put("5.5-31.1", vendorTypes.get(6));
-        contractTypesMap.put("5.5-31.X", vendorTypes.get(7));
-        contractTypesMap.put("5.5-31.X", vendorTypes.get(8));
-        contractTypesMap.put("5.5-31.7", vendorTypes.get(9));
-        contractTypesMap.put("5.5-31.4", vendorTypes.get(10));
-        Integer contractTypeId;
-        Optional<ContractType> contractTypeOptional = contractTypeRepository.findByExternalCode(contractNumber[0]);
-        if(contractTypeOptional.isEmpty()) {
-            flag = false;
-            contractTypeId = null;
-            responseMessages.add("El tipo de contrato no se encuentra en la base de datos");
-        } else {
-            contractTypeId = contractTypeOptional.get().getId();
-            if(!contractTypesMap.get(contractNumber[0]).equals("x")) {
+        if(vendorTypes!=null && !contractReference.equals("")) {
+            HashMap<String, String> contractTypesMap = new HashMap<>();
+            contractTypesMap.put("5.5-31.3", vendorTypes.get(0)); //X
+            contractTypesMap.put("5.5-31.6", vendorTypes.get(1));
+            contractTypesMap.put("5.5-31.X", vendorTypes.get(2));
+            contractTypesMap.put("5.5-31.5", vendorTypes.get(3)); //X
+            contractTypesMap.put("5.5-31.9", vendorTypes.get(4));
+            // contractTypesMap.put("5.5-31.6", vendorTypes.get(5));
+            contractTypesMap.put("5.5-31.1", vendorTypes.get(6));
+            contractTypesMap.put("5.5-31.X", vendorTypes.get(7));
+            contractTypesMap.put("5.5-31.X", vendorTypes.get(8));
+            contractTypesMap.put("5.5-31.7", vendorTypes.get(9));
+            contractTypesMap.put("5.5-31.4", vendorTypes.get(10));
+            
+            String[] contractNumber = contractReference.split("/");
+            Optional<ContractType> contractTypeOptional = contractTypeRepository.findByExternalCode(contractNumber[0]);
+            
+            if(contractTypeOptional.isEmpty()) {
                 flag = false;
-                responseMessages.add("El tipo de proveedor no coincide con la máscara especificada");
+                responseMessages.add("El tipo de contrato no se encuentra en la base de datos");
+            } else {
+                contractTypeId = contractTypeOptional.get().getId();
+                if(!contractTypesMap.get(contractNumber[0]).equals("x")) {
+                    flag = false;
+                    responseMessages.add("El tipo de proveedor no coincide con la máscara especificada");
+                }
             }
+        }
+
+        if(initialDate==null) {
+            flag = false;
+            responseMessages.add("La fecha de inicio no puede estar vacía");
+        }
+
+        if(finalDate==null) {
+            flag = false;
+            responseMessages.add("La fecha de terminación puede estar vacía");
+        }
+
+        if(contractSubject==null) {
+            flag = false;
+            responseMessages.add("El objeto del contrato no puede estar vacío");
         }
 
         var contractInfo = ContractEvaluationInfo.builder()
@@ -257,7 +286,7 @@ public class ScanFileServiceImpl implements IScanFileService {
             Optional<Contract> contract = this.contractRepository.findByReference(contractReference);
 
             if(contract.isEmpty()) {
-                responseMessages.add("El contrato con máscara: " + contractReference + " no se encuentra en la base de datos");
+                responseMessages.add("El contrato no se encuentra en la base de datos");
                 cleanData();
                 return uploadExcelFileResponse;
             }
@@ -297,7 +326,7 @@ public class ScanFileServiceImpl implements IScanFileService {
                     .createTime(now())
                     .build();
             this.scoreCriteriaRepository.saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
-            responseMessages.add("La evaluación del contrato con máscara: " + contractReference + " ha sido guardada correctamente");
+            responseMessages.add("La evaluación del contrato ha sido registrada correctamente");
         }
         cleanData();
 
@@ -324,7 +353,7 @@ public class ScanFileServiceImpl implements IScanFileService {
     }
 
     @Override
-    public List<String> processMassiveFile(MultipartFile file) throws IOException, ParseException {
+    public List<String> processMassiveFile(MultipartFile file) throws IOException {
         InputStream is = file.getInputStream();
         Workbook workbook = new XSSFWorkbook(is);
         Sheet sheet = workbook.getSheetAt(0);
@@ -430,4 +459,6 @@ public class ScanFileServiceImpl implements IScanFileService {
         cleanData();
         return listaMensajes;
     }
+
+
 }

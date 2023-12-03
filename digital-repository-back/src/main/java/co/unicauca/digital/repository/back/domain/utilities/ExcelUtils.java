@@ -1,6 +1,6 @@
 package co.unicauca.digital.repository.back.domain.utilities;
 
-import java.text.SimpleDateFormat;
+// import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -9,8 +9,8 @@ import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.util.Date;
+// import java.text.ParseException;
+// import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -113,7 +113,7 @@ public class ExcelUtils {
         }
     }
     
-    public LocalDateTime extractEvaluationUpdateDate(String updateDate) throws ParseException{
+    /*public LocalDateTime extractEvaluationUpdateDate(String updateDate) throws ParseException{
         // Verificar si la cadena contiene ":"
         if (updateDate.contains(":")) {
             // Encontrar la posición de ":"
@@ -133,7 +133,7 @@ public class ExcelUtils {
             // Si no hay ":", devolver la cadena original.
             return null;
         }
-    }
+    }*/
 
     public LocalDateTime extractEvaluationDate(String evaluationDate){
         String[] evaluationDatesSplit = evaluationDate.split(" ");

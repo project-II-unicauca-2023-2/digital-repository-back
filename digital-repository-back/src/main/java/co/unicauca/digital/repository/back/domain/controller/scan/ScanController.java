@@ -1,7 +1,6 @@
 package co.unicauca.digital.repository.back.domain.controller.scan;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
-import co.unicauca.digital.repository.back.domain.dto.scan.UploadExcelFileResponse;
 import co.unicauca.digital.repository.back.domain.service.scan.IScanFileService;
 
 @RestController
@@ -33,14 +31,12 @@ public class ScanController {
         for (MultipartFile file : files) {
             try {
                 scanFileService.processFile(file);
-            } catch (IOException | ParseException e) {
-                return new ResponseEntity<>("Error al guardar el archivo excel en la base de datos", 
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (IOException e) {
+                responseMessages.add("Error al leer el archivo excel");
+                // return new ResponseEntity<>("Error al leer el archivos excel", 
+                //     HttpStatus.INTERNAL_SERVER_ERROR);
             }
             responseMessages.add(scanFileService.saveData());
-            // for (var responseMessage : scanFileService.saveData()) {
-            //     responseMessages.add(string);    
-            // }
         }
         return ResponseEntity.ok(responseMessages);
     }
@@ -53,8 +49,8 @@ public class ScanController {
         List<String> mensajesProceso = new ArrayList<>();
         try {
             mensajesProceso = scanFileService.processMassiveFile(file);
-        } catch (IOException | ParseException e) {
-            return new ResponseEntity<>("Error al guardar el archivo excel en la base de datos", 
+        } catch (IOException e) {
+            return new ResponseEntity<>("Error al guardar los datos en la base de datos", 
                 HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(mensajesProceso);
