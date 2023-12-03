@@ -1,6 +1,8 @@
 package co.unicauca.digital.repository.back.domain.service.contract.impl;
 
 import co.unicauca.digital.repository.back.domain.service.collection.ICollectionService;
+import co.unicauca.digital.repository.back.domain.dto.aboutVendor.response.aboutVendorDto;
+import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoAverageRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
@@ -308,4 +310,15 @@ public class ContractServiceImpl implements IContractService {
 
         return new ResponseHandler<>(200, "Exitoso", "Exitoso", response).getResponse();
     }
+
+    @Override
+    public Response<ContractDtoAverageRequest> getAverageContractByCategory(String description, int year) {
+        
+        ContractDtoAverageRequest averageContract = new ContractDtoAverageRequest();
+        float promedio =contractRepository.getAverageByCategory(description, year);
+        averageContract.setAverageContract(promedio);
+               
+        return new ResponseHandler<>(200, "Encontrado", "Encontrado", averageContract).getResponse();
+    }
+    
 }

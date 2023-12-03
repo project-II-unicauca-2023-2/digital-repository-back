@@ -1,5 +1,6 @@
 package co.unicauca.digital.repository.back.domain.repository.contract;
 
+
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindContractualFoldersResponse;
 import co.unicauca.digital.repository.back.domain.model.contract.Contract;
 import org.springframework.data.domain.Page;
@@ -85,4 +86,12 @@ public interface IContractRepository extends JpaRepository<Contract, Integer> {
             "(:filter = 'SUPERSCRIBE-YEAR' AND YEAR(CON.signingDate) LIKE CONCAT('%', :search, '%')))")
     Page<ContractDtoFindContractualFoldersResponse> findByFilterAndSearchPattern(String filter, String search,
             Pageable pageable);
+
+
+    //Query for average from contract description
+    @Query(value = " SELECT AVG(sco.rate) FROM contract c INNER JOIN score sc ON c.id=sc.contract_id INNER JOIN scorecriteria sco " 
+    + " ON sc.contract_id=sco.scoreId INNER JOIN modalitycontracttype m ON c.modalityContractTypeId=m.id INNER JOIN contracttype "
+    + " con ON con.id=m.contractTypeId WHERE con.description =:description AND YEAR(c.initialDate) =:year "
+    + " AND sco.createTime < sco.updateTime", nativeQuery = true)
+    float getAverageByCategory(@Param("description") String description, @Param("year") int year);
 }

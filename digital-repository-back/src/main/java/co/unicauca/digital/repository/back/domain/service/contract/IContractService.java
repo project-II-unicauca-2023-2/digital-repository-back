@@ -1,5 +1,7 @@
 package co.unicauca.digital.repository.back.domain.service.contract;
 
+import co.unicauca.digital.repository.back.domain.dto.aboutContractType.aboutContractTypeDTO;
+import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoAverageRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
@@ -113,4 +115,13 @@ public interface IContractService {
     Response<PageableResponse<Object>> getContractualFoldersByFilter(int pageNo, int pageSize, String filter,
             String search);
 
+    
+
+    /**
+     * 
+     * @param description
+     * @param anio
+     * @return average category
+     */
+    Response<ContractDtoAverageRequest> getAverageContractByCategory(String description,int year);
 }

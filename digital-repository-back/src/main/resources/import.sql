@@ -58,8 +58,8 @@ INSERT INTO `db_gestion_documental`.`vendor` (`createTime`, `createUser`, `ident
 INSERT INTO `db_gestion_documental`.`vendor` (`createTime`, `createUser`, `identification`, `name`, `score`) VALUES ('2023-01-1 00:00:00', 'init', '333', 'Luis', '0');
 
 INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '5', '2');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '5', '3');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '6', '4');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '2', '3');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '3', '4');
 INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '6', '2');
 INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '6', '3');
 INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-2-1', '2023-01-1 00:00:00', '7', '4');
@@ -94,3 +94,6 @@ INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalSc
 INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (14,'2023-01-01 00:00:00',5,NULL);
 INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (15,'2023-01-01 00:00:00',3.8,NULL);
 INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (16,'2023-01-01 00:00:00',2.6,NULL);
+
+
+

@@ -10,10 +10,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import co.unicauca.digital.repository.back.domain.dto.aboutContractType.aboutContractTypeDTO;
+import co.unicauca.digital.repository.back.domain.dto.aboutContractType.aboutContractTypeDTO.aboutContractTypeDTOBuilder;
+import co.unicauca.digital.repository.back.domain.dto.aboutVendor.response.aboutVendorDto;
 import co.unicauca.digital.repository.back.domain.dto.contractType.request.ContractTypeDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contractType.request.ContractTypeDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contractType.response.ContractTypeDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.contractType.response.ContractTypeDtoFindResponse;
+import co.unicauca.digital.repository.back.domain.dto.criteria.response.CriteriaDtoConsultResponse;
 import co.unicauca.digital.repository.back.domain.mapper.contractType.IContractTypeMapper;
 import co.unicauca.digital.repository.back.domain.model.contractType.ContractType;
 import co.unicauca.digital.repository.back.domain.repository.contractType.IContractTypeRepository;
@@ -153,6 +157,16 @@ public class ContractTypeServiceImpl implements IContractTypeService {
      */
     private boolean entityExistsByExternalCode(final String externalCode) {
         return contractTypeRepository.findByExternalCode(externalCode).isPresent();
+    }
+
+    @Override
+    public Response<aboutContractTypeDTO> getAboutContractsubcategory(String category) {        
+        aboutContractTypeDTO aboutcontract = new aboutContractTypeDTO();
+
+        List<String> result =  contractTypeRepository.getSubCategoryByCategory(category);
+
+        aboutcontract.setContractType(result);  
+        return new ResponseHandler<>(200, "Encontrado", "Encontrado", aboutcontract).getResponse();
     }
 
 }

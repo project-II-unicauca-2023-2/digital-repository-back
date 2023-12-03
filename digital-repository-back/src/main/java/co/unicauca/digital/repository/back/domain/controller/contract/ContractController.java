@@ -1,6 +1,8 @@
 package co.unicauca.digital.repository.back.domain.controller.contract;
 
+import co.unicauca.digital.repository.back.domain.dto.aboutContractType.aboutContractTypeDTO;
 import co.unicauca.digital.repository.back.domain.dto.aboutVendor.response.aboutVendorDto;
+import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoAverageRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
@@ -201,4 +203,25 @@ public class ContractController {
 
         return aboutVendorService.getAboutVendor(referenceMask);
     }
+
+
+    //Method for calculating the average of the different types of contracts
+    @GetMapping("/averageContractType/Servicios/{year}")
+    public Response<ContractDtoAverageRequest> getAverageCategoryByServices(@PathVariable int year) {
+        return contractService.getAverageContractByCategory("Servicios", year);
+    }
+
+    //Method for calculating the average of the different types of contracts
+    @GetMapping("/averageContractType/Bienes/{year}")
+    public Response<ContractDtoAverageRequest> getAverageCategoryByGoods(@PathVariable int year) {
+        return contractService.getAverageContractByCategory("Bienes", year);
+    }
+
+    //Method for calculating the average of the different types of contracts
+    @GetMapping("/averageContractType/Obras/{year}")
+    public Response<ContractDtoAverageRequest> getAverageCategoryByWorks(@PathVariable int year) {
+        return contractService.getAverageContractByCategory("Obras", year);
+    }
+
+    
 }
