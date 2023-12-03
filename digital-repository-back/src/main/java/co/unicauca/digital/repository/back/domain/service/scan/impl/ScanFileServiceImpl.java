@@ -301,7 +301,7 @@ public class ScanFileServiceImpl implements IScanFileService {
                     .orElseThrow();
 
             Optional<Contract> contractOptional = contractRepository.findByReference(contractReference);
-            scoreRepository.updateByContractId(totalScore, contractOptional.get().getId());
+            scoreRepository.updateByContractId(totalScore, contractOptional.get().getId(), now());
 
             Optional<Score> scoreOptional = scoreRepository.findByContract(contractOptional.get());
 
@@ -449,7 +449,7 @@ public class ScanFileServiceImpl implements IScanFileService {
 
                     // Guardar en la base de datos
                     Optional<Contract> contractOptional = contractRepository.findByReference(contractReference);
-                    scoreRepository.updateByContractId(totalScore, contractOptional.get().getId());
+                    scoreRepository.updateByContractId(totalScore, contractOptional.get().getId(), now());
                     listaMensajes.add("El contrato con mascara: "+ contractReference + " ha sido guardado correctamente.");
                 } else {
                     listaMensajes.add("El contrato con mascara: "+ contractReference + " no se encuentra en la Base de datos.");
