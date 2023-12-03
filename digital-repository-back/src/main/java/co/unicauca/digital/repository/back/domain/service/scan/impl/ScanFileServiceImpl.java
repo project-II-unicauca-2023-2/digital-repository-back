@@ -300,27 +300,25 @@ public class ScanFileServiceImpl implements IScanFileService {
             var complianceCriteria = this.criteriaRepository.findByNameAndCriteriaType("Cumplimiento", criteriaType)
                     .orElseThrow();
 
-            Score score = Score.builder()
-                    .totalScore(totalScore)
-                    .contract(contract.get())
-                    .createTime(now())
-                    .build();
-            this.scoreRepository.save(score);
+            Optional<Contract> contractOptional = contractRepository.findByReference(contractReference);
+            scoreRepository.updateByContractId(totalScore, contractOptional.get().getId());
+
+            Optional<Score> scoreOptional = scoreRepository.findByContract(contractOptional.get());
 
             ScoreCriteria firstScoreCriteria = ScoreCriteria.builder()
-                    .score(score)
+                    .score(scoreOptional.get())
                     .criteria(qualityCriteria)
                     .rate(qualityCriteriaRate)
                     .createTime(now())
                     .build();
             ScoreCriteria secondScoreCriteria = ScoreCriteria.builder()
-                    .score(score)
+                    .score(scoreOptional.get())
                     .criteria(complianceCriteria)
                     .rate(complianceCriteriaRate)
                     .createTime(now())
                     .build();
             ScoreCriteria thirdScoreCriteria = ScoreCriteria.builder()
-                    .score(score)
+                    .score(scoreOptional.get())
                     .criteria(executionCriteria)
                     .rate(excecutionCriteriaRate)
                     .createTime(now())
@@ -328,8 +326,8 @@ public class ScanFileServiceImpl implements IScanFileService {
             this.scoreCriteriaRepository.saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
             responseMessages.add("La evaluación del contrato ha sido registrada correctamente");
         }
+        
         cleanData();
-
         return uploadExcelFileResponse;
     }
 
@@ -368,83 +366,90 @@ public class ScanFileServiceImpl implements IScanFileService {
         final String CE = "4 CÉDULA DE EXTRANJERÍA";
 
         System.out.println("\n============= Data Massive File ==============\n");
-        while(!isRowEmpty) { // mientras la fila no este vacia
+        while (!isRowEmpty) { // mientras la fila no este vacia
             row = sheet.getRow(rownum); // se obtiene la fila
             contractReference = row.getCell(NUM_COLUMN_A).toString();
-            if( contractReference.isBlank() ) {
+            if (contractReference.isBlank()) {
                 isRowEmpty = true;
             }
             // Comprobar si la celda en la coulmna L no es nula y no es NA
-            if(!isRowEmpty && row.getCell(NUM_COLUMN_L)!=null && !row.getCell(NUM_COLUMN_L).toString().equals("NA")) {
+            if (!isRowEmpty && row.getCell(NUM_COLUMN_L) != null
+                    && !row.getCell(NUM_COLUMN_L).toString().equals("NA")) {
                 // Comprobar si existe el contrato
                 var contract = contractRepository.findByReference(contractReference);
-                if(contract.isPresent()) {
+                if (contract.isPresent()) {
                     System.out.println("Printing row " + (rownum + 1) + "\n");
 
                     System.out.println("Reference: " + contractReference);
-                    
+
                     LocalDateTime suscriptionDate = row.getCell(NUM_COLUMN_B).getLocalDateTimeCellValue();
-                    if(suscriptionDate!=null) System.out.println("Susciption date: " + suscriptionDate);
-                    
+                    if (suscriptionDate != null)
+                        System.out.println("Susciption date: " + suscriptionDate);
+
                     String contractType = row.getCell(NUM_COLUMN_C).toString();
-                    if(!contractType.isBlank()) System.out.println("Contract type: " + contractType);
-                    
+                    if (!contractType.isBlank())
+                        System.out.println("Contract type: " + contractType);
+
                     String contractSubject = row.getCell(NUM_COLUMN_D).toString();
-                    if(!contractSubject.isBlank()) System.out.println("Contract subject: " + contractSubject);
-                    
+                    if (!contractSubject.isBlank())
+                        System.out.println("Contract subject: " + contractSubject);
+
                     String identificationType = row.getCell(NUM_COLUMN_E).toString();
-                    if(!identificationType.isBlank()) System.out.println("Identification type: " + identificationType);
-                    
-                    String identificationNumber="";
+                    if (!identificationType.isBlank())
+                        System.out.println("Identification type: " + identificationType);
+
+                    String identificationNumber = "";
                     // Comprobar si es persona natural
-                    if(identificationType.equals(RUT) || identificationType.equals(CC) || identificationType.equals(CE)) {
+                    if (identificationType.equals(RUT) || identificationType.equals(CC)
+                            || identificationType.equals(CE)) {
                         isNaturalPerson = true;
                     }
                     // Comprobar que, si es persona natural,
                     // que la celda en la columna F no sea nula
                     var cellF = row.getCell(NUM_COLUMN_F).toString();
-                    if(isNaturalPerson == true && !cellF.isBlank()) {
-                        if(!(row.getCell(NUM_COLUMN_G).toString()).isBlank()) {
+                    if (isNaturalPerson == true && !cellF.isBlank()) {
+                        if (!(row.getCell(NUM_COLUMN_G).toString()).isBlank()) {
                             System.out.println("Error: NIT is not blank");
                         } else {
                             identificationNumber = row.getCell(NUM_COLUMN_F).toString();
                         }
                     }
-                    // Comprobar que, si no es persona natural, 
+                    // Comprobar que, si no es persona natural,
                     // que la celda en la columna G no sea nula
                     var cellG = row.getCell(NUM_COLUMN_G).toString();
-                    if(isNaturalPerson == false && !cellG.isBlank()) {
-                        if(!(row.getCell(NUM_COLUMN_F).toString()).isBlank()) {
+                    if (isNaturalPerson == false && !cellG.isBlank()) {
+                        if (!(row.getCell(NUM_COLUMN_F).toString()).isBlank()) {
                             System.out.println("Error: CC/RUT is not blank");
                         } else {
                             identificationNumber = row.getCell(NUM_COLUMN_G).toString();
                         }
                     }
-                    if(!identificationNumber.isBlank()) System.out.println("Identification number: " + identificationNumber);
-                    
+                    if (!identificationNumber.isBlank())
+                        System.out.println("Identification number: " + identificationNumber);
+
                     String vendorName = row.getCell(NUM_COLUMN_H).toString();
-                    if(!vendorName.isBlank()) System.out.println("Vendor name: " + vendorName);
-                    
+                    if (!vendorName.isBlank())
+                        System.out.println("Vendor name: " + vendorName);
+
                     String supervisorName = row.getCell(NUM_COLUMN_I).toString();
-                    if(!supervisorName.isBlank()) System.out.println("Supervisor name: " + supervisorName);
-                    
+                    if (!supervisorName.isBlank())
+                        System.out.println("Supervisor name: " + supervisorName);
+
                     LocalDateTime initialDate = row.getCell(NUM_COLUMN_J).getLocalDateTimeCellValue();
-                    if(initialDate!=null) System.out.println("Initial date: " + initialDate);
-                    
+                    if (initialDate != null)
+                        System.out.println("Initial date: " + initialDate);
+
                     LocalDateTime finalDate = row.getCell(NUM_COLUMN_K).getLocalDateTimeCellValue();
-                    if(finalDate!=null) System.out.println("Final date: " + finalDate);
-                    
+                    if (finalDate != null)
+                        System.out.println("Final date: " + finalDate);
+
                     Double contractEvaluation = row.getCell(NUM_COLUMN_L).getNumericCellValue();
                     totalScore = contractEvaluation.floatValue();
                     System.out.println("Contract evaluation: " + totalScore + "\n");
 
                     // Guardar en la base de datos
-                    Score score = Score.builder()
-                        .totalScore(totalScore)
-                        .contract(contract.get())
-                        .createTime(now())
-                        .build();
-                    this.scoreRepository.save(score);
+                    Optional<Contract> contractOptional = contractRepository.findByReference(contractReference);
+                    scoreRepository.updateByContractId(totalScore, contractOptional.get().getId());
                     listaMensajes.add("El contrato con mascara: "+ contractReference + " ha sido guardado correctamente.");
                 } else {
                     listaMensajes.add("El contrato con mascara: "+ contractReference + " no se encuentra en la Base de datos.");
@@ -455,10 +460,10 @@ public class ScanFileServiceImpl implements IScanFileService {
             rownum++;
         }
         System.out.println("================= End =====================");
-        if (workbook != null) workbook.close();
+        if (workbook != null)
+            workbook.close();
         cleanData();
         return listaMensajes;
     }
-
 
 }

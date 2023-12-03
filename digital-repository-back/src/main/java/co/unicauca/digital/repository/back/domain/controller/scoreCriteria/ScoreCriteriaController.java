@@ -22,7 +22,7 @@ public class ScoreCriteriaController {
     public ScoreCriteriaController(IScoreCriteriaService scoreCriteriaService) {
         this.scoreCriteriaService = scoreCriteriaService;
     }
-    @GetMapping("scoreCriteriaDataByMask")
+    @PostMapping("scoreCriteriaDataByMask")
     public ResponseEntity<Response<ScoreCriteriaDtoResponse>> getScoreCriteriaDataByMask(
         @Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest
     ){
