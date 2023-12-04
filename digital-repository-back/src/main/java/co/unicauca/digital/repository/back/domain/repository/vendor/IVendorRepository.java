@@ -1,9 +1,15 @@
 package co.unicauca.digital.repository.back.domain.repository.vendor;
 
+import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoAboutData;
 import co.unicauca.digital.repository.back.domain.model.vendor.Vendor;
+
+import org.apache.commons.codec.language.DaitchMokotoffSoundex;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,5 +22,12 @@ public interface IVendorRepository extends JpaRepository<Vendor, Integer> {
      * Query find vendor by identification
      */
     Optional<Vendor> findByIdentification(String identification);
+
+    //Query to obtain a supplier with the requested data
+    @Query(value = "SELECT v.id ,v.name, v.identification, ( SELECT COUNT(*) FROM contract c WHERE c.vendorId = v.id "
+    +" AND YEAR(c.initialDate) = :year ) as cantidadContratos, s.totalScore, (SELECT COUNT(*) FROM contract c WHERE "
+    +" c.vendorId = v.id) as cantidadTotalContratos, v.score FROM vendor v INNER JOIN contract c ON c.vendorId = v.id "
+    +" INNER JOIN score s ON c.id = s.contract_id WHERE v.id = :idVendor AND YEAR(c.initialDate) = :year GROUP BY v.id", nativeQuery = true)
+    List<String> findVendorData(@Param("year") int year, @Param("idVendor") int idVendor);
 
 }

@@ -1,7 +1,10 @@
 package co.unicauca.digital.repository.back.domain.service.vendor;
 
+import org.hibernate.mapping.List;
+
 import co.unicauca.digital.repository.back.domain.dto.vendor.request.VendorDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.vendor.request.VendorDtoUpdateRequest;
+import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoAboutData;
 import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoFindResponse;
 import co.unicauca.digital.repository.back.global.response.PageableResponse;
@@ -62,4 +65,15 @@ public interface IVendorService {
      *         information about the outcome of the transaction.
      */
     Response<Boolean> deleteVendor(final int id);
+
+
+    
+    //Method for consult all vendor
+    /**
+     * @param year
+     * @param idsVendors
+     * @return
+     */
+
+    Response<java.util.List<VendorDtoAboutData>> getDataAboutVendors(int year, java.util.List<Integer> idsVendors);
 }

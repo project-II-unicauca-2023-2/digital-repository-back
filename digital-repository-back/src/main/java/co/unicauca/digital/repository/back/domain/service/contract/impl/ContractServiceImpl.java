@@ -10,6 +10,7 @@ import co.unicauca.digital.repository.back.domain.dto.contract.response.Contract
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindContractualFoldersResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
+import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoAboutData;
 import co.unicauca.digital.repository.back.domain.mapper.contract.IContractMapper;
 import co.unicauca.digital.repository.back.domain.mapper.contract.IContractVendorMapper;
 import co.unicauca.digital.repository.back.domain.model.contract.Contract;
@@ -32,6 +33,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -312,13 +314,43 @@ public class ContractServiceImpl implements IContractService {
     }
 
     @Override
-    public Response<ContractDtoAverageRequest> getAverageContractByCategory(String description, int year) {
+    public Response<List<ContractDtoAverageRequest>> getAverageContractByCategory(String description, int year) {
         
+
         ContractDtoAverageRequest averageContract = new ContractDtoAverageRequest();
-        float promedio =contractRepository.getAverageByCategory(description, year);
+        List<ContractDtoAverageRequest> ContractDtoList = new ArrayList<>();
+        
+        try{
+        Float promedio =contractRepository.getAverageByCategory(description, year);
         averageContract.setAverageContract(promedio);
-               
-        return new ResponseHandler<>(200, "Encontrado", "Encontrado", averageContract).getResponse();
-    }
+
+            if(promedio != null){
+                averageContract.setAverageContract(promedio);
+            ContractDtoList.add(averageContract);
+            }
+        }catch (Exception e) {
+            // Capturar cualquier excepción inesperada y manejarla adecuadamente
+            System.err.println("Error al procesar el promedio: " + e.getMessage());
+        }    
     
+
+        Response<List<ContractDtoAverageRequest>> response = new Response<>();
+        if(ContractDtoList.size()>0){
+        response.setStatus(200);
+        response.setUserMessage("Average Finded successfully");
+        response.setDeveloperMessage("Average Finded successfully");
+        response.setData(ContractDtoList);
+        }else{
+            response.setStatus(500);
+			response.setUserMessage("It was not possible to calculate the average");
+			response.setDeveloperMessage("Data Not Found for contract");
+        }
+        return response;
+
+               
+        //return new ResponseHandler<>(200, "Encontrado", "Encontrado", averageContract).getResponse();
+    }
+
 }
+    
+

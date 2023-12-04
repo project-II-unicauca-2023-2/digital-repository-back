@@ -2,6 +2,7 @@ package co.unicauca.digital.repository.back.domain.controller.vendor;
 
 import co.unicauca.digital.repository.back.domain.dto.vendor.request.VendorDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.vendor.request.VendorDtoUpdateRequest;
+import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoAboutData;
 import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.service.vendor.IVendorService;
@@ -10,6 +11,8 @@ import co.unicauca.digital.repository.back.global.response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -95,5 +98,12 @@ public class VendorController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Response<Boolean>> deleteVendor(@Valid @PathVariable final Integer id) {
         return new ResponseEntity<>(this.vendorService.deleteVendor(id), HttpStatus.OK);
+    }
+
+   
+
+    @GetMapping("/dataAboutVendors/{year}/{idsVendors}")
+    public Response<List<VendorDtoAboutData>> getInformationAboutVendors(@PathVariable int year, @PathVariable List<Integer> idsVendors) {
+        return this.vendorService.getDataAboutVendors(year, idsVendors);
     }
 }

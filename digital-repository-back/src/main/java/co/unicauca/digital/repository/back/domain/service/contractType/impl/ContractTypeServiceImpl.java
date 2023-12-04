@@ -165,7 +165,12 @@ public class ContractTypeServiceImpl implements IContractTypeService {
 
         List<String> result =  contractTypeRepository.getSubCategoryByCategory(category);
 
-        aboutcontract.setContractType(result);  
+        if(!result.isEmpty()){
+            aboutcontract.setContractType(result);  
+        }else{
+            System.out.println("No subcategory found by type contract");
+        }
+        
         return new ResponseHandler<>(200, "Encontrado", "Encontrado", aboutcontract).getResponse();
     }
 

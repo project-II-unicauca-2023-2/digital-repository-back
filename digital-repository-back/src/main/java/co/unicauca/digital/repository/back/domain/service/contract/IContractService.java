@@ -1,5 +1,7 @@
 package co.unicauca.digital.repository.back.domain.service.contract;
 
+import java.util.List;
+
 import co.unicauca.digital.repository.back.domain.dto.aboutContractType.aboutContractTypeDTO;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoAverageRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoCreateRequest;
@@ -8,6 +10,7 @@ import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractD
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
+import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoAboutData;
 import co.unicauca.digital.repository.back.global.response.PageableResponse;
 import co.unicauca.digital.repository.back.global.response.Response;
 
@@ -123,5 +126,6 @@ public interface IContractService {
      * @param anio
      * @return average category
      */
-    Response<ContractDtoAverageRequest> getAverageContractByCategory(String description,int year);
+    Response<List<ContractDtoAverageRequest>> getAverageContractByCategory(String description,int year);
+    //Response<ContractDtoAverageRequest> getAverageContractByCategory(String description,int year);
 }
