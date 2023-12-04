@@ -7,6 +7,7 @@ import lombok.Builder;
 @Builder
 public record UploadExcelFileResponse(
     String reference,
+    MessageType messageType,
     List<String> messages,
     ContractEvaluationInfo contractInfo
 ) 

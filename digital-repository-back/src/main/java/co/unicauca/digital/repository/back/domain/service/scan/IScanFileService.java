@@ -10,5 +10,5 @@ import java.util.List;
 public interface IScanFileService {
     void processFile(MultipartFile file) throws IOException;
     UploadExcelFileResponse saveData();
-    List<String> processMassiveFile(MultipartFile file) throws IOException;
+    List<UploadExcelFileResponse> processMassiveFile(MultipartFile file) throws IOException;
 }
