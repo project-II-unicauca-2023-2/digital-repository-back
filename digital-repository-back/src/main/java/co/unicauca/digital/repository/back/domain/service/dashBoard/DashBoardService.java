@@ -108,6 +108,21 @@ public class DashBoardService implements IDashBoardService {
             }
             allReturn.addData(new PrincipalDataDto(principal));
         });
+        //5 "No calificado"
+        datas=dashRepo.getDataByDesNoScore(desc, year);
+        madata = datas.stream().collect(Collectors.groupingBy(DataSave::getName));
+        madata.forEach((name, dataSave) -> {
+            principal.deca();
+            principal.setNombreSubCatContrato(name);
+            principal.setRangoScore("NoCalificado");
+            principal.setScore(0);
+            principal.setCantidad(dataSave.size());
+            for (DataSave dataSave2 : dataSave) {
+                principal.addIdContrato(dataSave2.getId());
+            }
+            allReturn.addData(new PrincipalDataDto(principal));
+        });
+
         return new ResponseHandler<>(200, "Procesado", "Procesado", allReturn).getResponse();
     }
     

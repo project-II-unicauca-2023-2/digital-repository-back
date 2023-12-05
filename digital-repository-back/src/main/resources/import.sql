@@ -65,6 +65,7 @@ INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalSc
 --
 ---- YA SE CALIFICO debido a que las fechas de creacion y actualizacion son diferentes
 INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (2,'2023-01-01 00:00:00',3.5,'2023-02-01 00:00:00'); 
+
 --
 INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (3,'2023-01-01 00:00:00',4,'2023-01-01 00:00:00');
 INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (4,'2023-01-01 00:00:00',4.2,'2023-01-01 00:00:00');

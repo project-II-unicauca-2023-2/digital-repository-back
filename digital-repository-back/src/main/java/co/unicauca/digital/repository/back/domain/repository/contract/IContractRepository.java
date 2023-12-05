@@ -94,7 +94,7 @@ public interface IContractRepository extends JpaRepository<Contract, Integer> {
     @Query(value = " SELECT AVG(sco.rate) FROM contract c INNER JOIN score sc ON c.id=sc.contract_id INNER JOIN scorecriteria sco " 
     + " ON sc.contract_id=sco.scoreId INNER JOIN modalitycontracttype m ON c.modalityContractTypeId=m.id INNER JOIN contracttype "
     + " con ON con.id=m.contractTypeId WHERE con.description =:description AND YEAR(c.initialDate) =:year "
-    + " AND sco.createTime < sco.updateTime", nativeQuery = true)
+    + " AND sc.createTime < sc.updateTime", nativeQuery = true)
     float getAverageByCategory(@Param("description") String description, @Param("year") int year);
 
     // Método para obtener contratos vencidos

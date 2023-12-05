@@ -99,11 +99,8 @@ public class VendorController {
     public ResponseEntity<Response<Boolean>> deleteVendor(@Valid @PathVariable final Integer id) {
         return new ResponseEntity<>(this.vendorService.deleteVendor(id), HttpStatus.OK);
     }
-
-   
-
-    @GetMapping("/dataAboutVendors/{year}/{idsVendors}")
-    public Response<List<VendorDtoAboutData>> getInformationAboutVendors(@PathVariable int year, @PathVariable List<Integer> idsVendors) {
+     @GetMapping("/dataAboutVendors/{year}")
+    public Response<List<VendorDtoAboutData>> getInformationAboutVendors(@PathVariable int year, @RequestBody List<Integer> idsVendors) {
         return this.vendorService.getDataAboutVendors(year, idsVendors);
     }
 }
