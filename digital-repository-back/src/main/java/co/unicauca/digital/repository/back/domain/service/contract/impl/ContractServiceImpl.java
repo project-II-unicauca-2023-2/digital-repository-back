@@ -7,13 +7,17 @@ import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractD
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
+import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoExpiredQualifiedResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindContractualFoldersResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
 import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoAboutData;
+import co.unicauca.digital.repository.back.domain.mapper.contract.IContractDtoExpiredQualifiedMapper;
 import co.unicauca.digital.repository.back.domain.mapper.contract.IContractMapper;
 import co.unicauca.digital.repository.back.domain.mapper.contract.IContractVendorMapper;
 import co.unicauca.digital.repository.back.domain.model.contract.Contract;
+import co.unicauca.digital.repository.back.domain.model.contractType.ContractType;
+import co.unicauca.digital.repository.back.domain.model.modality.Modality;
 import co.unicauca.digital.repository.back.domain.repository.contract.IContractRepository;
 import co.unicauca.digital.repository.back.domain.service.contract.IContractService;
 import co.unicauca.digital.repository.back.domain.model.modalityContractType.ModalityContractType;
@@ -31,7 +35,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,12 +69,15 @@ public class ContractServiceImpl implements IContractService {
 
     private final ICollectionService collectionService;
 
+    private final IContractDtoExpiredQualifiedMapper contractExpiredQualifiedMapper;
+
     /**
      * constructor method
      */
     public ContractServiceImpl(IContractRepository contractRepository, IVendorRepository vendorRepository,
             IModalityContractTypeRepository modalityContractTypeRepository, IContractMapper contractMapper,
-            ICollectionService collectionService,IScoreRepository scoreRepository,IContractVendorMapper contractVendorMapper) {
+            ICollectionService collectionService,IScoreRepository scoreRepository,IContractVendorMapper contractVendorMapper,
+            IContractDtoExpiredQualifiedMapper contractExpiredQualifiedMapper) {
         this.contractRepository = contractRepository;
         this.vendorRepository = vendorRepository;
         this.modalityContractTypeRepository = modalityContractTypeRepository;
@@ -78,6 +85,7 @@ public class ContractServiceImpl implements IContractService {
         this.collectionService = collectionService;
         this.scoreRepository = scoreRepository;
         this.contractVendorMapper = contractVendorMapper;
+        this.contractExpiredQualifiedMapper = contractExpiredQualifiedMapper;
     }
 
     /**
@@ -351,6 +359,32 @@ public class ContractServiceImpl implements IContractService {
         //return new ResponseHandler<>(200, "Encontrado", "Encontrado", averageContract).getResponse();
     }
 
+    @Override
+    public Response<List<ContractDtoExpiredQualifiedResponse>> getExpiredQualifiedContract(){
+        Optional<List<Contract>> listaContratosExpirados = this.contractRepository.findByFinalDateBefore(LocalDateTime.now());
+        List<Contract> varListaContratosExpirados = listaContratosExpirados.orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
+        List<Contract> varListaContratosExpiradosCalificados = new ArrayList<>();
+        List<ContractDtoExpiredQualifiedResponse> varListaContratosExpiradosCalificadosResponse = new ArrayList<>();
+        varListaContratosExpirados.forEach( contratoExpirado -> {
+            Score varScoreContratoExpirado = contratoExpirado.getScore();
+            if(!varScoreContratoExpirado.getCreateTime().equals(varScoreContratoExpirado.getUpdateTime())){
+                varListaContratosExpiradosCalificados.add(contratoExpirado);
+            }
+        });
+
+        varListaContratosExpiradosCalificados.forEach( contratoExpiradoCalificado ->{
+            Vendor objVendor = contratoExpiradoCalificado.getVendor();
+            ModalityContractType objModalityContractType = contratoExpiradoCalificado.getModalityContractType();
+            ContractType objContractType = objModalityContractType.getContractType();
+            Modality objModality = objModalityContractType.getModality();
+            Score objScore = contratoExpiradoCalificado.getScore();
+            ContractDtoExpiredQualifiedResponse objContractDtoExpiredQualifiedResponse = this.contractExpiredQualifiedMapper.toContractExpiredQualifiedResponse(contratoExpiradoCalificado, objVendor, objContractType, objModality, objScore);
+            objContractDtoExpiredQualifiedResponse.setInitialYear(contratoExpiradoCalificado.getInitialDate().getYear());
+            varListaContratosExpiradosCalificadosResponse.add(objContractDtoExpiredQualifiedResponse);
+        });
+        return new ResponseHandler<>(200,"Información de contratos calificados vencidos.","Información de contratos calificados vencidos.",
+        varListaContratosExpiradosCalificadosResponse).getResponse(); 
+    }
 }
     
 

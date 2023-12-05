@@ -6,6 +6,7 @@ import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractD
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
+import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoExpiredQualifiedResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
 import co.unicauca.digital.repository.back.domain.service.contract.IContractService;
@@ -224,6 +225,9 @@ public class ContractController {
     public Response<List<ContractDtoAverageRequest>> getAverageCategoryByWorks(@PathVariable int year) {
         return contractService.getAverageContractByCategory("Obras", year);
     }
-
-    
+    //Method for get data from contract expired but qualified
+    @GetMapping("/dataExpiredQualifiedContract")
+    public Response<List<ContractDtoExpiredQualifiedResponse>> getDataExpiredQualifiedContract() {
+        return contractService.getExpiredQualifiedContract();
+    }
 }

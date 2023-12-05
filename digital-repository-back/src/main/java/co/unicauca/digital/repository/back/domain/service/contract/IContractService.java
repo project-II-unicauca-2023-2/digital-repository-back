@@ -8,6 +8,7 @@ import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractD
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
+import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoExpiredQualifiedResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
 import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoAboutData;
@@ -128,4 +129,9 @@ public interface IContractService {
      */
     Response<List<ContractDtoAverageRequest>> getAverageContractByCategory(String description,int year);
     //Response<ContractDtoAverageRequest> getAverageContractByCategory(String description,int year);
+
+    /**
+     * @return List of contracts expired and qualified
+     */
+    Response<List<ContractDtoExpiredQualifiedResponse>> getExpiredQualifiedContract();
 }

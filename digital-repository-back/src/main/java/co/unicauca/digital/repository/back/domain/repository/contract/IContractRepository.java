@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 /**
  * Repository that manages the persistence of the Contract entity in the
@@ -95,4 +96,7 @@ public interface IContractRepository extends JpaRepository<Contract, Integer> {
     + " con ON con.id=m.contractTypeId WHERE con.description =:description AND YEAR(c.initialDate) =:year "
     + " AND sco.createTime < sco.updateTime", nativeQuery = true)
     float getAverageByCategory(@Param("description") String description, @Param("year") int year);
+
+    // Método para obtener contratos vencidos
+    Optional<List<Contract>> findByFinalDateBefore(LocalDateTime currentDate);
 }
