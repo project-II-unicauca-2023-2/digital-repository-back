@@ -27,7 +27,7 @@ public interface IDashRepo extends JpaRepository<Contract, Integer>{
             "Contract c inner join Score s on c.id=s.contract.id "+
             "inner join ModalityContractType m on c.modalityContractType.id = m.id "+
             "inner join ContractType ct on m.contractType.id=ct.id "+
-            "where s.createTime=s.updateTime")
+            "where s.createTime=s.updateTime and ct.description=:desc and year(s.createTime)=:year")
     List<DataSave> getDataByDesNoScore(@Param("desc") String desc, @Param("year") Integer year);
 
 
