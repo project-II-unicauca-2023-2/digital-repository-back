@@ -77,23 +77,37 @@ INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `fin
 INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2025-12-1', '2023-01-1 00:00:00', '6', '4');
 INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2025-12-1', '2023-01-1 00:00:00', '6', '4');
 INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2025-12-1', '2023-01-1 00:00:00', '10', '2');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-02-1', '2023-01-01 00:00:00', '6', '2');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-02-1', '2023-01-01 00:00:00', '6', '2');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-02-1', '2023-01-01 00:00:00', '7', '3');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-02-1', '2023-01-01 00:00:00', '8', '4');
 
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (1,'2023-01-01 00:00:00',2.5,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (2,'2023-01-01 00:00:00',3.5,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (3,'2023-01-01 00:00:00',4,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (4,'2023-01-01 00:00:00',4.2,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (5,'2023-01-01 00:00:00',3.5,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (6,'2023-01-01 00:00:00',2.1,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (7,'2023-01-01 00:00:00',1.5,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (8,'2023-01-01 00:00:00',4.5,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (9,'2023-01-01 00:00:00',5,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (10,'2023-01-01 00:00:00',5,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (11,'2023-01-01 00:00:00',4.6,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (12,'2023-01-01 00:00:00',1.6,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (13,'2023-01-01 00:00:00',4.2,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (14,'2023-01-01 00:00:00',5,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (15,'2023-01-01 00:00:00',3.8,NULL);
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (16,'2023-01-01 00:00:00',2.6,NULL);
+
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (1,'2023-01-01 00:00:00',2.5,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (2,'2023-01-01 00:00:00',3.5,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (3,'2023-01-01 00:00:00',4,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (4,'2023-01-01 00:00:00',4.2,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (5,'2023-01-01 00:00:00',3.5,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (6,'2023-01-01 00:00:00',2.1,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (7,'2023-01-01 00:00:00',1.5,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (8,'2023-01-01 00:00:00',4.5,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (9,'2023-01-01 00:00:00',5,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (10,'2023-01-01 00:00:00',5,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (11,'2023-01-01 00:00:00',4.6,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (12,'2023-01-01 00:00:00',1.6,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (13,'2023-01-01 00:00:00',4.2,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (14,'2023-01-01 00:00:00',5,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (15,'2023-01-01 00:00:00',3.8,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (16,'2023-01-01 00:00:00',2.6,'2023-02-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (17,'2023-01-01 00:00:00',NULL,'2023-01-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (18,'2023-01-01 00:00:00',NULL,'2023-01-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (19,'2023-01-01 00:00:00',NULL,'2023-01-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (20,'2023-01-01 00:00:00',NULL,'2023-01-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (21,'2023-01-01 00:00:00',NULL,'2023-01-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (22,'2023-01-01 00:00:00',NULL,'2023-01-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (23,'2023-01-01 00:00:00',NULL,'2023-01-01 00:00:00');
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (24,'2023-01-01 00:00:00',NULL,'2023-01-01 00:00:00');
+
 
 
 
