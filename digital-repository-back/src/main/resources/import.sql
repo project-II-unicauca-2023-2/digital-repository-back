@@ -30,7 +30,9 @@ INSERT INTO `contractualdocumenttype` (`ID`, `NAME`, `DESCRIPTION`, `CREATETIME`
 -- Internalnormative
 INSERT INTO `internalnormative` (`ID`, `NAME`, `ISINFORCE`, `INITIALTIME`, `FINALTIME`, `CREATEUSER`, `CREATETIME`, `UPDATEUSER`, `UPDATETIME`) VALUES (1, 'InternalNormative1', 1, '2023-01-01 00:00:00', NULL, 'cargue.inicial', '2023-05-29 03:45:22', 'cargue.inicial', '2023-05-29 03:45:22');
 -- ModalityContractType
+
 INSERT INTO `modalitycontracttype` (`ID`, `MODALITYID`, `CONTRACTTYPEID`, `internalNormativeId`, `EXTERNALCODE`, `VERSION`, `ISDISABLED`, `CREATETIME`, `CREATEUSER`, `UPDATETIME`, `UPDATEUSER`) VALUES(1, 1, 1, 1, 'PA-GA-5-OD-1', 3, 0, '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial'),(2, 1, 2, 1, 'PA-GA-5-OD-3', 3, 0, '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial'),(3, 1, 3, 1, 'PA-GA-5-OD-8', 4, 0, '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial'),(4, 2, 4, 1, 'PA-GA-5-OD-14', 2, 0, '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial');
+
 
 INSERT INTO `db_gestion_documental`.`criteria` (`criteriaType`, `description`, `name`) VALUES ('Bienes', 'Cumplimiento con las especificaciones técnicas pactadas y servicio post-venta.', 'CALIDAD');
 INSERT INTO `db_gestion_documental`.`criteria` (`criteriaType`, `description`, `name`) VALUES ('Bienes', 'Entrega de los bienes contratados dentro del tiempo establecido y los documentos que sean requeridos.', 'EJECUCION');
@@ -45,7 +47,7 @@ INSERT INTO `db_gestion_documental`.`criteria` (`criteriaType`, `description`, `
 -- Contract
 
 --Datos de prueba para dash
-INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`createUser`, `contractTypeId`, `modalityId`) VALUES ('init', '1', '1');
+INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`createUser`, `contractTypeId`, `modalityId`) VALUES ('init', '1', '9');
 INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`createUser`, `contractTypeId`, `modalityId`) VALUES ('init', '2', '1');
 INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`createUser`, `contractTypeId`, `modalityId`) VALUES ('init', '3', '1');
 INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`createUser`, `contractTypeId`, `modalityId`) VALUES ('init', '4', '1');
