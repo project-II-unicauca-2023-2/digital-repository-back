@@ -31,7 +31,7 @@ INSERT INTO `contractualdocumenttype` (`ID`, `NAME`, `DESCRIPTION`, `CREATETIME`
 INSERT INTO `internalnormative` (`ID`, `NAME`, `ISINFORCE`, `INITIALTIME`, `FINALTIME`, `CREATEUSER`, `CREATETIME`, `UPDATEUSER`, `UPDATETIME`) VALUES (1, 'InternalNormative1', 1, '2023-01-01 00:00:00', NULL, 'cargue.inicial', '2023-05-29 03:45:22', 'cargue.inicial', '2023-05-29 03:45:22');
 -- ModalityContractType
 
-INSERT INTO `modalitycontracttype` (`ID`, `MODALITYID`, `CONTRACTTYPEID`, `internalNormativeId`, `EXTERNALCODE`, `VERSION`, `ISDISABLED`, `CREATETIME`, `CREATEUSER`, `UPDATETIME`, `UPDATEUSER`) VALUES(1, 1, 1, 1, 'PA-GA-5-OD-1', 3, 0, '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial'),(2, 1, 2, 1, 'PA-GA-5-OD-3', 3, 0, '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial'),(3, 1, 3, 1, 'PA-GA-5-OD-8', 4, 0, '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial'),(4, 2, 4, 1, 'PA-GA-5-OD-14', 2, 0, '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial');
+INSERT INTO `modalitycontracttype` (`ID`, `MODALITYID`, `CONTRACTTYPEID`, `internalNormativeId`, `EXTERNALCODE`, `VERSION`, `ISDISABLED`, `CREATETIME`, `CREATEUSER`, `UPDATETIME`, `UPDATEUSER`) VALUES(1, 1, 1, 1, 'PA-GA-5-OD-1', 3, 0, '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial'),(2, 1, 5, 1, 'PA-GA-5-OD-3', 3, 0, '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial'),(3, 1, 3, 1, 'PA-GA-5-OD-8', 4, 0, '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial'),(4, 2, 3, 1, 'PA-GA-5-OD-14', 2, 0, '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial');
 
 
 INSERT INTO `db_gestion_documental`.`criteria` (`criteriaType`, `description`, `name`) VALUES ('Bienes', 'Cumplimiento con las especificaciones técnicas pactadas y servicio post-venta.', 'CALIDAD');
@@ -59,7 +59,7 @@ INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `fin
 
 
 INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2024-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/126','4', '2');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2024-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/127', '1', '3');
+INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2024-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/127', '2', '3');
 INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2024-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/128', '2', '4');
 
 --contratos finalizado

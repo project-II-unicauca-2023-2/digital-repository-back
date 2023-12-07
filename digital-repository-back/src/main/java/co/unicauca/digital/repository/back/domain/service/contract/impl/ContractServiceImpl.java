@@ -352,6 +352,9 @@ public class ContractServiceImpl implements IContractService {
             response.setStatus(500);
 			response.setUserMessage("It was not possible to calculate the average");
 			response.setDeveloperMessage("Data Not Found for contract");
+            averageContract.setAverageContract(0);
+            ContractDtoList.add(averageContract);
+            response.setData(ContractDtoList);
         }
         return response;
 
