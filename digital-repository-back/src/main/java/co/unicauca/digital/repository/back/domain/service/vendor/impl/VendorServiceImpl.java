@@ -171,8 +171,7 @@ public class VendorServiceImpl implements IVendorService {
 
         
         List<VendorDtoAboutData> VendorsDTOList = new ArrayList<>();
-        //List<VendorDtoData> VendorInformationList = new ArrayList<>();
-        //List<String> infomation=new ArrayList<>();
+    
         int cantidadLista = idsContract.size();
         
         for(int i =0; i<cantidadLista; i++){
@@ -195,36 +194,14 @@ public class VendorServiceImpl implements IVendorService {
                 
                 //Traemos los contratos asociados al vendedor
                 List<String> contracts =  contractRepository.getAboutContractForVendor(Integer.parseInt(valuesVendor[0]));
-                
+
                 vendorData.setIdsContract(contracts);
 
                 VendorsDTOList.add(vendorData);
 
-                /*VendorDtoData vendorInformation = new VendorDtoData();
-                vendorInformation.setIdVendor(Integer.parseInt(valuesVendor[0]));
-                vendorInformation.setIdContract(idsContract.get(i));
-                VendorInformationList.add(vendorInformation);/* */
             }else{
                 System.out.println("No data found for vendor with ID: " + idsContract.get(i));
             }
-
-
-            //Tratamos de construir la lista de ontratos asociados al vendedor
-
-            /*for(int j=0;j<VendorInformationList.size();j++){        
-                for(int k=0;k<VendorsDTOList.size();k++){
-                    if(VendorInformationList.get(j).getIdVendor()==VendorsDTOList.get(k).getIdVendor()){
-                        infomation.add(String.valueOf(VendorInformationList.get(j).getIdContract()));
-                    }
-                }
-            }*/
-
-            //Tratamos de asignar esos contratos a cada listado de vendedores devuelto, pero no se como meterlo.
-            //no se como hacer la insercion
-
-            //for(int l=0;l<VendorsDTOList.size();l++){
-                //VendorsDTOList.get(l).setIdsContract(infomation.get(l));
-            //}
 
             
         }
