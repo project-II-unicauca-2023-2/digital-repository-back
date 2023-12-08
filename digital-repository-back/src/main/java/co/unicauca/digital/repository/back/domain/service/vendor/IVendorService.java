@@ -71,9 +71,9 @@ public interface IVendorService {
     //Method for consult all vendor
     /**
      * @param year
-     * @param idsVendors
+     * @param idsContract
      * @return
      */
 
-    Response<java.util.List<VendorDtoAboutData>> getDataAboutVendors(int year, java.util.List<Integer> idsVendors);
+    Response<java.util.List<VendorDtoAboutData>> getDataAboutVendors(int year, java.util.List<Integer> idsContract);
 }

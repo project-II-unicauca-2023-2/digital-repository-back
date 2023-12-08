@@ -1,7 +1,6 @@
 package co.unicauca.digital.repository.back.domain.service.contract.impl;
 
 import co.unicauca.digital.repository.back.domain.service.collection.ICollectionService;
-import co.unicauca.digital.repository.back.domain.dto.aboutVendor.response.aboutVendorDto;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoAverageRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
@@ -11,7 +10,6 @@ import co.unicauca.digital.repository.back.domain.dto.contract.response.Contract
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindContractualFoldersResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
-import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoAboutData;
 import co.unicauca.digital.repository.back.domain.mapper.contract.IContractDtoExpiredQualifiedMapper;
 import co.unicauca.digital.repository.back.domain.mapper.contract.IContractMapper;
 import co.unicauca.digital.repository.back.domain.mapper.contract.IContractVendorMapper;
@@ -35,7 +33,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -326,37 +323,40 @@ public class ContractServiceImpl implements IContractService {
         
 
         ContractDtoAverageRequest averageContract = new ContractDtoAverageRequest();
-        List<ContractDtoAverageRequest> ContractDtoList = new ArrayList<>();
-        
-        try{
+    List<ContractDtoAverageRequest> ContractDtoList = new ArrayList<>();
+
+    try{
         Float promedio =contractRepository.getAverageByCategory(description, year);
         averageContract.setAverageContract(promedio);
 
-            if(promedio != null){
-                averageContract.setAverageContract(promedio);
+        if(promedio != null){
+            averageContract.setAverageContract(promedio);
             ContractDtoList.add(averageContract);
-            }
-        }catch (Exception e) {
-            // Capturar cualquier excepción inesperada y manejarla adecuadamente
-            System.err.println("Error al procesar el promedio: " + e.getMessage());
-        }    
-    
-
-        Response<List<ContractDtoAverageRequest>> response = new Response<>();
-        if(ContractDtoList.size()>0){
-        response.setStatus(200);
-        response.setUserMessage("Average Finded successfully");
-        response.setDeveloperMessage("Average Finded successfully");
-        response.setData(ContractDtoList);
-        }else{
-            response.setStatus(500);
-			response.setUserMessage("It was not possible to calculate the average");
-			response.setDeveloperMessage("Data Not Found for contract");
-            averageContract.setAverageContract(0);
-            ContractDtoList.add(averageContract);
-            response.setData(ContractDtoList);
         }
-        return response;
+    }catch (Exception e) {
+        // Capturar cualquier excepción inesperada y manejarla adecuadamente
+        //System.err.println("Error al procesar el promedio: " + e.getMessage());
+    }
+
+    int status = 200;
+    String userMessage = "Average Finded successfully";
+    String developerMessage = "Average Finded successfully";
+
+    if(ContractDtoList.isEmpty()){
+        status = 404;
+        userMessage = "It was not possible to calculate the average";
+        developerMessage = "Data Not Found for contract";
+        averageContract.setAverageContract(0);
+        ContractDtoList.add(averageContract);
+    }
+
+    Response<List<ContractDtoAverageRequest>> response = new Response<>();
+    response.setStatus(status);
+    response.setUserMessage(userMessage);
+    response.setDeveloperMessage(developerMessage);
+    response.setData(ContractDtoList);
+
+    return response;
 
                
         //return new ResponseHandler<>(200, "Encontrado", "Encontrado", averageContract).getResponse();

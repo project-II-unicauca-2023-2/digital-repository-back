@@ -100,7 +100,7 @@ public class VendorController {
         return new ResponseEntity<>(this.vendorService.deleteVendor(id), HttpStatus.OK);
     }
      @PostMapping("/dataAboutVendors/{year}")
-    public Response<List<VendorDtoAboutData>> getInformationAboutVendors(@PathVariable int year, @RequestBody List<Integer> idsVendors) {
-        return this.vendorService.getDataAboutVendors(year, idsVendors);
+    public Response<List<VendorDtoAboutData>> getInformationAboutVendors(@PathVariable int year, @RequestBody List<Integer> idsContract) {
+        return this.vendorService.getDataAboutVendors(year, idsContract);
     }
 }

@@ -4,6 +4,7 @@ import co.unicauca.digital.repository.back.domain.dto.vendor.request.VendorDtoCr
 import co.unicauca.digital.repository.back.domain.dto.vendor.request.VendorDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoAboutData;
 import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoCreateResponse;
+import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoData;
 import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.mapper.vendor.IVendorMapper;
 import co.unicauca.digital.repository.back.domain.model.vendor.Vendor;
@@ -24,7 +25,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.Null;
 
 /**
  * Class in charge of implementing the IVendorService interface
@@ -158,18 +158,20 @@ public class VendorServiceImpl implements IVendorService {
      * Search and retrieve seller data with the requested parameters
      *
      * @param year 
-     * @param  idsVendors
+     * @param  idsContract
      * @return List from vendors
      */
     @Override
-    public Response<List<VendorDtoAboutData>> getDataAboutVendors(int year, List<Integer> idsVendors) {
+    public Response<List<VendorDtoAboutData>> getDataAboutVendors(int year, List<Integer> idsContract) {
 
         
         List<VendorDtoAboutData> VendorsDTOList = new ArrayList<>();
-        int cantidadLista = idsVendors.size();
+        //List<VendorDtoData> VendorInformationList = new ArrayList<>();
+        //List<String> infomation=new ArrayList<>();
+        int cantidadLista = idsContract.size();
         
         for(int i =0; i<cantidadLista; i++){
-            List<String> result=vendorRepository.findVendorData(year, idsVendors.get(i));
+            List<String> result=vendorRepository.findVendorData(year, idsContract.get(i));
 
             if(!result.isEmpty()){
                 String str = result.get(0);
@@ -185,10 +187,33 @@ public class VendorServiceImpl implements IVendorService {
                 vendorData.setNumContractYear(Integer.parseInt(valuesVendor[5]));
                 vendorData.setScoreGeneral(Float.parseFloat(valuesVendor[6]));
 
-            VendorsDTOList.add(vendorData);
+                VendorsDTOList.add(vendorData);
+
+                /*VendorDtoData vendorInformation = new VendorDtoData();
+                vendorInformation.setIdVendor(Integer.parseInt(valuesVendor[0]));
+                vendorInformation.setIdContract(idsContract.get(i));
+                VendorInformationList.add(vendorInformation);/* */
             }else{
-                System.out.println("No data found for vendor with ID: " + idsVendors.get(i));
+                System.out.println("No data found for vendor with ID: " + idsContract.get(i));
             }
+
+
+            //Tratamos de construir la lista de ontratos asociados al vendedor
+
+            /*for(int j=0;j<VendorInformationList.size();j++){        
+                for(int k=0;k<VendorsDTOList.size();k++){
+                    if(VendorInformationList.get(j).getIdVendor()==VendorsDTOList.get(k).getIdVendor()){
+                        infomation.add(String.valueOf(VendorInformationList.get(j).getIdContract()));
+                    }
+                }
+            }*/
+
+            //Tratamos de asignar esos contratos a cada listado de vendedores devuelto, pero no se como meterlo.
+            //no se como hacer la insercion
+
+            //for(int l=0;l<VendorsDTOList.size();l++){
+                //VendorsDTOList.get(l).setIdsContract(infomation.get(l));
+            //}
 
             
         }
