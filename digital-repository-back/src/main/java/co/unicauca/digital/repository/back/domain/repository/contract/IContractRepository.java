@@ -99,4 +99,8 @@ public interface IContractRepository extends JpaRepository<Contract, Integer> {
 
     // Método para obtener contratos vencidos
     Optional<List<Contract>> findByFinalDateBefore(LocalDateTime currentDate);
+
+    //Metodo para obtener todos los contratos de un vendedor
+    @Query(value = " SELECT c.id FROM contract c WHERE c.vendorId=:idVendor", nativeQuery = true)
+    List<String> getContractByidVendor(@Param("idVendor") int idVendor);
 }

@@ -20,7 +20,7 @@ public class VendorDtoAboutData {
     private float scoreYear;
     private int numContractYear;
     private float scoreGeneral;
-    //private List<String> idsContract;
+    private List<String> idsContract;
 
 
     public VendorDtoAboutData(int idVendor,String nameVendor, String credential,int numContract,float scoreYear,int numContractYear,float scoreGeneral){

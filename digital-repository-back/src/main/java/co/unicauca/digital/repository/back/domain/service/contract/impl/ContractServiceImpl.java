@@ -388,6 +388,13 @@ public class ContractServiceImpl implements IContractService {
         return new ResponseHandler<>(200,"Información de contratos calificados vencidos.","Información de contratos calificados vencidos.",
         varListaContratosExpiradosCalificadosResponse).getResponse(); 
     }
+
+    @Override
+    public List<String> getAboutContractForVendor(int idVendor) {
+        List<String> result =  contractRepository.getContractByidVendor(idVendor);
+
+        return result;
+    }
 }
     
 

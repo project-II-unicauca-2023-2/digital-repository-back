@@ -134,4 +134,6 @@ public interface IContractService {
      * @return List of contracts expired and qualified
      */
     Response<List<ContractDtoExpiredQualifiedResponse>> getExpiredQualifiedContract();
+
+    List<String> getAboutContractForVendor(int idVendor);
 }

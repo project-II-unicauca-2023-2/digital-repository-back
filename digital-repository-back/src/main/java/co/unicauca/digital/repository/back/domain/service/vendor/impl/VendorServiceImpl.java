@@ -9,6 +9,7 @@ import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoF
 import co.unicauca.digital.repository.back.domain.mapper.vendor.IVendorMapper;
 import co.unicauca.digital.repository.back.domain.model.vendor.Vendor;
 import co.unicauca.digital.repository.back.domain.repository.vendor.IVendorRepository;
+import co.unicauca.digital.repository.back.domain.service.contract.IContractService;
 import co.unicauca.digital.repository.back.domain.service.vendor.IVendorService;
 import co.unicauca.digital.repository.back.global.exception.BusinessRuleException;
 import co.unicauca.digital.repository.back.global.response.PageableResponse;
@@ -37,14 +38,18 @@ public class VendorServiceImpl implements IVendorService {
     /** Object to perform CRUD operations on the Vendor entity */
     private final IVendorRepository vendorRepository;
 
+    /** Object to perform CRUD operations on the Vendor entity */
+    private final IContractService contractRepository;
+
     /** Mapping object for mapping the vendors */
     private final IVendorMapper vendorMapper;
 
     /**
      * constructor method
      */
-    public VendorServiceImpl(IVendorRepository vendorRepository, IVendorMapper vendorMapper) {
+    public VendorServiceImpl(IVendorRepository vendorRepository, IContractService contractRepository, IVendorMapper vendorMapper) {
         this.vendorRepository = vendorRepository;
+        this.contractRepository =contractRepository;
         this.vendorMapper = vendorMapper;
     }
 
@@ -186,6 +191,12 @@ public class VendorServiceImpl implements IVendorService {
                 vendorData.setScoreYear(Float.parseFloat(valuesVendor[4]));
                 vendorData.setNumContractYear(Integer.parseInt(valuesVendor[5]));
                 vendorData.setScoreGeneral(Float.parseFloat(valuesVendor[6]));
+
+                
+                //Traemos los contratos asociados al vendedor
+                List<String> contracts =  contractRepository.getAboutContractForVendor(Integer.parseInt(valuesVendor[0]));
+                
+                vendorData.setIdsContract(contracts);
 
                 VendorsDTOList.add(vendorData);
 
