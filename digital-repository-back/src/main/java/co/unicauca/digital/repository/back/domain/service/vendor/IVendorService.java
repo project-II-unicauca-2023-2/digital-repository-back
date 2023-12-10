@@ -1,6 +1,5 @@
 package co.unicauca.digital.repository.back.domain.service.vendor;
 
-import org.hibernate.mapping.List;
 
 import co.unicauca.digital.repository.back.domain.dto.vendor.request.VendorDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.vendor.request.VendorDtoUpdateRequest;

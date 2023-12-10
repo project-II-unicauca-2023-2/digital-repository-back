@@ -190,7 +190,7 @@ public class VendorServiceImpl implements IVendorService {
                 //Calculo del promedio del año, del vendedor
                 float averageYear= vendorRepository.calculateAverageYearVendor(Integer.parseInt(valuesVendor[0]));
                 vendorData.setScoreYear(averageYear);
-                
+
                 vendorData.setNumContractYear(Integer.parseInt(valuesVendor[4]));
                 vendorData.setScoreGeneral(Float.parseFloat(valuesVendor[5]));
 
@@ -200,7 +200,22 @@ public class VendorServiceImpl implements IVendorService {
 
                 vendorData.setIdsContract(contracts);
 
-                VendorsDTOList.add(vendorData);
+                if(VendorsDTOList.size()==0){
+                    VendorsDTOList.add(vendorData);
+                }else{
+                    boolean bandera=false;
+                    for(int j=0; j<VendorsDTOList.size(); j++){
+                        if (Integer.parseInt(valuesVendor[0])==VendorsDTOList.get(j).getIdVendor()) {
+                            bandera=true;
+                        }
+                    }
+
+                    if (bandera==false) {
+                        VendorsDTOList.add(vendorData);
+                    }
+                }
+                
+
 
             }else{
                 System.out.println("No data found for vendor with ID: " + idsContract.get(i));
