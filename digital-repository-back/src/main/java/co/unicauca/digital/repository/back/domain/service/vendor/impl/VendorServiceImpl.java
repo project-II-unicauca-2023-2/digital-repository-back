@@ -4,7 +4,6 @@ import co.unicauca.digital.repository.back.domain.dto.vendor.request.VendorDtoCr
 import co.unicauca.digital.repository.back.domain.dto.vendor.request.VendorDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoAboutData;
 import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoCreateResponse;
-import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoData;
 import co.unicauca.digital.repository.back.domain.dto.vendor.response.VendorDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.mapper.vendor.IVendorMapper;
 import co.unicauca.digital.repository.back.domain.model.vendor.Vendor;
@@ -187,9 +186,13 @@ public class VendorServiceImpl implements IVendorService {
                 vendorData.setNameVendor(valuesVendor[1]);
                 vendorData.setCredential(valuesVendor[2]);
                 vendorData.setNumContract(Integer.parseInt(valuesVendor[3]));
-                vendorData.setScoreYear(Float.parseFloat(valuesVendor[4]));
-                vendorData.setNumContractYear(Integer.parseInt(valuesVendor[5]));
-                vendorData.setScoreGeneral(Float.parseFloat(valuesVendor[6]));
+
+                //Calculo del promedio del año, del vendedor
+                float averageYear= vendorRepository.calculateAverageYearVendor(Integer.parseInt(valuesVendor[0]));
+                vendorData.setScoreYear(averageYear);
+                
+                vendorData.setNumContractYear(Integer.parseInt(valuesVendor[4]));
+                vendorData.setScoreGeneral(Float.parseFloat(valuesVendor[5]));
 
                 
                 //Traemos los contratos asociados al vendedor

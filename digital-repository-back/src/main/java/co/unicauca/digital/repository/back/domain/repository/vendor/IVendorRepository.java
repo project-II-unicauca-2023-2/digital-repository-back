@@ -23,9 +23,13 @@ public interface IVendorRepository extends JpaRepository<Vendor, Integer> {
 
     //Query to obtain a supplier with the requested data
     @Query(value = "SELECT v.id ,v.name, v.identification, ( SELECT COUNT(*) FROM contract c WHERE c.vendorId = v.id "
-    +" AND YEAR(c.initialDate) = :year ) as cantidadContratos, s.totalScore, (SELECT COUNT(*) FROM contract c WHERE "
+    +" AND YEAR(c.initialDate) = :year ) as cantidadContratos, (SELECT COUNT(*) FROM contract c WHERE "
     +" c.vendorId = v.id) as cantidadTotalContratos, v.score FROM vendor v INNER JOIN contract c ON c.vendorId = v.id "
     +" INNER JOIN score s ON c.id = s.contract_id WHERE c.id = :idContract AND YEAR(c.initialDate) = :year GROUP BY v.id", nativeQuery = true)
     List<String> findVendorData(@Param("year") int year, @Param("idContract") int idContract);
+
+    @Query(value = "SELECT AVG(sc.totalScore) FROM contract c INNER JOIN score sc ON c.id = sc.contract_id INNER JOIN"
+    +" vendor v ON c.vendorId = v.id WHERE YEAR(c.initialDate) = 2023 AND v.id =:idVendor", nativeQuery = true)
+    float calculateAverageYearVendor(@Param("idVendor") int idVendor);
 
 }
