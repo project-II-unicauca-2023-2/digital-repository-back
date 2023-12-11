@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import co.unicauca.digital.repository.back.domain.service.scan.IScanFileService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/scanFile")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ScanController {
 
     private final IScanFileService scanFileService;
@@ -34,8 +36,8 @@ public class ScanController {
                 scanFileService.processFile(file);
             } catch (IOException e) {
                 responseMessages.add("Error al leer el archivo excel");
-                // return new ResponseEntity<>("Error al leer el archivos excel", 
-                //     HttpStatus.INTERNAL_SERVER_ERROR);
+                // return new ResponseEntity<>("Error al leer el archivos excel",
+                // HttpStatus.INTERNAL_SERVER_ERROR);
             }
             responseMessages.add(scanFileService.saveData());
         }
