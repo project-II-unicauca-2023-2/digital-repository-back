@@ -1,5 +1,7 @@
 package co.unicauca.digital.repository.back.domain.controller.contractType;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.unicauca.digital.repository.back.domain.dto.aboutContractType.aboutContractTypeDTO;
+import co.unicauca.digital.repository.back.domain.dto.aboutVendor.response.aboutVendorDto;
 import co.unicauca.digital.repository.back.domain.dto.contractType.request.ContractTypeDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contractType.request.ContractTypeDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contractType.response.ContractTypeDtoCreateResponse;
@@ -108,5 +112,22 @@ public class ContractTypeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Response<Boolean>> deleteModality(@Valid @PathVariable final Integer id) {
         return new ResponseEntity<>(this.contractTypeService.deleteContractType(id), HttpStatus.OK);
+    }
+
+
+    //comentary 
+    @GetMapping("/aboutContractType/Bienes")
+    public Response<aboutContractTypeDTO> getContractSubcategoryByGoods() {
+        return contractTypeService.getAboutContractsubcategory("Bienes");
+    }
+
+    @GetMapping("/aboutContractType/Servicios")
+    public Response<aboutContractTypeDTO> getContractSubcategoryByServices() {
+        return contractTypeService.getAboutContractsubcategory("Servicios");
+    }
+
+    @GetMapping("/aboutContractType/Obras")
+    public Response<aboutContractTypeDTO> getContractSubcategoryByWorks() {
+        return contractTypeService.getAboutContractsubcategory("Obras");
     }
 }
