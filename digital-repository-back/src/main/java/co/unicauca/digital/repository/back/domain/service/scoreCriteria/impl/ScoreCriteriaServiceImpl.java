@@ -22,10 +22,12 @@ import co.unicauca.digital.repository.back.domain.model.contract.Contract;
 import co.unicauca.digital.repository.back.domain.model.criteria.Criteria;
 import co.unicauca.digital.repository.back.domain.model.score.Score;
 import co.unicauca.digital.repository.back.domain.model.scoreCriteria.ScoreCriteria;
+import co.unicauca.digital.repository.back.domain.model.vendor.Vendor;
 import co.unicauca.digital.repository.back.domain.repository.contract.IContractRepository;
 import co.unicauca.digital.repository.back.domain.repository.criteria.ICriteriaRepository;
 import co.unicauca.digital.repository.back.domain.repository.score.IScoreRepository;
 import co.unicauca.digital.repository.back.domain.repository.scoreCriteria.IScoreCriteriaRepository;
+import co.unicauca.digital.repository.back.domain.repository.vendor.IVendorRepository;
 import co.unicauca.digital.repository.back.domain.service.scoreCriteria.IScoreCriteriaService;
 import co.unicauca.digital.repository.back.global.exception.BusinessRuleException;
 import co.unicauca.digital.repository.back.global.response.Response;
@@ -41,16 +43,18 @@ public class ScoreCriteriaServiceImpl implements IScoreCriteriaService {
     private final IScoreCriteriaRepository scoreCriteriaRepository;
     private final ICriteriaRepository criteriaRepository;
     private final IScoreRepository scoreRepository;
+    private final IVendorRepository vendorRepository;
 
     public ScoreCriteriaServiceImpl(IContractRepository contractRepository,IScoreCriteriaMapper scoreCriteriaMapper,
     IScoreCriteriaDtoMapper scoreCriteriaDtoMapper,IScoreCriteriaRepository scoreCriteriaRepository,ICriteriaRepository criteriaRepository,
-    IScoreRepository scoreRepository){
+    IScoreRepository scoreRepository,IVendorRepository vendorRepository){
         this.contractRepository = contractRepository;
         this.scoreCriteriaMapper = scoreCriteriaMapper;
         this.scoreCriteriaDtoMapper = scoreCriteriaDtoMapper;
         this.scoreCriteriaRepository = scoreCriteriaRepository;
         this.criteriaRepository = criteriaRepository;
         this.scoreRepository = scoreRepository;
+        this.vendorRepository = vendorRepository;
     }
     public Response<ScoreCriteriaDtoResponse> DataScoreCriteriaByMask(final ContractDtoIdRequest prmContractParams){
         int numericYear = Integer.parseInt(prmContractParams.getAnio());
@@ -89,6 +93,8 @@ public class ScoreCriteriaServiceImpl implements IScoreCriteriaService {
         Optional<Contract> contract = contractRepository.findByReferenceAndYear(calificationRequest.getPrmContractParams().getMascara(),numericYear);
         Contract objContract = contract.orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
         Score objScore = objContract.getScore();
+        Vendor objVendor = objContract.getVendor();
+
         if(isAlreadyRated(objScore)){
             return new ResponseHandler<>(200,"Ya existe una evaluacion registrada para el contrato asociado a la mascara solicitada","Ya existe una evaluacion registrada para el contrato asociado a la mascara solicitada",
             false).getResponse();
@@ -111,10 +117,28 @@ public class ScoreCriteriaServiceImpl implements IScoreCriteriaService {
         });
         objScore.setTotalScore(GetAverageRate(listCriteriaRate));
         objScore.setUpdateTime(currentDate);
-        this.scoreRepository.save(objScore);
+        this.scoreRepository.save(objScore);     
+        objVendor.setScore(getTotalScoreVendor(objVendor.getId()));
+        this.vendorRepository.save(objVendor);
         return new ResponseHandler<>(200,"Calificación registrada con éxito","Calificación registrada con éxito",
         true).getResponse(); 
     }
+
+    private float getTotalScoreVendor(int prmIdVendor){
+        float varPromedio = 0; 
+        Optional<List<Contract>> listaContratos = this.contractRepository.findByVendorId(prmIdVendor);
+        List<Contract> varListaContratos = listaContratos.orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
+
+        for(int i = 0; i<varListaContratos.size();i++){
+            Score objScore = scoreRepository.findById(varListaContratos.get(i).getScore().getId())
+                                .orElseThrow(() -> new BusinessRuleException("criteria.request.not.found"));
+
+            varPromedio+=objScore.getTotalScore();
+        }
+        
+        return varPromedio / varListaContratos.size();
+    }
+
     private float GetAverageRate(List<ScoreCriteriaDtoCreate> prmListCriteriaRate){
         float sumOfRates = (float) prmListCriteriaRate.stream().mapToDouble(ScoreCriteriaDtoCreate::getRate).sum();
         return sumOfRates / prmListCriteriaRate.size();

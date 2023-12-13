@@ -1,9 +1,14 @@
 package co.unicauca.digital.repository.back.domain.service.contractType;
 
+
+import java.util.List;
+
+import co.unicauca.digital.repository.back.domain.dto.aboutContractType.aboutContractTypeDTO;
 import co.unicauca.digital.repository.back.domain.dto.contractType.request.ContractTypeDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contractType.request.ContractTypeDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contractType.response.ContractTypeDtoCreateResponse;
 import co.unicauca.digital.repository.back.domain.dto.contractType.response.ContractTypeDtoFindResponse;
+import co.unicauca.digital.repository.back.domain.dto.criteria.response.CriteriaDtoConsultResponse;
 import co.unicauca.digital.repository.back.global.response.PageableResponse;
 import co.unicauca.digital.repository.back.global.response.Response;
 
@@ -66,4 +71,12 @@ public interface IContractTypeService {
      *         information about the outcome of the transaction.
      */
     Response<Boolean> deleteContractType(final int id);
+
+
+    /**
+     * 
+     * @param type type category
+     * @return List subcategory
+     */
+    Response<aboutContractTypeDTO> getAboutContractsubcategory(String category);
 }

@@ -1,10 +1,12 @@
 package co.unicauca.digital.repository.back.domain.controller.contract;
 
 import co.unicauca.digital.repository.back.domain.dto.aboutVendor.response.aboutVendorDto;
+import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoAverageRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoCreateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoIdRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.request.ContractDtoUpdateRequest;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoCreateResponse;
+import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoExpiredQualifiedResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractDtoFindResponse;
 import co.unicauca.digital.repository.back.domain.dto.contract.response.ContractVendorDtoResponse;
 import co.unicauca.digital.repository.back.domain.service.contract.IContractService;
@@ -17,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -200,5 +204,30 @@ public class ContractController {
     public Response<aboutVendorDto> getCriteriaByType(@RequestParam String referenceMask) {
 
         return aboutVendorService.getAboutVendor(referenceMask);
+    }
+
+
+    //Method for calculating the average of the different types of contracts
+    @GetMapping("/averageContractType/Servicios/{year}")
+    
+    public Response<List<ContractDtoAverageRequest>> getAverageCategoryByServices(@PathVariable int year) {
+        return contractService.getAverageContractByCategory("Servicios", year);
+    }
+
+    //Method for calculating the average of the different types of contracts
+    @GetMapping("/averageContractType/Bienes/{year}")
+    public Response<List<ContractDtoAverageRequest>> getAverageCategoryByGoods(@PathVariable int year) {
+        return contractService.getAverageContractByCategory("Bienes", year);
+    }
+
+    //Method for calculating the average of the different types of contracts
+    @GetMapping("/averageContractType/Obras/{year}")
+    public Response<List<ContractDtoAverageRequest>> getAverageCategoryByWorks(@PathVariable int year) {
+        return contractService.getAverageContractByCategory("Obras", year);
+    }
+    //Method for get data from contract expired but qualified
+    @GetMapping("/dataExpiredQualifiedContract")
+    public Response<List<ContractDtoExpiredQualifiedResponse>> getDataExpiredQualifiedContract() {
+        return contractService.getExpiredQualifiedContract();
     }
 }
