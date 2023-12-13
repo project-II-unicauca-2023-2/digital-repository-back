@@ -1,5 +1,5 @@
 -- Vendor
-insert into `vendor` (`id`, `createTime`, `createUser`, `identification`, `name`, `personType`,  `score`,`updateTime`, `updateUser`) VALUES (NULL, '2023-05-27 17:13:42', 'Miguel', '1061', 'Andres', 'natural',  0.0, '2023-05-27 17:13:42', NULL);
+INSERT INTO `vendor` (`id`, `createTime`, `createUser`, `identification`, `name`, `personType`,  `score`,`updateTime`, `updateUser`) VALUES (NULL, '2023-05-27 17:13:42', 'Miguel', '1061', 'Andres', 'natural',  0.0, '2023-05-27 17:13:42', NULL);
 
 -- Modality
 INSERT INTO `modality` (`ID`, `NAME`, `DESCRIPTION`, `EXTERNALCODE`, `CREATETIME`, `CREATEUSER`, `UPDATETIME`, `UPDATEUSER`) VALUES (1, 'Inferior o Igual a 100 SMLMV', NULL, 'PVRM1', '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial'),(2, 'Mayores a 100 SMLMV', NULL, 'PVRM2', '2023-05-28 00:00:00', 'cargue.inicial', '2023-05-28 00:00:00', 'cargue.inicial');
@@ -33,6 +33,7 @@ INSERT INTO `internalnormative` (`ID`, `NAME`, `ISINFORCE`, `INITIALTIME`, `FINA
 -- ModalityContractType
 
 
+
 INSERT INTO `db_gestion_documental`.`criteria` (`criteriaType`, `description`, `name`) VALUES ('Bienes', 'Cumplimiento con las especificaciones técnicas pactadas y servicio post-venta.', 'CALIDAD');
 INSERT INTO `db_gestion_documental`.`criteria` (`criteriaType`, `description`, `name`) VALUES ('Bienes', 'Entrega de los bienes contratados dentro del tiempo establecido y los documentos que sean requeridos.', 'EJECUCION');
 INSERT INTO `db_gestion_documental`.`criteria` (`criteriaType`, `description`, `name`) VALUES ('Bienes', 'Respuesta a documentación solicitada; documentos precontractuales, contractual y post-contractual.', 'CUMPLIMIENTO');
@@ -51,40 +52,40 @@ INSERT INTO `db_gestion_documental`.`vendor` (`createTime`, `createUser`, `ident
 
 -- Contratos vencidos
 
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/124' ,'2', '3');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/125', '3', '4');
--- Contratos no vencidos
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`,  `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2024-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/123', '1', '2');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/124' ,'2', '3');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2023-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/125', '3', '4');
+-- -- Contratos no vencidos
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`,  `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2024-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/123', '1', '2');
 
 
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2024-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/126','4', '2');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2024-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/127', '2', '3');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2024-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/128', '2', '4');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2024-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/126','4', '2');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2024-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/127', '2', '3');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-1 00:00:00', 'init', '2024-01-31 23:59:59', '2023-01-1 00:00:00','5.5-31.3/128', '2', '4');
 
 --contratos finalizado
 
 ----NO SE HA CALIFICADO debido a que las fechas de creacion y actualizacion son iguales
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (1,'2023-01-01 00:00:00',0.0,'2023-01-01 00:00:00'); 
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (1,'2023-01-01 00:00:00',0.0,'2023-01-01 00:00:00'); 
 --
 ---- YA SE CALIFICO debido a que las fechas de creacion y actualizacion son diferentes
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (2,'2023-01-01 00:00:00',3.5,'2023-02-01 00:00:00'); 
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (3,'2023-01-01 00:00:00',4,'2023-02-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (4,'2023-01-01 00:00:00',4.2,'2023-02-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (5,'2023-01-01 00:00:00',3.5,'2023-02-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (6,'2023-01-01 00:00:00',2.1,'2023-02-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (7,'2023-01-01 00:00:00',1.5,'2023-02-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (8,'2023-01-01 00:00:00',4.5,'2023-02-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (9,'2023-01-01 00:00:00',5,'2023-02-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (10,'2023-01-01 00:00:00',5,'2023-02-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (11,'2023-01-01 00:00:00',4.6,'2023-02-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (12,'2023-01-01 00:00:00',1.6,'2023-02-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (13,'2023-01-01 00:00:00',4.2,'2023-02-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (14,'2023-01-01 00:00:00',5,'2023-02-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (15,'2023-01-01 00:00:00',3.8,'2023-02-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (16,'2023-01-01 00:00:00',2.6,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (2,'2023-01-01 00:00:00',3.5,'2023-02-01 00:00:00'); 
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (3,'2023-01-01 00:00:00',4,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (4,'2023-01-01 00:00:00',4.2,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (5,'2023-01-01 00:00:00',3.5,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (6,'2023-01-01 00:00:00',2.1,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (7,'2023-01-01 00:00:00',1.5,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (8,'2023-01-01 00:00:00',4.5,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (9,'2023-01-01 00:00:00',5,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (10,'2023-01-01 00:00:00',5,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (11,'2023-01-01 00:00:00',4.6,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (12,'2023-01-01 00:00:00',1.6,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (13,'2023-01-01 00:00:00',4.2,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (14,'2023-01-01 00:00:00',5,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (15,'2023-01-01 00:00:00',3.8,'2023-02-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (16,'2023-01-01 00:00:00',2.6,'2023-02-01 00:00:00');
 -- Contratos sin calificar, fechas iguales
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `createTime`, `totalScore`, `updateTime`) VALUES ('17', '2023-01-01 00:00:00', '0', '2023-01-01 00:00:00');
-INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `createTime`, `totalScore`, `updateTime`) VALUES ('18', '2023-01-01 00:00:00', '0', '2023-01-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `createTime`, `totalScore`, `updateTime`) VALUES ('17', '2023-01-01 00:00:00', '0', '2023-01-01 00:00:00');
+-- INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `createTime`, `totalScore`, `updateTime`) VALUES ('18', '2023-01-01 00:00:00', '0', '2023-01-01 00:00:00');
 
 
 
@@ -104,8 +105,8 @@ INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, 
 INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, `createUser`, `externalCode`, `isDisabled`, `updateTime`, `updateUser`, `version`, `contractTypeId`, `internalNormativeId`, `modalityId`) VALUES ('2', '2023-05-28 00:00:00', 'cargue.inicial', 'PA-GA-5-OD-?',b'0','2023-05-28 00:00:00','init','1','3','1','1');
 INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, `createUser`, `externalCode`, `isDisabled`, `updateTime`, `updateUser`, `version`, `contractTypeId`, `internalNormativeId`, `modalityId`) VALUES ('3', '2023-05-28 00:00:00', 'cargue.inicial', 'PA-GA-5-OD-?',b'0','2023-05-28 00:00:00','init','1','4','1','1');
 INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, `createUser`, `externalCode`, `isDisabled`, `updateTime`, `updateUser`, `version`, `contractTypeId`, `internalNormativeId`, `modalityId`) VALUES ('4', '2023-05-28 00:00:00', 'cargue.inicial', 'PA-GA-5-OD-?',b'0','2023-05-28 00:00:00','init','1','5','1','2');
-INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, `createUser`, `externalCode`, `isDisabled`, `updateTime`, `updateUser`, `version`, `contractTypeId`, `internalNormativeId`, `modalityId`) VALUES ('5','2023-05-28 00:00:00','init','PA-GA-5-OD-?',b'0','2023-05-28 00:00:00','init','1','6','1','1');
-INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, `createUser`, `externalCode`, `isDisabled`, `updateTime`, `updateUser`, `version`, `contractTypeId`, `internalNormativeId`, `modalityId`) VALUES ('6','2023-05-28 00:00:00','init','PA-GA-5-OD-?',b'0','2023-05-28 00:00:00','init','1','7','1','1');
+INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, `createUser`, `externalCode`, `isDisabled`, `updateTime`, `updateUser`, `version`, `contractTypeId`, `internalNormativeId`, `modalityId`) VALUES ('5', '2023-05-28 00:00:00', 'cargue.inicial', 'PA-GA-5-OD-?',b'0','2023-05-28 00:00:00','init','1','6','1','1');
+INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, `createUser`, `externalCode`, `isDisabled`, `updateTime`, `updateUser`, `version`, `contractTypeId`, `internalNormativeId`, `modalityId`) VALUES ('6', '2023-05-28 00:00:00', 'cargue.inicial', 'PA-GA-5-OD-?',b'0','2023-05-28 00:00:00','init','1','7','1','1');
 INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, `createUser`, `externalCode`, `isDisabled`, `updateTime`, `updateUser`, `version`, `contractTypeId`, `internalNormativeId`, `modalityId`) VALUES ('7','2023-05-28 00:00:00','init','PA-GA-5-OD-?',b'0','2023-05-28 00:00:00','init','1','8','1','1');
 INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, `createUser`, `externalCode`, `isDisabled`, `updateTime`, `updateUser`, `version`, `contractTypeId`, `internalNormativeId`, `modalityId`) VALUES ('8','2023-05-28 00:00:00','init','PA-GA-5-OD-?',b'0','2023-05-28 00:00:00','init','1','9','1','1');
 INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, `createUser`, `externalCode`, `isDisabled`, `updateTime`, `updateUser`, `version`, `contractTypeId`, `internalNormativeId`, `modalityId`) VALUES ('9','2023-05-28 00:00:00','init','PA-GA-5-OD-?',b'0','2023-05-28 00:00:00','init','1','10','1','1');
@@ -114,29 +115,29 @@ INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, 
 INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, `createUser`, `externalCode`, `isDisabled`, `updateTime`, `updateUser`, `version`, `contractTypeId`, `internalNormativeId`, `modalityId`) VALUES ('12','2023-05-28 00:00:00','init','PA-GA-5-OD-?',b'0','2023-05-28 00:00:00','init','1','13','1','1');
 
 -- Modificaciones contratos
-UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '1');
-UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '2');
-UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '3');
-UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '4');
-UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '5');
-UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '6');
+-- UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '1');
+-- UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '2');
+-- UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '3');
+-- UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '4');
+-- UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '5');
+-- UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '6');
 
-UPDATE `contract` SET `reference` = '5.5-31.3/124' WHERE (`id` = '1');
-UPDATE `contract` SET `reference` = '5.5-31.4/125' WHERE (`id` = '2');
-UPDATE `contract` SET `reference` = '5.5-31.1/123' WHERE (`id` = '3');
-UPDATE `contract` SET `reference` = '5.5-31.5/126' WHERE (`id` = '4');
-UPDATE `contract` SET `reference` = '5.5-31.3/127' WHERE (`id` = '5');
-UPDATE `contract` SET `reference` = '5.5-31.3/128' WHERE (`id` = '6');
+-- UPDATE `contract` SET `reference` = '5.5-31.3/124' WHERE (`id` = '1');
+-- UPDATE `contract` SET `reference` = '5.5-31.4/125' WHERE (`id` = '2');
+-- UPDATE `contract` SET `reference` = '5.5-31.1/123' WHERE (`id` = '3');
+-- UPDATE `contract` SET `reference` = '5.5-31.5/126' WHERE (`id` = '4');
+-- UPDATE `contract` SET `reference` = '5.5-31.3/127' WHERE (`id` = '5');
+-- UPDATE `contract` SET `reference` = '5.5-31.3/128' WHERE (`id` = '6');
 
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.6/130', '2023-01-01 00:00:00', '5', '2');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.7/131', '2023-01-01 00:00:00', '6', '3');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.7/132', '2023-01-01 00:00:00', '6', '4');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.8/133', '2023-01-01 00:00:00', '7', '2');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.9/134', '2023-01-01 00:00:00', '8', '3');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.10/135', '2023-01-01 00:00:00', '9', '3');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.10/136', '2023-01-01 00:00:00', '9', '4');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.11/137', '2023-01-01 00:00:00', '10', '2');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.11/138', '2023-01-01 00:00:00', '10', '2');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.12/139', '2023-01-01 00:00:00', '11', '3');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.12/140', '2023-01-01 00:00:00', '11', '4');
-INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.12/141', '2023-01-01 00:00:00', '11', '3');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.6/130', '2023-01-01 00:00:00', '5', '2');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.7/131', '2023-01-01 00:00:00', '6', '3');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.7/132', '2023-01-01 00:00:00', '6', '4');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.8/133', '2023-01-01 00:00:00', '7', '2');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.9/134', '2023-01-01 00:00:00', '8', '3');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.10/135', '2023-01-01 00:00:00', '9', '3');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.10/136', '2023-01-01 00:00:00', '9', '4');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.11/137', '2023-01-01 00:00:00', '10', '2');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.11/138', '2023-01-01 00:00:00', '10', '2');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.12/139', '2023-01-01 00:00:00', '11', '3');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.12/140', '2023-01-01 00:00:00', '11', '4');
+-- INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.12/141', '2023-01-01 00:00:00', '11', '3');
