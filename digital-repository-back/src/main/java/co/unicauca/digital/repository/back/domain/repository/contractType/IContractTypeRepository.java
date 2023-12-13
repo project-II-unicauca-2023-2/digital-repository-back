@@ -24,13 +24,11 @@ public interface IContractTypeRepository extends JpaRepository<ContractType, Int
 
     @Query("SELECT v.name FROM ContractType v WHERE v.description = :description")
     List<String> getSubCategoryByCategory(@Param("description") String description);
-
+//"new co.unicauca.digital.repository.back.domain.dto.aboutContract.response.aboutContractIdDTO(c.id, ct.externalCode,year(c.createTime)) "+
     @Query("select " +
-            "new co.unicauca.digital.repository.back.domain.dto.aboutContract.response.aboutContractIdDTO(c.id, ct.externalCode,year(c.createTime)) "+
+            "new co.unicauca.digital.repository.back.domain.dto.aboutContract.response.aboutContractIdDTO(c.id, c.reference,year(c.createTime)) "+
             "from " +
-            "Contract c inner join ModalityContractType m " +
-            "on c.modalityContractType.id = m.id " +
-            "inner join ContractType ct on m.contractType.id = ct.id " +
+            "Contract c  " +
             "where c.id=:idContrato")
     aboutContractIdDTO getMasksByIdContract(@Param("idContrato") Integer idContrato);
 
