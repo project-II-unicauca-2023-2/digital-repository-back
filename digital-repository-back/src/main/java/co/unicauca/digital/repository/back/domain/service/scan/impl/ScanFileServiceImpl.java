@@ -87,6 +87,7 @@ public class ScanFileServiceImpl implements IScanFileService {
         Sheet sheet = workbook.getSheetAt(0);
         FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
         final Cell cell4A = sheet.getRow(3).getCell(NUM_COLUMN_A);
+        //TODO Validación Daniel
         if(cell4A.toString().equals("Código: PA-GA-5-FOR-39")){
             //System.out.println("Formato valido");
 
@@ -458,7 +459,7 @@ public class ScanFileServiceImpl implements IScanFileService {
                     } else {
                         contractTypeId = contractTypeOptional.get().getId();
                     }
-                    if(row.getCell(NUM_COLUMN_L) == null || row.getCell(NUM_COLUMN_L).toString().equals("NA")) {
+                    if(row.getCell(NUM_COLUMN_L) == null || row.getCell(NUM_COLUMN_L).toString().equals("NA") && contractTypeId!=null) {
                         messageType = MessageType.VALIDATION;
                         responseMessages.add("Al contrato NO se le ha ingresado una evaluación en el excel.");
                     } else{
@@ -475,7 +476,36 @@ public class ScanFileServiceImpl implements IScanFileService {
                                 responseMessages.add("El contrato ya tiene una evaluación registrada.");
                             } else {
                                 // Guardar en la base de datos
+                                //Actualiza el score
                                 scoreRepository.updateByContractId(totalScore, contract.get().getId(), now());
+                                scoreRepository.flush();
+                                // Guardar criterios
+                                var qualityCriteria = this.criteriaRepository.findByNameAndCriteriaType("Calidad", contractTypeOptional.get().getDescription())
+                                    .orElseThrow();
+                                var complianceCriteria = this.criteriaRepository.findByNameAndCriteriaType("Cumplimiento", contractTypeOptional.get().getDescription())
+                                    .orElseThrow();
+                                var executionCriteria = this.criteriaRepository.findByNameAndCriteriaType("Ejecucion", contractTypeOptional.get().getDescription())
+                                    .orElseThrow();
+                                var firstScoreCriteria = ScoreCriteria.builder()
+                                    .score(objScore)
+                                    .criteria(qualityCriteria)
+                                    .rate(totalScore.intValue())
+                                    .createTime(now())
+                                    .build();
+                                var secondScoreCriteria = ScoreCriteria.builder()
+                                    .score(objScore)
+                                    .criteria(complianceCriteria)
+                                    .rate(totalScore.intValue())
+                                    .createTime(now())
+                                    .build();
+                                var thirdScoreCriteria = ScoreCriteria.builder()
+                                    .score(objScore)
+                                    .criteria(executionCriteria)
+                                    .rate(totalScore.intValue())
+                                    .createTime(now())
+                                    .build();
+                                System.out.println("\nScore: "+ totalScore.intValue());
+                                this.scoreCriteriaRepository.saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
                                 vendorIdentification = contract.get().getVendor().getIdentification();
                                 initialDate = contract.get().getInitialDate();
                                 finalDate = contract.get().getFinalDate();
