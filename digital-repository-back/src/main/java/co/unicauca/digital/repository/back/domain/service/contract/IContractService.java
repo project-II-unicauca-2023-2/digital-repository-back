@@ -136,4 +136,9 @@ public interface IContractService {
     Response<List<ContractDtoExpiredQualifiedResponse>> getExpiredQualifiedContract();
 
     List<String> getAboutContractForVendor(int idVendor);
+
+    /**
+     * @return true if contract is finalized, else return false
+     */
+    Response<Boolean> isContractFinalized(final ContractDtoIdRequest prmContractParams);
 }

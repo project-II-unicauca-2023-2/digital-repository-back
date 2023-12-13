@@ -84,9 +84,9 @@ INSERT INTO `db_gestion_documental`.`vendor` (`createTime`, `createUser`, `ident
 -- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (15,'2023-01-01 00:00:00',3.8,'2023-02-01 00:00:00');
 -- INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (16,'2023-01-01 00:00:00',2.6,'2023-02-01 00:00:00');
 -- Contratos sin calificar, fechas iguales
+
 -- INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `createTime`, `totalScore`, `updateTime`) VALUES ('17', '2023-01-01 00:00:00', '0', '2023-01-01 00:00:00');
 -- INSERT INTO `db_gestion_documental`.`score` (`contract_id`, `createTime`, `totalScore`, `updateTime`) VALUES ('18', '2023-01-01 00:00:00', '0', '2023-01-01 00:00:00');
-
 
 
 -- Modificaciones contracttype
