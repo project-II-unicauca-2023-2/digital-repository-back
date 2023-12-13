@@ -114,7 +114,6 @@ INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, 
 INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, `createUser`, `externalCode`, `isDisabled`, `updateTime`, `updateUser`, `version`, `contractTypeId`, `internalNormativeId`, `modalityId`) VALUES ('11','2023-05-28 00:00:00','init','PA-GA-5-OD-?',b'0','2023-05-28 00:00:00','init','1','12','1','1');
 INSERT INTO `db_gestion_documental`.`modalitycontracttype` (`id`, `createTime`, `createUser`, `externalCode`, `isDisabled`, `updateTime`, `updateUser`, `version`, `contractTypeId`, `internalNormativeId`, `modalityId`) VALUES ('12','2023-05-28 00:00:00','init','PA-GA-5-OD-?',b'0','2023-05-28 00:00:00','init','1','13','1','1');
 
-
 -- Modificaciones contratos
 -- UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '1');
 -- UPDATE `db_gestion_documental`.`contract` SET `signingDate` = '2023-01-01 00:00:00' WHERE (`id` = '2');
