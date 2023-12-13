@@ -395,6 +395,27 @@ public class ContractServiceImpl implements IContractService {
 
         return result;
     }
+
+    @Override
+    public Response<Boolean> isContractFinalized(final ContractDtoIdRequest prmContractParams){
+        if(!entityExistsByReference(prmContractParams).getData()){
+        return new ResponseHandler<>(400,"No existe un contrato con esa mascara","No existe un contrato con esa mascara",
+            false).getResponse();
+        }
+        Optional<Contract> contract = contractRepository.findByReferenceAndYear(prmContractParams.getMascara(),Integer.parseInt(prmContractParams.getAnio()));
+        Contract objContract = contract.orElseThrow(() -> new BusinessRuleException("contract.request.not.found"));
+        LocalDateTime currentDate = LocalDateTime.now();
+
+        if(objContract.getFinalDate() == null){
+            return new ResponseHandler<>(400,"Este contrato tiene la fecha de finalización nula.","Este contrato tiene la fecha de finalización nula.", false).getResponse(); 
+        }
+        
+        if(objContract.getFinalDate().isEqual(currentDate) || objContract.getFinalDate().isAfter(currentDate)){
+            return new ResponseHandler<>(400,"Este contrato no ha finalizado.","Este contrato no ha finalizado.", false).getResponse(); 
+        }
+
+        return new ResponseHandler<>(200,"Este contrato ya ha finalizado.","Este contrato ya ha finalizado.", true).getResponse(); 
+    }
 }
     
 

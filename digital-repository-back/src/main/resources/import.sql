@@ -138,3 +138,13 @@ INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `fin
 INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.12/140', '2023-01-01 00:00:00', '11', '4');
 INSERT INTO `db_gestion_documental`.`contract` (`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES ('2023-01-01 00:00:00', 'init', '2023-02-01 00:00:00', '2023-01-01 00:00:00', '5.5-31.12/141', '2023-01-01 00:00:00', '11', '3');
 
+--Contrato que no ha finalizado (en diciembre 13 de 2023)
+INSERT INTO `db_gestion_documental`.`contract` (`id`,`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES (20,'2023-01-01 00:00:00', 'init', '2024-12-29 00:00:00', '2023-01-01 00:00:00', '5.5-31.12/142', '2023-01-01 00:00:00', '11', '3');
+--respectivo score asociado a este contrato , NO SE HA CALIFICADO
+INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (20,'2023-01-01 00:00:00',0.0,'2023-01-01 00:00:00');
+
+--Contrato con fecha de finalizacion nula
+--INSERT INTO `db_gestion_documental`.`contract` (`id`,`createTime`, `createUser`, `finalDate`, `initialDate`, `reference`, `signingDate`, `modalityContractTypeId`, `vendorId`) VALUES (21,'2023-01-01 00:00:00', 'init', null, '2023-01-01 00:00:00', '5.5-31.12/143', '2023-01-01 00:00:00', '11', '3');
+
+--respectivo score asociado a este contrato, NO SE HA CALIFICADO
+--INSERT INTO `db_gestion_documental`.`score` (`contract_id`,`createTime`,`totalScore`,`updateTime`) VALUES (21,'2023-01-01 00:00:00',0.0,'2023-01-01 00:00:00');
