@@ -12,8 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.constraints.Null;
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
@@ -28,14 +26,17 @@ import co.unicauca.digital.repository.back.domain.dto.scan.ContractEvaluationInf
 import co.unicauca.digital.repository.back.domain.dto.scan.MessageType;
 import co.unicauca.digital.repository.back.domain.dto.scan.UploadExcelFileResponse;
 import co.unicauca.digital.repository.back.domain.model.contract.Contract;
+import co.unicauca.digital.repository.back.domain.model.contract.ContractStatusEnum;
 import co.unicauca.digital.repository.back.domain.model.contractType.ContractType;
 import co.unicauca.digital.repository.back.domain.model.score.Score;
 import co.unicauca.digital.repository.back.domain.model.scoreCriteria.ScoreCriteria;
 import co.unicauca.digital.repository.back.domain.repository.contract.IContractRepository;
 import co.unicauca.digital.repository.back.domain.repository.contractType.IContractTypeRepository;
 import co.unicauca.digital.repository.back.domain.repository.criteria.ICriteriaRepository;
+import co.unicauca.digital.repository.back.domain.repository.modalityContractType.IModalityContractTypeRepository;
 import co.unicauca.digital.repository.back.domain.repository.score.IScoreRepository;
 import co.unicauca.digital.repository.back.domain.repository.scoreCriteria.IScoreCriteriaRepository;
+import co.unicauca.digital.repository.back.domain.repository.vendor.IVendorRepository;
 import co.unicauca.digital.repository.back.domain.service.scan.IScanFileService;
 import co.unicauca.digital.repository.back.domain.utilities.ExcelUtils;
 import lombok.RequiredArgsConstructor;
@@ -50,9 +51,11 @@ public class ScanFileServiceImpl implements IScanFileService {
     private final ICriteriaRepository criteriaRepository;
     private final IContractRepository contractRepository;
     private final IContractTypeRepository contractTypeRepository;
+    private final IVendorRepository vendorRepository;
+    private final IModalityContractTypeRepository modalityContractTypeRepository;
     /* Excel column numbers */
     private final int NUM_COLUMN_A = 0;
-    // private final int NUM_COLUMN_B = 1;
+    private final int NUM_COLUMN_B = 1;
     private final int NUM_COLUMN_C = 2;
     private final int NUM_COLUMN_D = 3;
     private final int NUM_COLUMN_E = 4;
@@ -342,6 +345,7 @@ public class ScanFileServiceImpl implements IScanFileService {
         Sheet sheet = workbook.getSheetAt(0);
         
         List<UploadExcelFileResponse> massiveExcelFileResponses = new ArrayList<UploadExcelFileResponse>();
+        LocalDateTime signingDate = null;
         //creacion lista encabezados estrutura carga masiva
         List<String> encabezadosArchivo = Arrays.asList("NÚMERO DE CONTRATO",
         "FECHA SUSCRIPCIÓN CONTRATO (AAAA/MM/DD)","CLASE DE CONTRATO", "OBJETO DEL CONTRATO","CONTRATISTA : TIPO IDENTIFICACIÓN"
@@ -413,6 +417,9 @@ public class ScanFileServiceImpl implements IScanFileService {
                 }
                 // Comprobar si la celda en la coulmna L no es nula y no es NA
                 if (!isRowEmpty && row!=null) {
+                    if(row.getCell(NUM_COLUMN_B)!=null && row.getCell(NUM_COLUMN_B).getCellType() != CellType.STRING) {
+                        signingDate = row.getCell(NUM_COLUMN_B).getLocalDateTimeCellValue();
+                    }
                     contractSubject = row.getCell(NUM_COLUMN_D).toString();
                     vendorIdentificationType = row.getCell(NUM_COLUMN_E).toString();
                     vendorIdentification = "";
@@ -439,6 +446,13 @@ public class ScanFileServiceImpl implements IScanFileService {
                             vendorIdentification = excelUtils.extractIntegerValue(row.getCell(NUM_COLUMN_G).toString()).toString();
                         }
                     }
+
+                    var vendor = this.vendorRepository.findByIdentification(vendorIdentification);
+                    if(vendor.isEmpty()) {
+                        messageType = MessageType.VALIDATION;
+                        responseMessages.add("El proveedor no se encuentra en la base de datos");
+                    }
+
                     vendorName = row.getCell(NUM_COLUMN_H).toString();
                     if(row.getCell(NUM_COLUMN_J)!=null && row.getCell(NUM_COLUMN_J).getCellType() != CellType.STRING) {
                         initialDate = row.getCell(NUM_COLUMN_J).getLocalDateTimeCellValue();
@@ -459,15 +473,72 @@ public class ScanFileServiceImpl implements IScanFileService {
                     } else {
                         contractTypeId = contractTypeOptional.get().getId();
                     }
-                    if(row.getCell(NUM_COLUMN_L) == null || row.getCell(NUM_COLUMN_L).toString().equals("NA") && contractTypeId!=null) {
+                    if(row.getCell(NUM_COLUMN_L) == null || row.getCell(NUM_COLUMN_L).toString().equals("NA")) {
                         messageType = MessageType.VALIDATION;
                         responseMessages.add("Al contrato NO se le ha ingresado una evaluación en el excel.");
                     } else{
                         // Comprobar si existe el contrato
                         var contract = contractRepository.findByReference(contractReference);
                         if (contract.isEmpty()) {
-                            messageType = MessageType.CONTRACT_NOT_FOUND;
-                            responseMessages.add("El contrato no se encuentra en la Base de datos.");
+                            // messageType = MessageType.CONTRACT_NOT_FOUND;
+                            // responseMessages.add("El contrato no se encuentra en la Base de datos.");
+                            //Crear contrato
+                            if(vendor.isPresent()) {
+                                var modalityContractType = modalityContractTypeRepository.findByContractModality(contractTypeId, 1);
+                                var contractToSave = Contract.builder()
+                                    .reference(contractReference)
+                                    .signingDate(signingDate)
+                                    .initialDate(initialDate)
+                                    .finalDate(finalDate)
+                                    .status(ContractStatusEnum.ACTIVO)
+                                    .subject(contractSubject)
+                                    .createTime(now())
+                                    .vendor(vendor.get())
+                                    .modalityContractType(modalityContractType.get())
+                                    .build();
+                                var contractSaved = this.contractRepository.save(contractToSave);
+                                // Crear score
+                                var scoreToSave = Score.builder()
+                                    .contract(contractSaved)
+                                    .totalScore(totalScore)
+                                    .createTime(now())
+                                    .build();
+                                var scoreSaved = this.scoreRepository.save(scoreToSave);
+                                // crear score criteria
+                                var qualityCriteria = this.criteriaRepository.findByNameAndCriteriaType("Calidad", contractTypeOptional.get().getDescription())
+                                    .orElseThrow();
+                                var complianceCriteria = this.criteriaRepository.findByNameAndCriteriaType("Cumplimiento", contractTypeOptional.get().getDescription())
+                                    .orElseThrow();
+                                var executionCriteria = this.criteriaRepository.findByNameAndCriteriaType("Ejecucion", contractTypeOptional.get().getDescription())
+                                    .orElseThrow();
+                                var firstScoreCriteria = ScoreCriteria.builder()
+                                    .score(scoreSaved)
+                                    .criteria(qualityCriteria)
+                                    .rate(totalScore.intValue())
+                                    .createTime(now())
+                                    .build();
+                                var secondScoreCriteria = ScoreCriteria.builder()
+                                    .score(scoreSaved)
+                                    .criteria(complianceCriteria)
+                                    .rate(totalScore.intValue())
+                                    .createTime(now())
+                                    .build();
+                                var thirdScoreCriteria = ScoreCriteria.builder()
+                                    .score(scoreSaved)
+                                    .criteria(executionCriteria)
+                                    .rate(totalScore.intValue())
+                                    .createTime(now())
+                                    .build();
+                                // System.out.println("\nScore: "+ totalScore.intValue());
+                                this.scoreCriteriaRepository.saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
+                                vendorIdentification = contractSaved.getVendor().getIdentification();
+                                initialDate = contractSaved.getInitialDate();
+                                finalDate = contractSaved.getFinalDate();
+                                contractSubject = contractSaved.getSubject();
+                                messageType = MessageType.EVALUATION_SAVED;
+                                responseMessages.add("La evaluación ha sido registrada correctamente.");
+                            }
+                            
                         } else {
                             Score objScore  = scoreRepository.findById(contract.get().getId()).get();
                             boolean isEvaluationRegister = objScore.getCreateTime().equals(objScore.getUpdateTime()) ? false : true;
@@ -504,7 +575,7 @@ public class ScanFileServiceImpl implements IScanFileService {
                                     .rate(totalScore.intValue())
                                     .createTime(now())
                                     .build();
-                                System.out.println("\nScore: "+ totalScore.intValue());
+                                // System.out.println("\nScore: "+ totalScore.intValue());
                                 this.scoreCriteriaRepository.saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
                                 vendorIdentification = contract.get().getVendor().getIdentification();
                                 initialDate = contract.get().getInitialDate();
@@ -535,20 +606,20 @@ public class ScanFileServiceImpl implements IScanFileService {
                         .build();
                     massiveExcelFileResponses.add(uploadExcelFileResponse);
                 }
+                // System.out.println("Row: "+rownum);
                 rownum++;
             }
         }else{ 
-                    List<String> responseMessagesError = new ArrayList<>();
-                   MessageType messageTypeM = MessageType.VALIDATION;
-                    responseMessagesError.add("Error en la lectura del archivo, por favor revise que el formato este bien estructurado y dilegenciado ");
-                    var uploadExcelFileResponse = UploadExcelFileResponse.builder()
-                        .reference(null)
-                        .messageType(messageTypeM)
-                        .messages(responseMessagesError)
-                        .contractInfo(null)
-                        .build();
-                    massiveExcelFileResponses.add(uploadExcelFileResponse);
-           
+            List<String> responseMessagesError = new ArrayList<>();
+            MessageType messageTypeM = MessageType.VALIDATION;
+            responseMessagesError.add("Error en la lectura del archivo, por favor revise que el formato este bien estructurado y dilegenciado ");
+            var uploadExcelFileResponse = UploadExcelFileResponse.builder()
+                .reference(null)
+                .messageType(messageTypeM)
+                .messages(responseMessagesError)
+                .contractInfo(null)
+                .build();
+            massiveExcelFileResponses.add(uploadExcelFileResponse);  
         }
         if (workbook != null) workbook.close();
         cleanData();
@@ -559,8 +630,7 @@ public class ScanFileServiceImpl implements IScanFileService {
         if (celda != null) {
             lista.add(celda.toString());
         } else {
-            lista.add("ERROR");
-            
+            lista.add("ERROR");   
         }
     }
 }

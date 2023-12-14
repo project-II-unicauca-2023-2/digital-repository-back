@@ -43,7 +43,7 @@ public class Contract {
     private ContractStatusEnum status;
 
     /** Contract subject */
-    @Column(length = 250)
+    @Column(length = 390)
     private String subject;
 
     /** Contract create User */
