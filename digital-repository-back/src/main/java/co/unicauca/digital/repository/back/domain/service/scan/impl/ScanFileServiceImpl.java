@@ -529,7 +529,7 @@ public class ScanFileServiceImpl implements IScanFileService {
                                     .rate(totalScore.intValue())
                                     .createTime(now())
                                     .build();
-                                System.out.println("\nScore: "+ totalScore.intValue());
+                                // System.out.println("\nScore: "+ totalScore.intValue());
                                 this.scoreCriteriaRepository.saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
                                 vendorIdentification = contractSaved.getVendor().getIdentification();
                                 initialDate = contractSaved.getInitialDate();
