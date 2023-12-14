@@ -606,7 +606,7 @@ public class ScanFileServiceImpl implements IScanFileService {
                         .build();
                     massiveExcelFileResponses.add(uploadExcelFileResponse);
                 }
-                System.out.println("Row: "+rownum); //TODO Delete
+                // System.out.println("Row: "+rownum);
                 rownum++;
             }
         }else{ 
