@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class aboutContractIdDTO {
     private Integer idContrato;
-    private String maskSerial; 
+    private String mask; 
     private Integer year; 
 }
