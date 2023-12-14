@@ -230,4 +230,10 @@ public class ContractController {
     public Response<List<ContractDtoExpiredQualifiedResponse>> getDataExpiredQualifiedContract() {
         return contractService.getExpiredQualifiedContract();
     }
+
+    @PostMapping("/isContractFinalized")
+    public Response<Boolean> IsContractFinalized(@Valid @RequestBody final ContractDtoIdRequest contractDtoIdRequest) {
+        return this.contractService.isContractFinalized(contractDtoIdRequest);
+    }
+    
 }

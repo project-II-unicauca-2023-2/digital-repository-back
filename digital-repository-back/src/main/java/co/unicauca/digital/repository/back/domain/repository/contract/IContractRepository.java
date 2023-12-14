@@ -24,7 +24,7 @@ public interface IContractRepository extends JpaRepository<Contract, Integer> {
      */
     Optional<Contract> findByReference(String reference);
 
-    @Query(value = "SELECT * FROM contract c WHERE c.reference = :reference AND YEAR(c.initialDate) = :year", nativeQuery = true)
+    @Query(value = "SELECT * FROM contract c WHERE c.reference = :reference AND YEAR(c.createTime) = :year", nativeQuery = true)
     Optional<Contract> findByReferenceAndYear(@Param("reference") String reference, @Param("year") int year);
     Optional<List<Contract>> findByVendorId(int reference);
 
