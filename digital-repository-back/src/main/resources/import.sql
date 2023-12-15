@@ -91,11 +91,14 @@ INSERT INTO `db_gestion_documental`.`vendor` (`createTime`, `createUser`, `ident
 
 -- Modificaciones contracttype
 UPDATE `db_gestion_documental`.`contracttype` SET `description` = 'Servicios' WHERE (`id` = '7');
+UPDATE `db_gestion_documental`.`contracttype` SET `description` = 'Servicios' WHERE (`id` = '8');
 UPDATE `db_gestion_documental`.`contracttype` SET `description` = 'Servicios' WHERE (`id` = '9');
 UPDATE `db_gestion_documental`.`contracttype` SET `description` = 'Servicios' WHERE (`id` = '10');
 UPDATE `db_gestion_documental`.`contracttype` SET `description` = 'Servicios' WHERE (`id` = '11');
 UPDATE `db_gestion_documental`.`contracttype` SET `description` = 'Servicios' WHERE (`id` = '12');
-
+INSERT INTO `db_gestion_documental`.`contracttype` (`id`, `description`, `externalCode`, `name`) VALUES ('14', 'Servicios', '5.5-31.14', 'Pasantía');
+INSERT INTO `db_gestion_documental`.`contracttype` (`id`, `description`, `externalCode`, `name`) VALUES ('15', 'Servicios', '5.5-31.15', 'Jusicatura');
+INSERT INTO `db_gestion_documental`.`contracttype` (`id`, `description`, `externalCode`, `name`) VALUES ('16', 'Bienes', '5.4.5-64.1', 'Órdenes de compra');
 
 -- Modificaciones modalitycontracttype
 UPDATE `modalitycontracttype` SET `contractTypeId` = '2' WHERE (`id` = '2');

@@ -2,9 +2,7 @@ package co.unicauca.digital.repository.back.domain.service.scan.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import static java.time.LocalDateTime.now;
@@ -243,7 +241,7 @@ public class ScanFileServiceImpl implements IScanFileService {
                 flag = false;
                 responseMessages.add("La fecha de inicio no puede estar vacía");
             }
-            System.out.println("La fecha actual dada es: "+fechaHoraActual);
+            // System.out.println("La fecha actual dada es: "+fechaHoraActual);
             if (finalDate == null || finalDate.isAfter(fechaHoraActual)) {
                 flag = false;
                 responseMessages.add("La fecha de terminación no puede estar vacía ni puede ser superior a la fecha actual");
@@ -425,7 +423,6 @@ public class ScanFileServiceImpl implements IScanFileService {
         int auxContador = 0;
         Integer contractTypeId;
         for (int i = 0; i < encabezadosArchivo.size(); i++) {
-            
             if (encabezadosArchivo.get(i).equals(lecturaEncabezadosArchivo.get(i))) {
                 auxContador++;
             }
@@ -445,8 +442,7 @@ public class ScanFileServiceImpl implements IScanFileService {
                 }
                 // Comprobar si la celda en la coulmna L no es nula y no es NA
                 if (!isRowEmpty && row != null) {
-                    if (row.getCell(NUM_COLUMN_B) != null
-                            && row.getCell(NUM_COLUMN_B).getCellType() != CellType.STRING) {
+                    if (row.getCell(NUM_COLUMN_B) != null && row.getCell(NUM_COLUMN_B).getCellType() != CellType.STRING) {
                         signingDate = row.getCell(NUM_COLUMN_B).getLocalDateTimeCellValue();
                     }
                     contractSubject = row.getCell(NUM_COLUMN_D).toString();
@@ -457,61 +453,63 @@ public class ScanFileServiceImpl implements IScanFileService {
                             vendorIdentificationType.equals(CE)) {
                         isNaturalPerson = true;
                     }
-                    // Comprobar que, si es persona natural, que la celda en la columna F no sea
-                    // nula
+                    // Comprobar que, si es persona natural, que la celda en la columna F no sea nula
                     var cellF = row.getCell(NUM_COLUMN_F).toString();
                     if (isNaturalPerson == true && !cellF.isBlank()) {
                         if (!(row.getCell(NUM_COLUMN_G).toString()).isBlank()) {
                             System.out.println("Error: NIT is not blank");
                         } else {
                             vendorIdentification = excelUtils.extractIntegerValue(row.getCell(NUM_COLUMN_F).toString())
-                                    .toString();
+                                .toString();
                         }
                     }
-                    // Comprobar que, si no es persona natural, que la celda en la columna G no sea
-                    // nula
+                    // Comprobar que, si no es persona natural, que la celda en la columna G no sea nula
                     var cellG = row.getCell(NUM_COLUMN_G).toString();
                     if (isNaturalPerson == false && !cellG.isBlank()) {
                         if (!(row.getCell(NUM_COLUMN_F).toString()).isBlank()) {
                             System.out.println("Error: CC/RUT is not blank");
                         } else {
                             vendorIdentification = excelUtils.extractIntegerValue(row.getCell(NUM_COLUMN_G).toString())
-                                    .toString();
+                                .toString();
                         }
                     }
-
                     var vendor = this.vendorRepository.findByIdentification(vendorIdentification);
                     if (vendor.isEmpty()) {
                         messageType = MessageType.VALIDATION;
                         responseMessages.add("El proveedor no se encuentra en la base de datos");
                     }
-
                     vendorName = row.getCell(NUM_COLUMN_H).toString();
                     if (row.getCell(NUM_COLUMN_J) != null
                             && row.getCell(NUM_COLUMN_J).getCellType() != CellType.STRING) {
                         initialDate = row.getCell(NUM_COLUMN_J).getLocalDateTimeCellValue();
                     }
-                    
                     if (row.getCell(NUM_COLUMN_K) != null
                             && row.getCell(NUM_COLUMN_K).getCellType() == CellType.NUMERIC) {
                         if(row.getCell(NUM_COLUMN_K).getLocalDateTimeCellValue().isBefore(fechaHoraActual))
                         {
                             finalDate = row.getCell(NUM_COLUMN_K).getLocalDateTimeCellValue();
                         }else{
+                            messageType = MessageType.VALIDATION;
                             responseMessages.add("La fecha de terminacion no puede ser superior a la fecha actual, no es posible calificar el contrato");
                             flagFechaValida = false;
                         }
-                        
                     }
-                    if (row.getCell(NUM_COLUMN_L) != null
-                            && row.getCell(NUM_COLUMN_L).getCellType() == CellType.NUMERIC) {
+                    if (row.getCell(NUM_COLUMN_L) != null && row.getCell(NUM_COLUMN_L).getCellType() == CellType.NUMERIC) {
                         Double contractEvaluation = row.getCell(NUM_COLUMN_L).getNumericCellValue();
                         totalScore = contractEvaluation.floatValue();
                     }
+                    if(row.getCell(12)!=null && row.getCell(13)!=null && row.getCell(14)!=null) {
+                        qualityCriteriaRate = excelUtils.extractIntegerValue(row.getCell(12).toString());
+                        complianceCriteriaRate = excelUtils.extractIntegerValue(row.getCell(13).toString());
+                        excecutionCriteriaRate = excelUtils.extractIntegerValue(row.getCell(14).toString());
+                    } else {
+                        qualityCriteriaRate = totalScore.intValue();
+                        complianceCriteriaRate = totalScore.intValue();
+                        excecutionCriteriaRate = totalScore.intValue();
+                    }
                     // Comprobar si existe el tipo de contrato
                     String[] contractNumber = contractReference.split("/");
-                    Optional<ContractType> contractTypeOptional = contractTypeRepository
-                            .findByExternalCode(contractNumber[0]);
+                    Optional<ContractType> contractTypeOptional = contractTypeRepository.findByExternalCode(contractNumber[0]);
                     if (contractTypeOptional.isEmpty()) {
                         // messageType = MessageType.VALIDATION;
                         responseMessages.add("El tipo de contrato no se encuentra en la base de datos");
@@ -525,10 +523,8 @@ public class ScanFileServiceImpl implements IScanFileService {
                         // Comprobar si existe el contrato
                         var contract = contractRepository.findByReference(contractReference);
                         if (contract.isEmpty()) {
-                            // messageType = MessageType.CONTRACT_NOT_FOUND;
-                            // responseMessages.add("El contrato no se encuentra en la Base de datos.");
                             // Crear contrato
-                            if (vendor.isPresent()) {
+                            if (vendor.isPresent() && flagFechaValida) {
                                 var modalityContractType = modalityContractTypeRepository
                                         .findByContractModality(contractTypeId, 1);
                                 var contractToSave = Contract.builder()
@@ -545,59 +541,51 @@ public class ScanFileServiceImpl implements IScanFileService {
                                 var contractSaved = this.contractRepository.save(contractToSave);
                                 // Crear score
                                 var scoreToSave = Score.builder()
-                                        .contract(contractSaved)
-                                        .totalScore(totalScore)
-                                        .createTime(now())
-                                        .updateTime(now().plus(1, ChronoUnit.MINUTES))
-                                        .build();
+                                    .contract(contractSaved)
+                                    .totalScore(totalScore)
+                                    .createTime(now())
+                                    .updateTime(now().plus(1, ChronoUnit.MINUTES))
+                                    .build();
                                 var scoreSaved = this.scoreRepository.save(scoreToSave);
                                 // crear score criteria
                                 var qualityCriteria = this.criteriaRepository
-                                        .findByNameAndCriteriaType("Calidad",
-                                                contractTypeOptional.get().getDescription())
-                                        .orElseThrow();
+                                    .findByNameAndCriteriaType("Calidad", contractTypeOptional.get().getDescription())
+                                    .orElseThrow();
                                 var complianceCriteria = this.criteriaRepository
-                                        .findByNameAndCriteriaType("Cumplimiento",
-                                                contractTypeOptional.get().getDescription())
-                                        .orElseThrow();
+                                    .findByNameAndCriteriaType("Cumplimiento", contractTypeOptional.get().getDescription())
+                                    .orElseThrow();
                                 var executionCriteria = this.criteriaRepository
-                                        .findByNameAndCriteriaType("Ejecucion",
-                                                contractTypeOptional.get().getDescription())
-                                        .orElseThrow();
+                                    .findByNameAndCriteriaType("Ejecucion", contractTypeOptional.get().getDescription())
+                                    .orElseThrow();
                                 var firstScoreCriteria = ScoreCriteria.builder()
                                         .score(scoreSaved)
                                         .criteria(qualityCriteria)
-                                        .rate(totalScore.intValue())
+                                        .rate(qualityCriteriaRate)
                                         .createTime(now())
                                         .build();
                                 var secondScoreCriteria = ScoreCriteria.builder()
                                         .score(scoreSaved)
                                         .criteria(complianceCriteria)
-                                        .rate(totalScore.intValue())
+                                        .rate(complianceCriteriaRate)
                                         .createTime(now())
                                         .build();
                                 var thirdScoreCriteria = ScoreCriteria.builder()
                                         .score(scoreSaved)
                                         .criteria(executionCriteria)
-                                        .rate(totalScore.intValue())
+                                        .rate(excecutionCriteriaRate)
                                         .createTime(now())
                                         .build();
-                                // System.out.println("\nScore: "+ totalScore.intValue());
-                                this.scoreCriteriaRepository
-                                        .saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
+                                this.scoreCriteriaRepository.saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
                                 vendorIdentification = contractSaved.getVendor().getIdentification();
                                 initialDate = contractSaved.getInitialDate();
                                 finalDate = contractSaved.getFinalDate();
                                 contractSubject = contractSaved.getSubject();
                                 messageType = MessageType.EVALUATION_SAVED;
-                                responseMessages.add("La evaluación ha sido registrada correctamente.");
+                                responseMessages.add("El contrato ha sido creado y la evaluación ha sido registrada correctamente.");
                             }
-
                         } else {
                             Score objScore = scoreRepository.findById(contract.get().getId()).get();
-                            boolean isEvaluationRegister = objScore.getCreateTime().equals(objScore.getUpdateTime())
-                                    ? false
-                                    : true;
+                            boolean isEvaluationRegister = objScore.getCreateTime().equals(objScore.getUpdateTime()) ? false : true;
                             if (isEvaluationRegister) {
                                 messageType = MessageType.EVALUATION_ALREADY_EXISTS;
                                 responseMessages.add("El contrato ya tiene una evaluación registrada.");
@@ -605,41 +593,36 @@ public class ScanFileServiceImpl implements IScanFileService {
                                 // Guardar en la base de datos
                                 // Actualiza el score
                                 scoreRepository.updateByContractId(totalScore, contract.get().getId(), now());
-                                scoreRepository.flush();
+                                // scoreRepository.flush();
                                 // Guardar criterios
                                 var qualityCriteria = this.criteriaRepository
-                                        .findByNameAndCriteriaType("Calidad",
-                                                contractTypeOptional.get().getDescription())
+                                        .findByNameAndCriteriaType("Calidad", contractTypeOptional.get().getDescription())
                                         .orElseThrow();
                                 var complianceCriteria = this.criteriaRepository
-                                        .findByNameAndCriteriaType("Cumplimiento",
-                                                contractTypeOptional.get().getDescription())
+                                        .findByNameAndCriteriaType("Cumplimiento", contractTypeOptional.get().getDescription())
                                         .orElseThrow();
                                 var executionCriteria = this.criteriaRepository
-                                        .findByNameAndCriteriaType("Ejecucion",
-                                                contractTypeOptional.get().getDescription())
+                                        .findByNameAndCriteriaType("Ejecucion", contractTypeOptional.get().getDescription())
                                         .orElseThrow();
                                 var firstScoreCriteria = ScoreCriteria.builder()
                                         .score(objScore)
                                         .criteria(qualityCriteria)
-                                        .rate(totalScore.intValue())
+                                        .rate(qualityCriteriaRate)
                                         .createTime(now())
                                         .build();
                                 var secondScoreCriteria = ScoreCriteria.builder()
                                         .score(objScore)
                                         .criteria(complianceCriteria)
-                                        .rate(totalScore.intValue())
+                                        .rate(complianceCriteriaRate)
                                         .createTime(now())
                                         .build();
                                 var thirdScoreCriteria = ScoreCriteria.builder()
                                         .score(objScore)
                                         .criteria(executionCriteria)
-                                        .rate(totalScore.intValue())
+                                        .rate(excecutionCriteriaRate)
                                         .createTime(now())
                                         .build();
-                                // System.out.println("\nScore: "+ totalScore.intValue());
-                                this.scoreCriteriaRepository
-                                        .saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
+                                this.scoreCriteriaRepository.saveAll(List.of(firstScoreCriteria, secondScoreCriteria, thirdScoreCriteria));
                                 vendorIdentification = contract.get().getVendor().getIdentification();
                                 initialDate = contract.get().getInitialDate();
                                 finalDate = contract.get().getFinalDate();
@@ -649,7 +632,6 @@ public class ScanFileServiceImpl implements IScanFileService {
                             }
                         }
                     }
-                    
                     var contractInfo = ContractEvaluationInfo.builder()
                         .vendorName(vendorName)
                         .identification(vendorIdentification)
@@ -657,9 +639,9 @@ public class ScanFileServiceImpl implements IScanFileService {
                         .finalDate(finalDate)
                         .subject(contractSubject)
                         .contractTypeId(contractTypeId)
-                        .qualityRate(totalScore.intValue())
-                        .complianceRate(totalScore.intValue())
-                        .excecutionRate(totalScore.intValue())
+                        .qualityRate(qualityCriteriaRate)
+                        .complianceRate(complianceCriteriaRate)
+                        .excecutionRate(excecutionCriteriaRate)
                         .totalScore(totalScore)
                         .build();
                     var uploadExcelFileResponse = UploadExcelFileResponse.builder()
@@ -669,23 +651,20 @@ public class ScanFileServiceImpl implements IScanFileService {
                         .contractInfo(contractInfo)
                         .build();
                     massiveExcelFileResponses.add(uploadExcelFileResponse);
-                    
-                    
                 }
-                // System.out.println("Row: "+rownum);
                 rownum++;
             }
         } else {
             List<String> responseMessagesError = new ArrayList<>();
             MessageType messageTypeM = MessageType.VALIDATION;
             responseMessagesError.add(
-                    "Error en la lectura del archivo, por favor revise que el formato este bien estructurado y dilegenciado ");
+                "Error en la lectura del archivo, por favor revise que el formato este bien estructurado y dilegenciado ");
             var uploadExcelFileResponse = UploadExcelFileResponse.builder()
-                    .reference(null)
-                    .messageType(messageTypeM)
-                    .messages(responseMessagesError)
-                    .contractInfo(null)
-                    .build();
+                .reference(null)
+                .messageType(messageTypeM)
+                .messages(responseMessagesError)
+                .contractInfo(null)
+                .build();
             massiveExcelFileResponses.add(uploadExcelFileResponse);
         }
         if (workbook != null)
