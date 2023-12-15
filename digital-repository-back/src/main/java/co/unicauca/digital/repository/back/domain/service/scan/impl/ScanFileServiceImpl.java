@@ -2,7 +2,9 @@ package co.unicauca.digital.repository.back.domain.service.scan.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import static java.time.LocalDateTime.now;
@@ -84,6 +86,7 @@ public class ScanFileServiceImpl implements IScanFileService {
     private Integer excecutionCriteriaRate;
     private Float totalScore;
     private boolean flagValidacionEstructura = true;
+    private LocalDateTime fechaHoraActual = LocalDateTime.now();
 
     @Override
     public void processFile(MultipartFile file) throws IOException {
@@ -181,6 +184,7 @@ public class ScanFileServiceImpl implements IScanFileService {
         List<String> responseMessages = new ArrayList<String>();
         MessageType messageType = null;
         Integer contractTypeId = null;
+        
         if (flagValidacionEstructura) {
             // Reference is not empty
             if (contractReference == null || contractReference.isBlank()) {
@@ -239,9 +243,11 @@ public class ScanFileServiceImpl implements IScanFileService {
                 flag = false;
                 responseMessages.add("La fecha de inicio no puede estar vacía");
             }
-            if (finalDate == null) {
+            System.out.println("La fecha actual dada es: "+fechaHoraActual);
+            if (finalDate == null || finalDate.isAfter(fechaHoraActual)) {
                 flag = false;
-                responseMessages.add("La fecha de terminación puede estar vacía");
+                responseMessages.add("La fecha de terminación no puede estar vacía ni puede ser superior a la fecha actual");
+                //System.out.println("final date es: "+finalDate+" y la fecha actual "+fechaHoraActual);
             }
             if (contractSubject == null || contractSubject.isBlank()) {
                 flag = false;
@@ -402,20 +408,7 @@ public class ScanFileServiceImpl implements IScanFileService {
         final Cell cell1K = sheet.getRow(0).getCell(10);
         final Cell cell1L = sheet.getRow(0).getCell(11);
         List<String> lecturaEncabezadosArchivo = new ArrayList<>();
-        /*
-         * if(cell1A!=null || cell1B!=null || cell1C!=null || cell1D!=null ||
-         * cell1E!=null ||
-         * cell1F!=null || cell1G!=null && cell1H!=null && cell1I!=null && cell1J!=null
-         * && cell1K!=null
-         * && cell1L!=null){
-         * lecturaEncabezadosArchivo.addAll(Arrays.asList(cell1A.toString(),cell1B.
-         * toString(),
-         * cell1C.toString(),cell1D.toString(),cell1E.toString(),cell1F.toString(),
-         * cell1G.toString(),
-         * cell1H.toString(),cell1I.toString(),cell1J.toString(),cell1K.toString(),
-         * cell1L.toString()));
-         * }
-         */
+        
         agregarCeldaNoNula(lecturaEncabezadosArchivo, cell1A);
         agregarCeldaNoNula(lecturaEncabezadosArchivo, cell1B);
         agregarCeldaNoNula(lecturaEncabezadosArchivo, cell1C);
@@ -432,19 +425,16 @@ public class ScanFileServiceImpl implements IScanFileService {
         int auxContador = 0;
         Integer contractTypeId;
         for (int i = 0; i < encabezadosArchivo.size(); i++) {
-            // System.out.println(encabezadosArchivo.get(i) + " vs " +
-            // lecturaEncabezadosArchivo.get(i));
+            
             if (encabezadosArchivo.get(i).equals(lecturaEncabezadosArchivo.get(i))) {
-                // System.out.println("Estructura del archivo correcta, seleccione un archivo
-                // valido index: "+i);
                 auxContador++;
-
             }
         }
         if (auxContador >= 12) {
             while (!isRowEmpty) { // mientras la fila no este vacia
                 totalScore = 0f;
                 row = sheet.getRow(rownum); // se obtiene la fila
+                boolean flagFechaValida = true;
                 if (row != null)
                     contractReference = row.getCell(NUM_COLUMN_A).toString();
                 List<String> responseMessages = new ArrayList<>();
@@ -501,9 +491,17 @@ public class ScanFileServiceImpl implements IScanFileService {
                             && row.getCell(NUM_COLUMN_J).getCellType() != CellType.STRING) {
                         initialDate = row.getCell(NUM_COLUMN_J).getLocalDateTimeCellValue();
                     }
+                    
                     if (row.getCell(NUM_COLUMN_K) != null
-                            && row.getCell(NUM_COLUMN_K).getCellType() != CellType.STRING) {
-                        finalDate = row.getCell(NUM_COLUMN_K).getLocalDateTimeCellValue();
+                            && row.getCell(NUM_COLUMN_K).getCellType() == CellType.NUMERIC) {
+                        if(row.getCell(NUM_COLUMN_K).getLocalDateTimeCellValue().isBefore(fechaHoraActual))
+                        {
+                            finalDate = row.getCell(NUM_COLUMN_K).getLocalDateTimeCellValue();
+                        }else{
+                            responseMessages.add("La fecha de terminacion no puede ser superior a la fecha actual, no es posible calificar el contrato");
+                            flagFechaValida = false;
+                        }
+                        
                     }
                     if (row.getCell(NUM_COLUMN_L) != null
                             && row.getCell(NUM_COLUMN_L).getCellType() == CellType.NUMERIC) {
@@ -603,7 +601,7 @@ public class ScanFileServiceImpl implements IScanFileService {
                             if (isEvaluationRegister) {
                                 messageType = MessageType.EVALUATION_ALREADY_EXISTS;
                                 responseMessages.add("El contrato ya tiene una evaluación registrada.");
-                            } else {
+                            } else if(flagFechaValida) {
                                 // Guardar en la base de datos
                                 // Actualiza el score
                                 scoreRepository.updateByContractId(totalScore, contract.get().getId(), now());
@@ -651,25 +649,28 @@ public class ScanFileServiceImpl implements IScanFileService {
                             }
                         }
                     }
+                    
                     var contractInfo = ContractEvaluationInfo.builder()
-                            .vendorName(vendorName)
-                            .identification(vendorIdentification)
-                            .initialDate(initialDate)
-                            .finalDate(finalDate)
-                            .subject(contractSubject)
-                            .contractTypeId(contractTypeId)
-                            .qualityRate(totalScore.intValue())
-                            .complianceRate(totalScore.intValue())
-                            .excecutionRate(totalScore.intValue())
-                            .totalScore(totalScore)
-                            .build();
+                        .vendorName(vendorName)
+                        .identification(vendorIdentification)
+                        .initialDate(initialDate)
+                        .finalDate(finalDate)
+                        .subject(contractSubject)
+                        .contractTypeId(contractTypeId)
+                        .qualityRate(totalScore.intValue())
+                        .complianceRate(totalScore.intValue())
+                        .excecutionRate(totalScore.intValue())
+                        .totalScore(totalScore)
+                        .build();
                     var uploadExcelFileResponse = UploadExcelFileResponse.builder()
-                            .reference(contractReference)
-                            .messageType(messageType)
-                            .messages(responseMessages)
-                            .contractInfo(contractInfo)
-                            .build();
+                        .reference(contractReference)
+                        .messageType(messageType)
+                        .messages(responseMessages)
+                        .contractInfo(contractInfo)
+                        .build();
                     massiveExcelFileResponses.add(uploadExcelFileResponse);
+                    
+                    
                 }
                 // System.out.println("Row: "+rownum);
                 rownum++;
