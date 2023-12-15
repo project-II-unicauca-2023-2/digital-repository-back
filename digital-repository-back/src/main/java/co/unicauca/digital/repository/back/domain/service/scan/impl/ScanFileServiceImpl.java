@@ -209,15 +209,15 @@ public class ScanFileServiceImpl implements IScanFileService {
             // Reference with contract type
             if (vendorTypes != null && !contractReference.equals("")) {
                 HashMap<String, String> contractTypesMap = new HashMap<>();
-                contractTypesMap.put("5.5-31.3", vendorTypes.get(0)); // X
+                contractTypesMap.put("5.5-31.3", vendorTypes.get(0));
                 contractTypesMap.put("5.5-31.6", vendorTypes.get(1));
-                contractTypesMap.put("5.5-31.X", vendorTypes.get(2));
-                contractTypesMap.put("5.5-31.5", vendorTypes.get(3)); // X
+                contractTypesMap.put("5.5-31.2", vendorTypes.get(2));
+                contractTypesMap.put("5.5-31.5", vendorTypes.get(3));
                 contractTypesMap.put("5.5-31.9", vendorTypes.get(4));
                 // contractTypesMap.put("5.5-31.6", vendorTypes.get(5));
                 contractTypesMap.put("5.5-31.1", vendorTypes.get(6));
-                contractTypesMap.put("5.5-31.X", vendorTypes.get(7));
-                contractTypesMap.put("5.5-31.X", vendorTypes.get(8));
+                contractTypesMap.put("5.5-31.14", vendorTypes.get(7));
+                contractTypesMap.put("5.5-31.15", vendorTypes.get(8));
                 contractTypesMap.put("5.5-31.7", vendorTypes.get(9));
                 contractTypesMap.put("5.5-31.4", vendorTypes.get(10));
 
