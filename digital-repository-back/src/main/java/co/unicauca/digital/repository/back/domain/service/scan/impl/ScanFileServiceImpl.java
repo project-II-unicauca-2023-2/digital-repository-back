@@ -498,7 +498,9 @@ public class ScanFileServiceImpl implements IScanFileService {
                         Double contractEvaluation = row.getCell(NUM_COLUMN_L).getNumericCellValue();
                         totalScore = contractEvaluation.floatValue();
                     }
-                    if(row.getCell(12)!=null && row.getCell(13)!=null && row.getCell(14)!=null) {
+                    if(row.getCell(12)!=null && row.getCell(13)!=null && row.getCell(14)!=null &&
+                     row.getCell(12).getCellType() == CellType.NUMERIC && row.getCell(13).getCellType() == CellType.NUMERIC &&
+                     row.getCell(14).getCellType() == CellType.NUMERIC) {
                         qualityCriteriaRate = excelUtils.extractIntegerValue(row.getCell(12).toString());
                         complianceCriteriaRate = excelUtils.extractIntegerValue(row.getCell(13).toString());
                         excecutionCriteriaRate = excelUtils.extractIntegerValue(row.getCell(14).toString());
