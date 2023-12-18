@@ -498,10 +498,23 @@ public class ScanFileServiceImpl implements IScanFileService {
                         Double contractEvaluation = row.getCell(NUM_COLUMN_L).getNumericCellValue();
                         totalScore = contractEvaluation.floatValue();
                     }
-                    if(row.getCell(12)!=null && row.getCell(13)!=null && row.getCell(14)!=null) {
-                        qualityCriteriaRate = excelUtils.extractIntegerValue(row.getCell(12).toString());
-                        complianceCriteriaRate = excelUtils.extractIntegerValue(row.getCell(13).toString());
-                        excecutionCriteriaRate = excelUtils.extractIntegerValue(row.getCell(14).toString());
+                    if(row.getCell(12)!=null && row.getCell(13)!=null && row.getCell(14)!=null
+                    && row.getCell(12).getCellType() == CellType.NUMERIC && row.getCell(13).getCellType() == CellType.NUMERIC && row.getCell(14).getCellType() == CellType.NUMERIC) {
+                        Integer colum_M = excelUtils.extractIntegerValue(row.getCell(12).toString());
+                        Integer colum_N = excelUtils.extractIntegerValue(row.getCell(13).toString());
+                        Integer colum_O = excelUtils.extractIntegerValue(row.getCell(14).toString());
+                        if(colum_M >= 0 && colum_M <=5 && colum_N >= 0 && colum_N <=5 && colum_O >= 0 && colum_O <=5 )
+                        {
+                            qualityCriteriaRate = colum_M;
+                            complianceCriteriaRate = colum_N;
+                            excecutionCriteriaRate = colum_O;
+                        }else{
+                            responseMessages.add("Alguno de los valores de los criterios de evaluacion está fuera de rango, el calculo se realizara en base a la evaluacion total. ");
+                            qualityCriteriaRate = totalScore.intValue();
+                            complianceCriteriaRate = totalScore.intValue();
+                            excecutionCriteriaRate = totalScore.intValue();
+                        }
+                        
                     } else {
                         qualityCriteriaRate = totalScore.intValue();
                         complianceCriteriaRate = totalScore.intValue();
